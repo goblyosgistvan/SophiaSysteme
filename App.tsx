@@ -283,12 +283,22 @@ const App: React.FC = () => {
       {/* --- Info Modal --- */}
       {showInfo && (
           <div className="fixed inset-0 z-[60] bg-ink/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowInfo(false)}>
-              <div className="bg-paper max-w-lg w-full rounded-xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
-                  <div className="p-8">
-                      <div className="flex justify-between items-center mb-6">
-                          <h2 className="text-2xl font-serif font-bold text-ink">SophiaSysteme</h2>
-                          <button onClick={() => setShowInfo(false)} className="text-secondary hover:text-ink"><X /></button>
-                      </div>
+              {/* A doboz flex-col lett, hogy a fejléc és tartalom egymás alatt legyen, és max-h-[90vh]-t kapott */}
+              <div 
+                className="bg-paper max-w-lg w-full rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]" 
+                onClick={e => e.stopPropagation()}
+              >
+                  
+                  {/* FEJLÉC: Ez mindig látszik, nem görög el. shrink-0 miatt nem nyomódik össze */}
+                  <div className="p-6 md:p-8 flex justify-between items-center border-b border-stone-200 bg-paper shrink-0">
+                      <h2 className="text-2xl font-serif font-bold text-ink">SophiaSysteme</h2>
+                      <button onClick={() => setShowInfo(false)} className="text-secondary hover:text-ink p-1">
+                          <X size={24} /> 
+                      </button>
+                  </div>
+
+                  {/* TARTALOM: Ez a rész görgethető, ha nem fér ki a képernyőre */}
+                  <div className="p-6 md:p-8 overflow-y-auto custom-scrollbar">
                       <div className="space-y-4 font-serif text-lg text-ink/80 leading-relaxed">
                           <p>
                               A SophiaSysteme a görög bölcsesség (sophia) és a francia rendszer (systéme) szó összegyúrásából keletkezett. Ez egy kísérleti tanulási felület, amely gráfok segítségével igyekszik vizualizálni az összetett filozófiai rendszerek kapcsolódási pontjait és összefüggéseit.
@@ -299,19 +309,12 @@ const App: React.FC = () => {
                           <p>
                               Mivel a tartalomgenerálás MI alapú, így vannak korlátjai. Előfordulhatnak szakirodalomba nem illő fordítások, helytelen formázások, hibás könyvcímek vagy szokatlan fogalmi meghatározások (pl. Nietzschénél „a hatalom akarása” helyett „akarni a hatalmat” és hasonlók). Az eddigi teszteléseim alatt úgy láttam, hogy míg a relációs kapcsolatokat eltalálja a rendszer, addig a legnagyobb kihívása az egységes nyelvezetben és fogalommegjelölésekben van. Ettől függetlenül értékes tanulási kiegészítő lehet.
                           </p>
-                          <p>
+                          <p className="text-base text-secondary pt-4 font-sans">
                               0.1 verzió. 2025. november
                           </p>
                       </div>
-                      <div className="mt-8 pt-6 border-t border-stone-200 text-center">
-                          <button 
-                            onClick={() => setShowInfo(false)}
-                            className="px-6 py-2 bg-ink text-white rounded-full hover:bg-accent transition-colors font-sans text-sm"
-                          >
-                              Bezárás
-                          </button>
-                      </div>
                   </div>
+                  
               </div>
           </div>
       )}
