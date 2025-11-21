@@ -14,9 +14,9 @@ interface SavedGraph {
 }
 
 const ALL_SUGGESTIONS = [
-    'sztoicizmus', 'Platón', 'etika', 'egzisztencializmus', 'kategorikus imperatívusz',
-    'Nietzsche', 'arisztotelészi logika', 'utilitarizmus', 'fenomenológia', 'Heidegger',
-    'Spinoza etikája', 'Schopenhauer', 'metafizika', 'episztemológia', 'Társadalmi szerződés'
+    'Sztoicizmus', 'Platón', 'Etika', 'Egzisztencializmus', 'Kategorikus imperatívusz',
+    'Nietzsche', 'Arisztotelészi logika', 'Utilitarizmus', 'Fenomenológia', 'Heidegger',
+    'Spinoza etikája', 'Schopenhauer', 'Metafizika', 'Episztemológia', 'Társadalmi szerződés'
 ];
 
 const App: React.FC = () => {
@@ -434,7 +434,7 @@ const App: React.FC = () => {
              <div className="absolute inset-0 flex flex-col items-center justify-center bg-paper/80 backdrop-blur-sm z-50">
                 <Loader2 className="w-10 h-10 text-accent animate-spin mb-4" />
                 <p className="font-serif text-xl animate-pulse">Kapcsolatok létrehozása...</p>
-                <p className="text-sm text-secondary mt-2 font-sans">Ez körülbelül 30 másodpercet vesz igénybe.</p>
+                <p className="text-sm text-secondary mt-2 font-sans">Ez körülbelül 1-2 percet vesz igénybe.</p>
              </div>
         )}
 
