@@ -286,18 +286,21 @@ const App: React.FC = () => {
               <div className="bg-paper max-w-lg w-full rounded-xl shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
                   <div className="p-8">
                       <div className="flex justify-between items-center mb-6">
-                          <h2 className="text-2xl font-serif font-bold text-ink">RelatoSophia</h2>
+                          <h2 className="text-2xl font-serif font-bold text-ink">SophiaSysteme</h2>
                           <button onClick={() => setShowInfo(false)} className="text-secondary hover:text-ink"><X /></button>
                       </div>
                       <div className="space-y-4 font-serif text-lg text-ink/80 leading-relaxed">
                           <p>
-                              A RelatoSophia egy kísérleti tanulási felület, amely vizuális gráfokon keresztül segít felfedezni a filozófia komplex világát.
+                              A SophiaSysteme a görög bölcsesség (sophia) és a francia rendszer (systéme) szó összegyúrásából keletkezett. Ez egy kísérleti tanulási felület, amely gráfok segítségével igyekszik vizualizálni az összetett filozófiai rendszerek kapcsolódási pontjait és összefüggéseit.
                           </p>
                           <p>
-                              Használd a bal egérgombot a csomópontok kiválasztásához, a görgőt a nagyításhoz, és a húzást a térkép mozgatásához.
+                              A használat elég egyszerű: megadsz egy témát és a mesterséges intelligencia összeállítja neked a tartalmat. Ezután a bal egérgomb lenyomásával tudod mozgatni a térképet, a görgővel tudsz nagyítani, és a csomópontokra kattintva elolvashatod azok kifejtéseit. Az „Áttekintés” gombra kattintva, hierarchikusan, egyesével végigvezet a fogalmakon és koncepciókon.
                           </p>
                           <p>
-                              Az "Áttekintés" mód végigvezet a téma logikai felépítésén.
+                              Mivel a tartalomgenerálás MI alapú, így vannak korlátjai. Előfordulhatnak szakirodalomba nem illő fordítások, helytelen formázások, hibás könyvcímek vagy szokatlan fogalmi meghatározások (pl. Nietzschénél „a hatalom akarása” helyett „akarni a hatalmat” és hasonlók). Az eddigi teszteléseim alatt úgy láttam, hogy míg a relációs kapcsolatokat eltalálja a rendszer, addig a legnagyobb kihívása az egységes nyelvezetben és fogalommegjelölésekben van. Ettől függetlenül értékes tanulási kiegészítő lehet.
+                          </p>
+                          <p>
+                              0.1 verzió. 2025. november
                           </p>
                       </div>
                       <div className="mt-8 pt-6 border-t border-stone-200 text-center">
