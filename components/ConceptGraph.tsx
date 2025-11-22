@@ -4,29 +4,37 @@ import * as d3 from 'd3';
 import { GraphData, NodeType, SimulationNode, SimulationLink } from '../types';
 
 export interface ConceptGraphHandle {
-  focusNode: (nodeId: string, panelOffset?: number) => void;
+  focusNode: (nodeId: string, options?: { fitPadding?: number; targetYRatio?: number; scale?: number }) => void;
   resetZoom: () => void;
 }
 
 interface ConceptGraphProps {
   data: GraphData | null;
   onNodeClick: (node: SimulationNode) => void;
+  selectedNodeId: string | null;
 }
 
-const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, onNodeClick }, ref) => {
+// Extend SimulationLink to support bidirectional flag
+interface EnhancedLink extends SimulationLink {
+    bidirectional?: boolean;
+}
+
+const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, onNodeClick, selectedNodeId }, ref) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown>>(null);
   
   // Persist simulation across renders
-  const simulationRef = useRef<d3.Simulation<SimulationNode, SimulationLink> | null>(null);
+  const simulationRef = useRef<d3.Simulation<SimulationNode, EnhancedLink> | null>(null);
   
   const renderedDataRef = useRef<GraphData | null>(null);
+  // Keep track of current selection for effect hook
+  const selectedNodeIdRef = useRef<string | null>(null);
 
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
 
   useImperativeHandle(ref, () => ({
-    focusNode: (nodeId: string, panelOffset: number = 0) => {
+    focusNode: (nodeId: string, options?: { fitPadding?: number; targetYRatio?: number; scale?: number }) => {
       if (!svgRef.current || !zoomRef.current || !simulationRef.current) return;
       
       const nodes = simulationRef.current.nodes();
@@ -34,26 +42,19 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
       
       if (node && typeof node.x === 'number' && typeof node.y === 'number') {
         const svg = d3.select(svgRef.current);
-        // Less aggressive zoom (1.2 instead of 1.5)
-        const scale = 1.2;
         
-        // Calculate effective center:
-        // We want the node to be in the center of the "visible" part of the screen.
-        // If panel is open on the right, visual center is shifted to the left.
-        // effectiveWidth = totalWidth - panelOffset
-        // center is effectiveWidth / 2
-        const effectiveWidth = dimensions.width - panelOffset;
+        const zoomScale = options?.scale ?? 0.9;
+        const effectiveWidth = dimensions.width - (options?.fitPadding || 0);
         const centerX = effectiveWidth / 2;
+        const centerY = dimensions.height * (options?.targetYRatio ?? 0.5);
 
-        const x = -node.x * scale + centerX;
-        const y = -node.y * scale + dimensions.height / 2;
+        const x = -node.x * zoomScale + centerX;
+        const y = -node.y * zoomScale + centerY;
         
         svg.transition()
           .duration(1200)
           .ease(d3.easeCubicOut)
-          .call(zoomRef.current.transform, d3.zoomIdentity.translate(x, y).scale(scale));
-          
-        onNodeClick(node);
+          .call(zoomRef.current.transform, d3.zoomIdentity.translate(x, y).scale(zoomScale));
       }
     },
     resetZoom: () => {
@@ -78,6 +79,100 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
     return () => resizeObserver.disconnect();
   }, []);
 
+  // --- Highlight Logic Helper ---
+  const highlightNode = (nodeId: string | null, nodes: any, links: any) => {
+    const svg = d3.select(svgRef.current);
+    if (!svg.empty() && nodeId) {
+        svg.selectAll(".node").style("opacity", 0.2);
+        svg.selectAll(".link").style("opacity", 0.1);
+        svg.selectAll(".link-label").style("opacity", 0);
+
+        // Find node datum
+        const d = nodes.find((n: any) => n.id === nodeId);
+        if (!d) return;
+
+        // Highlight main node
+        const mainNodeGroup = svg.selectAll(".node").filter((n: any) => n.id === nodeId);
+        mainNodeGroup.style("opacity", 1).raise();
+        mainNodeGroup.select("circle")
+            .attr("stroke", "#A65D57")
+            .attr("stroke-width", 3)
+            .attr("r", (n: any) => getRadius(n) * 1.2);
+
+        // Find connections
+        const connectedNodeIds = new Set<string>();
+        const connectedLinks: any[] = [];
+        
+        links.forEach((l: any) => {
+            if (l.source.id === nodeId) {
+                connectedNodeIds.add(l.target.id);
+                connectedLinks.push(l);
+            }
+            if (l.target.id === nodeId) {
+                connectedNodeIds.add(l.source.id);
+                connectedLinks.push(l);
+            }
+        });
+
+        // Highlight connected nodes
+        svg.selectAll(".node").filter((n: any) => connectedNodeIds.has(n.id))
+            .style("opacity", 1)
+            .select("circle")
+            .attr("stroke", "#C5A059")
+            .attr("stroke-width", 2);
+
+        // Highlight connected links
+        svg.selectAll(".link").filter((l: any) => connectedLinks.includes(l))
+            .style("opacity", 1)
+            .attr("stroke", "#A65D57")
+            .attr("stroke-width", 2);
+            
+        svg.selectAll(".link-label").filter((l: any) => connectedLinks.includes(l))
+            .style("opacity", 1)
+            .attr("font-weight", "bold");
+    }
+  };
+
+  const resetHighlight = () => {
+     const svg = d3.select(svgRef.current);
+     if (!svg.empty()) {
+        svg.selectAll(".node").style("opacity", 1);
+        svg.selectAll(".link").style("opacity", 0.4).attr("stroke", "#B0B0B0").attr("stroke-width", 1.5);
+        svg.selectAll(".link-label").style("opacity", 0.7).attr("font-weight", "normal");
+        
+        svg.selectAll("circle")
+            .attr("stroke", "#2D2A26")
+            .attr("stroke-width", 1)
+            .attr("r", getRadius);
+     }
+  };
+  
+  const getRadius = (d: SimulationNode) => {
+      switch (d.type) {
+        case NodeType.ROOT: return 40;
+        case NodeType.CATEGORY: return 30;
+        case NodeType.WORK: return 18;
+        default: return 14;
+      }
+  };
+
+  // --- Effect to handle external selection changes ---
+  useEffect(() => {
+      selectedNodeIdRef.current = selectedNodeId;
+      if (simulationRef.current) {
+          const nodes = simulationRef.current.nodes();
+          const linkSelection = d3.select(svgRef.current).selectAll(".link");
+          const links = linkSelection.data();
+
+          if (selectedNodeId) {
+              highlightNode(selectedNodeId, nodes, links);
+          } else {
+              resetHighlight();
+          }
+      }
+  }, [selectedNodeId]);
+
+
   // --- EFFECT: Initialize Simulation ---
   useEffect(() => {
     if (!data || !svgRef.current) return;
@@ -89,38 +184,57 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
     svg.selectAll("*").remove(); 
 
     const nodes: SimulationNode[] = data.nodes.map(d => ({ ...d })) as SimulationNode[];
-    // SAFETY CHECK: Create a set of valid node IDs
     const nodeIds = new Set(nodes.map(n => n.id));
-    // Only include links where both source and target exist in the nodes array
-    const links: SimulationLink[] = data.links
-      .filter(l => nodeIds.has(l.source as string) && nodeIds.has(l.target as string))
-      .map(d => ({ ...d })) as SimulationLink[];
+    
+    // Link Processing: Merge identical bidirectional links
+    const rawLinks = data.links.filter(l => nodeIds.has(l.source as string) && nodeIds.has(l.target as string));
+    const processedLinks: EnhancedLink[] = [];
+    const processedPairs = new Set<string>();
 
-    // Detect bidirectional links to handle curves
-    const linkPairs = new Set<string>();
+    rawLinks.forEach(link => {
+        const src = typeof link.source === 'object' ? (link.source as any).id : link.source;
+        const tgt = typeof link.target === 'object' ? (link.target as any).id : link.target;
+        const pairId = `${src}-${tgt}`;
+        const reversePairId = `${tgt}-${src}`;
+        
+        if (processedPairs.has(pairId)) return; // Already handled (as reverse of another)
+
+        // Check if reverse exists AND has same label
+        const reverseLink = rawLinks.find(l => {
+             const lSrc = typeof l.source === 'object' ? (l.source as any).id : l.source;
+             const lTgt = typeof l.target === 'object' ? (l.target as any).id : l.target;
+             return lSrc === tgt && lTgt === src && l.relationLabel === link.relationLabel;
+        });
+
+        if (reverseLink) {
+            // It's a bidirectional identical link
+            processedLinks.push({ ...link, bidirectional: true } as EnhancedLink);
+            processedPairs.add(pairId);
+            processedPairs.add(reversePairId); // Mark reverse as handled
+        } else {
+            processedLinks.push({ ...link } as EnhancedLink);
+            processedPairs.add(pairId);
+        }
+    });
+
+    const links: EnhancedLink[] = processedLinks;
+    
+    // Check for remaining curved links (different labels)
+    const remainingLinkPairs = new Set<string>();
     links.forEach(l => {
-      const sourceId = typeof l.source === 'object' ? (l.source as any).id : l.source;
-      const targetId = typeof l.target === 'object' ? (l.target as any).id : l.target;
-      linkPairs.add(`${sourceId}-${targetId}`);
+        if (l.bidirectional) return; // Straight line for bidirectional
+        const s = typeof l.source === 'object' ? (l.source as any).id : l.source;
+        const t = typeof l.target === 'object' ? (l.target as any).id : l.target;
+        remainingLinkPairs.add(`${s}-${t}`);
     });
     
-    // Helper to check if reverse link exists
-    const hasReverse = (l: any) => {
-       const s = typeof l.source === 'object' ? l.source.id : l.source;
-       const t = typeof l.target === 'object' ? l.target.id : l.target;
-       return linkPairs.has(`${t}-${s}`);
+    const hasReverse = (l: EnhancedLink) => {
+       if (l.bidirectional) return false;
+       const s = typeof l.source === 'object' ? (l.source as any).id : l.source;
+       const t = typeof l.target === 'object' ? (l.target as any).id : l.target;
+       return remainingLinkPairs.has(`${t}-${s}`);
     };
     
-    // --- Configurations ---
-    const nodeRadius = (d: SimulationNode) => {
-      switch (d.type) {
-        case NodeType.ROOT: return 40;
-        case NodeType.CATEGORY: return 30;
-        case NodeType.WORK: return 18;
-        default: return 14;
-      }
-    };
-
     const nodeColor = (d: SimulationNode) => {
       switch (d.type) {
         case NodeType.ROOT: return "#A65D57"; 
@@ -131,12 +245,11 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
     };
 
     // --- Simulation ---
-    // Tweak: Increased charge (repel) and distance to separate nodes and labels
     const simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id((d: any) => d.id).distance(280)) // Increased distance from 220 to 280
-      .force("charge", d3.forceManyBody().strength(-3500)) // Increased repel from -2500 to -3500
+      .force("link", d3.forceLink(links).id((d: any) => d.id).distance(280))
+      .force("charge", d3.forceManyBody().strength(-3500))
       .force("center", d3.forceCenter(dimensions.width / 2, dimensions.height / 2))
-      .force("collide", d3.forceCollide().radius((d: any) => nodeRadius(d) + 60).iterations(2))
+      .force("collide", d3.forceCollide().radius((d: any) => getRadius(d) + 60).iterations(2))
       .alphaDecay(0.05);
     
     simulationRef.current = simulation;
@@ -154,7 +267,11 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
     zoomRef.current = zoom;
     svg.call(zoom);
 
-    svg.append("defs").append("marker")
+    // Define Markers
+    const defs = svg.append("defs");
+    
+    // Standard end marker
+    defs.append("marker")
       .attr("id", "arrowhead")
       .attr("viewBox", "0 -5 10 10")
       .attr("refX", 32) 
@@ -166,7 +283,19 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
       .attr("d", "M0,-5L10,0L0,5")
       .attr("fill", "#B0B0B0");
 
-    // Use 'path' instead of 'line' to support curves
+    // Start marker for bidirectional
+    defs.append("marker")
+      .attr("id", "arrowhead-start")
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", -22) 
+      .attr("refY", 0)
+      .attr("orient", "auto-start-reverse")
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .append("path")
+      .attr("d", "M0,-5L10,0L0,5")
+      .attr("fill", "#B0B0B0");
+
     const link = g.append("g")
       .selectAll("path")
       .data(links)
@@ -176,7 +305,8 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
       .attr("stroke-opacity", 0.4)
       .attr("stroke-width", 1.5)
       .attr("class", "link")
-      .attr("marker-end", "url(#arrowhead)");
+      .attr("marker-end", "url(#arrowhead)")
+      .attr("marker-start", (d) => d.bidirectional ? "url(#arrowhead-start)" : null);
 
     const linkLabel = g.append("g")
         .selectAll("text")
@@ -203,7 +333,7 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
         .on("end", dragended));
 
     node.append("circle")
-      .attr("r", nodeRadius)
+      .attr("r", getRadius)
       .attr("fill", nodeColor)
       .attr("stroke", "#2D2A26")
       .attr("stroke-width", 1)
@@ -211,7 +341,7 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
 
     node.append("text")
       .text(d => d.label.replace(/_/g, ''))
-      .attr("dy", (d) => nodeRadius(d) + 20)
+      .attr("dy", (d) => getRadius(d) + 20)
       .attr("text-anchor", "middle")
       .attr("font-family", "Sabon, EB Garamond, serif") 
       .attr("font-weight", "600")
@@ -224,58 +354,14 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
 
     node
       .on("mouseover", function(event, d) {
-        node.style("opacity", 0.2);
-        link.style("opacity", 0.1);
-        linkLabel.style("opacity", 0);
-
-        const el = d3.select(this);
-        el.style("opacity", 1).raise();
-        
-        el.select("circle")
-            .attr("stroke", "#A65D57")
-            .attr("stroke-width", 3)
-            .attr("r", (n: any) => nodeRadius(n) * 1.2);
-
-        const connectedNodeIds = new Set<string>();
-        const connectedLinks: any[] = [];
-        
-        links.forEach((l: any) => {
-            if (l.source.id === d.id) {
-                connectedNodeIds.add(l.target.id);
-                connectedLinks.push(l);
-            }
-            if (l.target.id === d.id) {
-                connectedNodeIds.add(l.source.id);
-                connectedLinks.push(l);
-            }
-        });
-
-        node.filter((n: any) => connectedNodeIds.has(n.id))
-            .style("opacity", 1)
-            .select("circle")
-            .attr("stroke", "#C5A059")
-            .attr("stroke-width", 2);
-
-        link.filter((l: any) => connectedLinks.includes(l))
-            .style("opacity", 1)
-            .attr("stroke", "#A65D57")
-            .attr("stroke-width", 2);
-            
-        linkLabel.filter((l: any) => connectedLinks.includes(l))
-            .style("opacity", 1)
-            .attr("font-weight", "bold");
+        highlightNode(d.id, nodes, links);
       })
       .on("mouseout", function(event, d) {
-        node.style("opacity", 1);
-        link.style("opacity", 0.4).attr("stroke", "#B0B0B0").attr("stroke-width", 1.5);
-        linkLabel.style("opacity", 0.7).attr("font-weight", "normal");
-        
-        d3.select(this).select("circle")
-            .attr("stroke", "#2D2A26")
-            .attr("stroke-width", 1)
-            .attr("r", nodeRadius);
-            
-        node.selectAll("circle").attr("stroke", "#2D2A26").attr("stroke-width", 1);
+        if (selectedNodeIdRef.current) {
+            highlightNode(selectedNodeIdRef.current, nodes, links);
+        } else {
+            resetHighlight();
+        }
       });
 
     node.on("click", (event, d) => {
@@ -287,25 +373,32 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
       link.attr("d", (d: any) => {
          const dx = d.target.x - d.source.x;
          const dy = d.target.y - d.source.y;
-         const dr = Math.sqrt(dx * dx + dy * dy);
          
-         // Curve if there is a reverse link, otherwise straight
+         // If bidirectional with same label, use straight line
+         if (d.bidirectional) {
+             return `M${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
+         }
+
+         // Curved for separate reverse links
          if (hasReverse(d)) {
+             const dr = Math.sqrt(dx * dx + dy * dy);
             return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
          }
+         
+         // Default straight
          return `M${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
       });
 
       linkLabel
         .attr("x", (d: any) => {
-            if (hasReverse(d)) {
+            if (!d.bidirectional && hasReverse(d)) {
                  const mx = (d.source.x + d.target.x) / 2;
                  return mx;
             }
             return (d.source.x + d.target.x) / 2;
         })
         .attr("y", (d: any) => {
-            if (hasReverse(d)) {
+            if (!d.bidirectional && hasReverse(d)) {
                  const dx = d.target.x - d.source.x;
                  const dy = d.target.y - d.source.y;
                  const dist = Math.sqrt(dx*dx + dy*dy);
@@ -318,16 +411,9 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
                  return ((d.source.y + d.target.y) / 2) + ny * offset;
             }
             return (d.source.y + d.target.y) / 2;
-        })
-        .attr("transform", (d: any) => {
-             if (hasReverse(d)) {
-                 return ""; 
-             }
-             return "";
         });
         
-      // Adjust label x position for the curve offset calculated above
-       linkLabel.filter((d: any) => hasReverse(d))
+       linkLabel.filter((d: any) => !d.bidirectional && hasReverse(d))
         .attr("x", (d: any) => {
              const dx = d.target.x - d.source.x;
              const dy = d.target.y - d.source.y;
@@ -375,10 +461,9 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
         height="100%" 
         className="w-full h-full outline-none block cursor-grab active:cursor-grabbing"
         style={{ textRendering: 'optimizeSpeed', shapeRendering: 'geometricPrecision' }}
+        onClick={() => { 
+        }}
       ></svg>
-      <div className="absolute bottom-4 left-4 text-[10px] text-secondary font-sans opacity-60 pointer-events-none select-none z-10">
-        Nagyítás: görgő • Mozgatás: húzás
-      </div>
     </div>
   );
 });
