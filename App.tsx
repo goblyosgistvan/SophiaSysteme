@@ -1,6 +1,6 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send } from 'lucide-react';
+import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical } from 'lucide-react';
 import ConceptGraph, { ConceptGraphHandle } from './components/ConceptGraph';
 import DetailPanel from './components/DetailPanel';
 import { fetchPhilosophyData, augmentPhilosophyData, enrichNodeData } from './services/geminiService';
@@ -127,12 +127,14 @@ const App: React.FC = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [savedGraphs, setSavedGraphs] = useState<SavedGraph[]>([]);
   const [showInfo, setShowInfo] = useState(false);
+  const [showExportMenu, setShowExportMenu] = useState(false);
   
   // Augment State
   const [showAugmentInput, setShowAugmentInput] = useState(false);
   const [augmentQuery, setAugmentQuery] = useState('');
   const [augmentLoading, setAugmentLoading] = useState(false);
   const augmentInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Node Regeneration State
   const [isRegeneratingNode, setIsRegeneratingNode] = useState(false);
@@ -145,6 +147,13 @@ const App: React.FC = () => {
   const [isTourActive, setIsTourActive] = useState(false);
   const [tourPath, setTourPath] = useState<string[]>([]);
   const [tourIndex, setTourIndex] = useState(-1);
+  const [showTourOutline, setShowTourOutline] = useState(false);
+  const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
+  
+  const outlineScrollRef = useRef<HTMLDivElement>(null);
+  const toggleOutlineBtnRef = useRef<HTMLButtonElement>(null);
+
 
   // Responsive state
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
@@ -173,6 +182,33 @@ const App: React.FC = () => {
       }
     }
   }, []);
+
+  // Click outside to close Tour Outline
+  useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+          if (showTourOutline && 
+              outlineScrollRef.current && 
+              !outlineScrollRef.current.contains(event.target as Node) &&
+              toggleOutlineBtnRef.current &&
+              !toggleOutlineBtnRef.current.contains(event.target as Node)) {
+              setShowTourOutline(false);
+          }
+      };
+      
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showTourOutline]);
+
+  // Click outside to close Export Menu
+  useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+          if (showExportMenu && !(event.target as Element).closest('.export-container')) {
+              setShowExportMenu(false);
+          }
+      };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showExportMenu]);
 
   // Focus augment input when opened
   useEffect(() => {
@@ -249,6 +285,21 @@ const App: React.FC = () => {
   const getCleanFileName = (topic: string) => {
     return topic.replace(/[^a-z0-9áéíóöőúüű]/gi, '_').toLowerCase();
   };
+
+  const handleExportJSON = () => {
+      if (!data) return;
+      const jsonString = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${getCleanFileName(query)}_sophia_graph.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setShowExportMenu(false);
+  }
 
   const handleExportMarkdown = () => {
     if (!data) return;
@@ -337,7 +388,54 @@ const App: React.FC = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    setShowExportMenu(false);
   };
+
+  const handleImportGraph = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const content = e.target?.result as string;
+        try {
+            const parsedData = JSON.parse(content);
+            // Basic validation check
+            if (parsedData.nodes && Array.isArray(parsedData.nodes) && parsedData.links && Array.isArray(parsedData.links)) {
+                
+                // Determine topic name
+                const rootNode = parsedData.nodes.find((n: any) => n.type === 'ROOT');
+                const topic = rootNode ? rootNode.label : file.name.replace('.json', '');
+
+                // Save and Load
+                autoSaveGraph(topic, parsedData);
+                const importedGraph: SavedGraph = {
+                    id: Date.now().toString(),
+                    topic: topic,
+                    date: new Date().toLocaleDateString('hu-HU'),
+                    data: parsedData
+                };
+                
+                // If on landing page, just add to history. If already searching, maybe load it? 
+                // Let's just load it to be helpful.
+                loadSavedGraph(importedGraph);
+                
+            } else {
+                alert("A fájl formátuma nem megfelelő.");
+            }
+        } catch (err) {
+            console.error("Invalid JSON", err);
+            alert("Hiba a fájl beolvasásakor.");
+        }
+    };
+    reader.readAsText(file);
+    // Reset input so same file can be selected again
+    event.target.value = '';
+  };
+
+  const triggerFileUpload = () => {
+      fileInputRef.current?.click();
+  }
 
   // --- Augment Logic ---
 
@@ -380,6 +478,18 @@ const App: React.FC = () => {
           setAugmentLoading(false);
       }
   };
+
+  // --- Update Node Logic (Manual Edit) ---
+  const handleNodeUpdate = (updatedNode: PhilosophicalNode) => {
+      if (!data) return;
+      
+      const updatedNodes = data.nodes.map(n => n.id === updatedNode.id ? updatedNode : n);
+      const updatedData = { ...data, nodes: updatedNodes };
+      
+      setData(updatedData);
+      setSelectedNode(updatedNode);
+      autoSaveGraph(query, updatedData);
+  }
 
   // --- Regenerate Node Logic ---
   
@@ -469,17 +579,26 @@ const App: React.FC = () => {
     }
 
     // 5. Construct Path: Whole -> Parts -> Details (Hermeneutic Circle)
+    // IMPORTANT: Use a Set to prevent duplicates
     const path: string[] = [];
+    const addedIds = new Set<string>();
+
+    const addToPath = (id: string) => {
+        if (!addedIds.has(id)) {
+            path.push(id);
+            addedIds.add(id);
+        }
+    }
 
     // A. The Whole (Root)
-    if (root) path.push(root.id);
+    if (root) addToPath(root.id);
 
     // B. The Categories (Parts) - Sorted by Centrality
     const sortedCategories = [...categories].sort((a, b) => (degrees.get(b.id)||0) - (degrees.get(a.id)||0));
 
     sortedCategories.forEach(cat => {
         // 1. Visit the Category itself
-        path.push(cat.id);
+        addToPath(cat.id);
         
         // 2. Gather items belonging to this context
         const items = nodes.filter(n => {
@@ -502,7 +621,7 @@ const App: React.FC = () => {
             return (degrees.get(b.id)||0) - (degrees.get(a.id)||0); // Descending degree
         });
 
-        path.push(...items.map(n => n.id));
+        items.forEach(item => addToPath(item.id));
     });
 
     // C. Orphans
@@ -512,7 +631,7 @@ const App: React.FC = () => {
         !assignments.has(n.id)
     );
     orphans.sort((a, b) => (degrees.get(b.id)||0) - (degrees.get(a.id)||0));
-    path.push(...orphans.map(n => n.id));
+    orphans.forEach(n => addToPath(n.id));
 
     return path;
   };
@@ -546,9 +665,91 @@ const App: React.FC = () => {
 
   const stopTour = () => {
     setIsTourActive(false);
+    setShowTourOutline(false);
     setTourIndex(-1);
     setSelectedNode(null); // Close panel
     graphRef.current?.resetZoom(); // Center camera
+  };
+
+  const handleTourJump = (index: number) => {
+      setTourIndex(index);
+      focusOnNodeById(tourPath[index]);
+  };
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+      setDraggedItemIndex(index);
+      e.dataTransfer.effectAllowed = 'move';
+      // Hide ghost image slightly if desired, or set a custom one
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+      e.preventDefault(); 
+      e.dataTransfer.dropEffect = 'move';
+
+      // Auto Scroll Logic
+      const container = outlineScrollRef.current;
+      if (container) {
+          const { top, bottom } = container.getBoundingClientRect();
+          const hoverY = e.clientY;
+          const threshold = 60; // Distance in pixels from top/bottom to trigger scroll
+
+          // Slowed down scrolling speed from 10 to 2
+          if (hoverY < top + threshold) {
+              container.scrollTop -= 2; 
+          } else if (hoverY > bottom - threshold) {
+              container.scrollTop += 2;
+          }
+      }
+
+      // Visual Drop Indicator Logic
+      if (draggedItemIndex === null) return;
+      if (index === draggedItemIndex) {
+          setDropTargetIndex(null);
+          return;
+      }
+      
+      const rect = e.currentTarget.getBoundingClientRect();
+      const midY = rect.top + rect.height / 2;
+      
+      if (e.clientY < midY) {
+          setDropTargetIndex(index); // Insert before
+      } else {
+          setDropTargetIndex(index + 1); // Insert after
+      }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+      e.preventDefault();
+      
+      if (draggedItemIndex === null || dropTargetIndex === null) return;
+      if (draggedItemIndex === dropTargetIndex) {
+        setDraggedItemIndex(null);
+        setDropTargetIndex(null);
+        return;
+      }
+
+      const newPath = [...tourPath];
+      const [draggedItem] = newPath.splice(draggedItemIndex, 1);
+      
+      // Calculate insertion index
+      let insertionIndex = dropTargetIndex;
+      if (draggedItemIndex < dropTargetIndex) {
+          insertionIndex -= 1;
+      }
+      
+      newPath.splice(insertionIndex, 0, draggedItem);
+      
+      setTourPath(newPath);
+
+      // Adjust active tour index to track the current node
+      const currentActiveId = tourPath[tourIndex];
+      const newActiveIndex = newPath.indexOf(currentActiveId);
+      if (newActiveIndex !== -1) {
+          setTourIndex(newActiveIndex);
+      }
+
+      setDraggedItemIndex(null);
+      setDropTargetIndex(null);
   };
 
   const focusOnNodeById = (id: string) => {
@@ -594,7 +795,7 @@ const App: React.FC = () => {
     const pNode = node as PhilosophicalNode;
     // Trigger focus with specific params when manually clicking too
     if (isMobile) {
-        // Same as tour: Center in the top 40% with less zoom to show connections
+        // Same as tour: Center in the top 40% with less zoom (scale 0.5)
         graphRef.current?.focusNode(pNode.id, { targetYRatio: 0.2, scale: 0.5 });
     } else {
         graphRef.current?.focusNode(pNode.id, { fitPadding: 480, scale: 0.9 });
@@ -606,7 +807,8 @@ const App: React.FC = () => {
         if (indexInPath !== -1) {
             setTourIndex(indexInPath);
         } else {
-            stopTour();
+            // Do not stop tour if clicking around, just don't update index if not in path
+            // stopTour(); 
         }
     }
   }, [isTourActive, tourPath, isMobile]);
@@ -687,14 +889,35 @@ const App: React.FC = () => {
                     </button>
                 </div>
 
-                {/* Simple Export Button */}
-                <button 
-                    onClick={handleExportMarkdown}
-                    className="text-[#D1D1D1] hover:text-ink transition-colors"
-                    title="Exportálás esszé formátumban (.md)"
-                >
-                    <Download className="w-6 h-6" />
-                </button>
+                {/* Export Dropdown */}
+                <div className="relative export-container">
+                    <button 
+                        onClick={() => setShowExportMenu(!showExportMenu)}
+                        className={`text-[#D1D1D1] hover:text-ink transition-colors ${showExportMenu ? 'text-ink' : ''}`}
+                        title="Exportálás"
+                    >
+                        <Download className="w-6 h-6" />
+                    </button>
+                    
+                    {showExportMenu && (
+                        <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-stone-200 py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                             <button 
+                                onClick={handleExportMarkdown}
+                                className="w-full text-left px-4 py-3 hover:bg-stone-50 flex items-center gap-3 transition-colors"
+                             >
+                                 <FileText className="w-4 h-4 text-secondary" />
+                                 <span className="font-sans text-sm text-ink">Esszé (.md)</span>
+                             </button>
+                             <button 
+                                onClick={handleExportJSON}
+                                className="w-full text-left px-4 py-3 hover:bg-stone-50 flex items-center gap-3 transition-colors border-t border-stone-100"
+                             >
+                                 <FileJson className="w-4 h-4 text-secondary" />
+                                 <span className="font-sans text-sm text-ink">Adatfájl (.json)</span>
+                             </button>
+                        </div>
+                    )}
+                </div>
 
                 <button 
                 onClick={goHome}
@@ -802,9 +1025,31 @@ const App: React.FC = () => {
                         </div>
                     </div>
 
-                    {savedGraphs.length > 0 && (
-                        <div className="w-full max-w-3xl text-left animate-in fade-in slide-in-from-bottom-8 duration-700 pb-20">
-                            <h3 className="font-serif text-2xl text-ink mb-6 border-b border-stone-200 pb-2">Előzmények</h3>
+                    <div className="w-full max-w-3xl text-left animate-in fade-in slide-in-from-bottom-8 duration-700 pb-20">
+                        <div className="flex justify-between items-end mb-6 border-b border-stone-200 pb-2">
+                             <h3 className="font-serif text-2xl text-ink">Előzmények</h3>
+                             
+                             {/* Import Button */}
+                             <div>
+                                <input 
+                                    type="file" 
+                                    ref={fileInputRef}
+                                    onChange={handleImportGraph}
+                                    accept=".json" 
+                                    className="hidden" 
+                                />
+                                <button 
+                                    onClick={triggerFileUpload}
+                                    className="flex items-center gap-2 text-secondary hover:text-accent transition-colors text-sm font-sans"
+                                    title="Mentett gráf importálása"
+                                >
+                                    <Upload className="w-4 h-4" />
+                                    <span>Importálás</span>
+                                </button>
+                             </div>
+                        </div>
+
+                        {savedGraphs.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                 {savedGraphs.map(graph => (
                                     <div 
@@ -856,8 +1101,10 @@ const App: React.FC = () => {
                                     </div>
                                 ))}
                             </div>
-                        </div>
-                    )}
+                        ) : (
+                            <p className="text-secondary/50 italic text-center py-8">Még nincsenek mentett gráfjaid.</p>
+                        )}
+                    </div>
                 </div>
             </div>
         )}
@@ -888,13 +1135,61 @@ const App: React.FC = () => {
 
         {/* Persistent Floating Bottom Interaction Bar with Morphing Animation */}
         {data && !loading && (
+            <>
              <div 
-                className={`absolute bottom-8 transform -translate-x-1/2 z-[100] bg-white/95 backdrop-blur shadow-lg border border-stone-200 rounded-full flex items-center transition-all duration-500 ease-in-out overflow-hidden ${isTourActive ? 'w-[280px] h-[52px]' : 'w-[150px] h-[44px]'}`}
+                className={`absolute bottom-8 transform -translate-x-1/2 z-[100] bg-white/95 backdrop-blur shadow-lg border border-stone-200 rounded-full flex items-center transition-all duration-500 ease-in-out overflow-visible ${isTourActive ? 'w-[320px] h-[52px]' : 'w-[150px] h-[44px]'}`}
                 style={{
                     left: (selectedNode && windowWidth >= 768) ? 'calc((100% - 480px) / 2)' : '50%'
                 }}
              >
-                 <div className="relative w-full h-full">
+                 {/* Tour Outline Popup */}
+                 <div 
+                    ref={outlineScrollRef}
+                    className={`absolute bottom-16 left-0 w-full bg-white/95 backdrop-blur shadow-2xl border border-stone-200 rounded-2xl p-2 max-h-64 overflow-y-auto custom-scrollbar flex flex-col gap-1 z-[110] transition-all duration-300 origin-bottom transform ${isTourActive && showTourOutline ? 'opacity-100 scale-y-100 translate-y-0' : 'opacity-0 scale-y-90 translate-y-4 pointer-events-none'}`}
+                 >
+                    {tourPath.map((nodeId, idx) => {
+                        const node = data.nodes.find(n => n.id === nodeId);
+                        if (!node) return null;
+                        const isActive = idx === tourIndex;
+                        const isBeingDragged = draggedItemIndex === idx;
+                        
+                        const showDropLine = dropTargetIndex === idx && !isBeingDragged;
+                        const showDropLineBottom = dropTargetIndex === idx + 1 && !isBeingDragged;
+
+                        return (
+                            <div key={`${nodeId}-${idx}`} className="relative transition-all duration-200">
+                                {showDropLine && (
+                                    <div className="absolute -top-1 left-0 right-0 h-0.5 bg-accent rounded-full z-10" />
+                                )}
+                                
+                                <div 
+                                    draggable
+                                    onDragStart={(e) => handleDragStart(e, idx)}
+                                    onDragOver={(e) => handleDragOver(e, idx)}
+                                    onDrop={handleDrop}
+                                    onClick={() => handleTourJump(idx)}
+                                    className={`
+                                        flex items-center gap-2 p-2 rounded cursor-pointer transition-colors group
+                                        ${isActive ? 'bg-accent/10 text-accent' : 'hover:bg-stone-100 text-ink'}
+                                        ${isBeingDragged ? 'opacity-50' : 'opacity-100'}
+                                    `}
+                                >
+                                    <div className="cursor-grab active:cursor-grabbing p-1 text-stone-400 group-hover:text-stone-600">
+                                        <GripVertical size={14} />
+                                    </div>
+                                    <span className="font-serif text-sm font-bold w-5 text-right shrink-0">{idx + 1}.</span>
+                                    <span className={`font-sans text-sm truncate ${isActive ? 'font-medium' : ''}`}>{node.label.replace(/_/g, '')}</span>
+                                </div>
+
+                                {showDropLineBottom && (
+                                    <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent rounded-full z-10" />
+                                )}
+                            </div>
+                        )
+                    })}
+                 </div>
+
+                 <div className="relative w-full h-full overflow-hidden rounded-full">
                     
                     {/* Start Button View */}
                     <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${!isTourActive ? 'opacity-100 delay-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
@@ -908,7 +1203,20 @@ const App: React.FC = () => {
                     </div>
 
                    {/* Tour Controls View */}
-                   <div className={`absolute inset-0 flex items-center justify-between px-6 transition-opacity duration-300 ${isTourActive ? 'opacity-100 delay-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                   <div className={`absolute inset-0 flex items-center justify-between px-4 transition-opacity duration-300 ${isTourActive ? 'opacity-100 delay-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                      
+                      {/* Outline Toggle */}
+                      <button 
+                        ref={toggleOutlineBtnRef}
+                        onClick={() => setShowTourOutline(!showTourOutline)}
+                        className={`p-2 rounded-full transition-colors shrink-0 mr-1 ${showTourOutline ? 'bg-accent text-white' : 'hover:bg-stone-100 text-secondary'}`}
+                        title="Vázlat"
+                      >
+                          <List className="w-4 h-4" />
+                      </button>
+
+                      <div className="w-px h-6 bg-stone-300 mx-1 shrink-0" />
+
                       <button 
                         onClick={prevStep} 
                         disabled={tourIndex === 0}
@@ -917,7 +1225,7 @@ const App: React.FC = () => {
                         <ChevronLeft className="w-5 h-5" />
                       </button>
                       
-                      <span className="font-serif text-lg text-center whitespace-nowrap">
+                      <span className="font-serif text-lg text-center whitespace-nowrap w-12">
                         {tourIndex + 1} / {tourPath.length}
                       </span>
 
@@ -928,7 +1236,7 @@ const App: React.FC = () => {
                           {tourIndex === tourPath.length - 1 ? <X className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
                       </button>
 
-                      <div className="w-px h-6 bg-stone-300 mx-0 shrink-0" />
+                      <div className="w-px h-6 bg-stone-300 mx-1 shrink-0" />
 
                       <button 
                         onClick={stopTour}
@@ -939,6 +1247,7 @@ const App: React.FC = () => {
                    </div>
                  </div>
             </div>
+            </>
         )}
 
         <div className="flex-1 relative bg-paper h-full min-w-0">
@@ -956,6 +1265,7 @@ const App: React.FC = () => {
             onClose={() => setSelectedNode(null)} 
             onNavigate={(id) => focusOnNodeById(id)}
             onRegenerate={handleRegenerateNode}
+            onSave={handleNodeUpdate}
             isRegenerating={isRegeneratingNode}
             isMobile={isMobile}
         />
