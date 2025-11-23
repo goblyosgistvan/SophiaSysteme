@@ -177,6 +177,49 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
   useEffect(() => {
     if (!data || !svgRef.current) return;
     
+    // Check for "Soft Update" (Content change without structural change)
+    if (renderedDataRef.current && simulationRef.current) {
+        const oldNodes = renderedDataRef.current.nodes;
+        const newNodes = data.nodes;
+        
+        // Simple check: same count and same IDs
+        const isStructureSame = 
+            oldNodes.length === newNodes.length && 
+            oldNodes.every(oldN => newNodes.some(newN => newN.id === oldN.id)) &&
+            // If strictly needed, check links too, but usually node edits don't change links unless specified
+            data.links.length === renderedDataRef.current.links.length;
+
+        if (isStructureSame) {
+            // Update the existing simulation nodes with new data properties
+            const simNodes = simulationRef.current.nodes();
+            
+            simNodes.forEach(simNode => {
+                const newDataNode = newNodes.find(n => n.id === simNode.id);
+                if (newDataNode) {
+                    // Update content properties
+                    Object.assign(simNode, {
+                        label: newDataNode.label,
+                        type: newDataNode.type,
+                        shortSummary: newDataNode.shortSummary,
+                        longExplanation: newDataNode.longExplanation,
+                        conceptContext: newDataNode.conceptContext,
+                        // Do NOT overwrite x, y, vx, vy
+                    });
+                }
+            });
+
+            // Update Visuals in DOM
+            const svg = d3.select(svgRef.current);
+            svg.selectAll<SVGTextElement, SimulationNode>(".node text")
+               .text(d => d.label.replace(/_/g, ''))
+               .attr("font-style", d => d.label.includes('_') ? "italic" : "normal");
+
+            // Update references
+            renderedDataRef.current = data;
+            return; // EXIT: Do not restart simulation
+        }
+    }
+
     if (renderedDataRef.current === data) return;
     renderedDataRef.current = data;
 
