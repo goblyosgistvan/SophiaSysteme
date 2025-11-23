@@ -390,7 +390,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
             
             {/* Delete Node Section */}
             {!isEditing && (
-                <div className="mt-16 pt-8 border-t border-stone-200 flex justify-center">
+                <div className="mt-6 pt-8 border-t border-stone-200 flex justify-center">
                     {!showDeleteConfirm ? (
                         <button 
                             onClick={() => setShowDeleteConfirm(true)}
