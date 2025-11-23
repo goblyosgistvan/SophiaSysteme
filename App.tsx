@@ -129,6 +129,9 @@ const App: React.FC = () => {
   const [showInfo, setShowInfo] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
   
+  // Panel state
+  const [panelWidth, setPanelWidth] = useState(480);
+  
   // Augment State
   const [showAugmentInput, setShowAugmentInput] = useState(false);
   const [augmentQuery, setAugmentQuery] = useState('');
@@ -762,7 +765,7 @@ const App: React.FC = () => {
           graphRef.current?.focusNode(id, { targetYRatio: 0.2, scale: 0.5 });
       } else {
           // Desktop: Default behavior, offset for right panel
-          graphRef.current?.focusNode(id, { fitPadding: 480, scale: 0.9 });
+          graphRef.current?.focusNode(id, { fitPadding: panelWidth, scale: 0.9 });
       }
     }
   };
@@ -798,7 +801,7 @@ const App: React.FC = () => {
         // Same as tour: Center in the top 40% with less zoom (scale 0.5)
         graphRef.current?.focusNode(pNode.id, { targetYRatio: 0.2, scale: 0.5 });
     } else {
-        graphRef.current?.focusNode(pNode.id, { fitPadding: 480, scale: 0.9 });
+        graphRef.current?.focusNode(pNode.id, { fitPadding: panelWidth, scale: 0.9 });
     }
     setSelectedNode(pNode);
 
@@ -811,7 +814,7 @@ const App: React.FC = () => {
             // stopTour(); 
         }
     }
-  }, [isTourActive, tourPath, isMobile]);
+  }, [isTourActive, tourPath, isMobile, panelWidth]);
 
   return (
     <div className="h-screen w-screen flex flex-col bg-paper text-ink overflow-hidden relative">
@@ -1139,7 +1142,7 @@ const App: React.FC = () => {
              <div 
                 className={`absolute bottom-8 transform -translate-x-1/2 z-[100] bg-white/95 backdrop-blur shadow-lg border border-stone-200 rounded-full flex items-center transition-all duration-500 ease-in-out overflow-visible ${isTourActive ? 'w-[320px] h-[52px]' : 'w-[150px] h-[44px]'}`}
                 style={{
-                    left: (selectedNode && windowWidth >= 768) ? 'calc((100% - 480px) / 2)' : '50%'
+                    left: (selectedNode && windowWidth >= 768) ? `calc((100% - ${panelWidth}px) / 2)` : '50%'
                 }}
              >
                  {/* Tour Outline Popup */}
@@ -1268,6 +1271,8 @@ const App: React.FC = () => {
             onSave={handleNodeUpdate}
             isRegenerating={isRegeneratingNode}
             isMobile={isMobile}
+            width={panelWidth}
+            onResize={setPanelWidth}
         />
 
       </main>
