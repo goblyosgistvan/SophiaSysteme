@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { PhilosophicalNode, NodeType } from '../types';
-import { X, ArrowRightCircle, GitGraph, Lightbulb, RefreshCw, Edit3, Save, PenTool, GripVertical } from 'lucide-react';
+import { X, ArrowRightCircle, GitGraph, Lightbulb, RefreshCw, Edit3, Save, PenTool, GripVertical, Trash2, Plus, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 interface DetailPanelProps {
@@ -11,7 +11,10 @@ interface DetailPanelProps {
   onNavigate: (nodeId: string) => void;
   onRegenerate: (node: PhilosophicalNode) => void;
   onSave: (updatedNode: PhilosophicalNode) => void;
+  onDelete: (nodeId: string) => void;
+  onAddConnectedNode: (sourceNode: PhilosophicalNode, topic: string) => Promise<void>;
   isRegenerating: boolean;
+  isAddingNode: boolean;
   isMobile: boolean;
   width: number;
   onResize: (width: number) => void;
@@ -37,18 +40,37 @@ const AutoResizeTextarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElem
 };
 
 
-const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNavigate, onRegenerate, onSave, isRegenerating, isMobile, width, onResize }) => {
+const DetailPanel: React.FC<DetailPanelProps> = ({ 
+  node, 
+  allNodes, 
+  onClose, 
+  onNavigate, 
+  onRegenerate, 
+  onSave, 
+  onDelete, 
+  onAddConnectedNode, 
+  isRegenerating, 
+  isAddingNode,
+  isMobile, 
+  width, 
+  onResize 
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedLabel, setEditedLabel] = useState('');
   const [editedSummary, setEditedSummary] = useState('');
   const [editedExplanation, setEditedExplanation] = useState('');
   const [editedContext, setEditedContext] = useState('');
   
+  const [newConnectionTopic, setNewConnectionTopic] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  
   const isResizing = useRef(false);
 
-  // Reset edit state when node changes
+  // Reset states when node changes
   useEffect(() => {
     setIsEditing(false);
+    setShowDeleteConfirm(false);
+    setNewConnectionTopic('');
     if (node) {
         setEditedLabel(node.label);
         setEditedSummary(node.shortSummary);
@@ -99,7 +121,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
       const updatedNode: PhilosophicalNode = {
           ...node,
           label: editedLabel,
-          shortSummary: editedSummary, // Preserve the summary even if hidden in edit mode
+          shortSummary: editedSummary,
           longExplanation: editedExplanation,
           conceptContext: editedContext.trim() === '' ? undefined : editedContext
       };
@@ -116,6 +138,12 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
       }
       setIsEditing(false);
   };
+
+  const handleAddConnection = async () => {
+      if (!node || !newConnectionTopic.trim()) return;
+      await onAddConnectedNode(node, newConnectionTopic);
+      setNewConnectionTopic('');
+  }
 
   const getTypeLabel = (type: NodeType) => {
     switch (type) {
@@ -140,9 +168,8 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
     .map(id => allNodes.find(n => n.id === id))
     .filter((n): n is PhilosophicalNode => !!n) : [];
 
-  // Dynamic classes for positioning and transition based on isMobile
   const positionClasses = isMobile 
-    ? `fixed inset-x-0 bottom-0 h-[75vh] rounded-t-3xl border-t border-stone-200 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] ${node ? 'translate-y-0' : 'translate-y-full'}`
+    ? `fixed inset-x-0 bottom-0 h-[80vh] rounded-t-3xl border-t border-stone-200 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] ${node ? 'translate-y-0' : 'translate-y-full'}`
     : `fixed inset-y-0 right-0 border-l border-stone-200 ${node ? 'translate-x-0' : 'translate-x-full'}`;
   
   const desktopStyle = !isMobile ? { width: `${width}px` } : {};
@@ -251,11 +278,10 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
           </div>
 
           {/* Content */}
-          <div className={`flex-1 px-8 py-6 overflow-y-auto custom-scrollbar pb-24 ${isEditing ? 'bg-stone-50/30' : ''}`}>
+          <div className={`flex-1 px-8 py-6 overflow-y-auto custom-scrollbar pb-10 ${isEditing ? 'bg-stone-50/30' : ''}`}>
             
             {isEditing ? (
                  <div className="flex flex-col gap-6 mb-10 border-2 border-dashed border-stone-200 rounded-xl p-4 -mx-4 bg-stone-50/50">
-                    {/* Main Explanation Editing - Seamless Look */}
                     <div className="relative">
                          <AutoResizeTextarea 
                             value={editedExplanation}
@@ -265,7 +291,6 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
                         />
                     </div>
                     
-                    {/* Context Editing - Seamless Look */}
                     <div className="mt-2 border-t border-stone-200 pt-6">
                         <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-secondary mb-4">
                             <Lightbulb className="w-4 h-4" />
@@ -289,7 +314,6 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
                     </ReactMarkdown>
                     </div>
 
-                    {/* Logic: Show "Intellectual Context" ONLY if conceptContext exists */}
                     {node.conceptContext && (
                     <div className={`mb-8 border-t border-stone-200 pt-6 transition-opacity duration-500 ${isRegenerating ? 'opacity-50' : 'opacity-100'}`}>
                         <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-secondary mb-4">
@@ -308,28 +332,91 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
                 </>
             )}
 
-            {/* Interactive Connections (Only show in view mode) */}
-            {!isEditing && connectedNodes.length > 0 && (
+            {/* Interactive Connections */}
+            {!isEditing && (
                <div className="mt-8 pt-6 border-t border-stone-200">
                  <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-secondary mb-4">
                    <GitGraph className="w-4 h-4" />
                    Kapcsolódó fogalmak
                  </h3>
-                 <div className="flex flex-wrap gap-2">
-                   {connectedNodes.map(connNode => (
-                     <button
-                       key={connNode.id}
-                       onClick={() => onNavigate(connNode.id)}
-                       className="group flex items-center gap-2 px-4 py-2 bg-white border border-stone-300 rounded-full hover:border-accent hover:text-accent transition-all text-sm font-sans text-stone-600 shadow-sm"
-                     >
-                       <span className={connNode.label.includes('_') ? "italic" : ""}>
-                         {connNode.label.replace(/_/g, '')}
-                       </span>
-                       <ArrowRightCircle className="w-4 h-4 opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
-                     </button>
-                   ))}
+                 
+                 {/* Existing Connections */}
+                 {connectedNodes.length > 0 ? (
+                    <div className="flex flex-wrap gap-2 mb-6">
+                        {connectedNodes.map(connNode => (
+                        <button
+                            key={connNode.id}
+                            onClick={() => onNavigate(connNode.id)}
+                            className="group flex items-center gap-2 px-4 py-2 bg-white border border-stone-300 rounded-full hover:border-accent hover:text-accent transition-all text-sm font-sans text-stone-600 shadow-sm"
+                        >
+                            <span className={connNode.label.includes('_') ? "italic" : ""}>
+                            {connNode.label.replace(/_/g, '')}
+                            </span>
+                            <ArrowRightCircle className="w-4 h-4 opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300" />
+                        </button>
+                        ))}
+                    </div>
+                 ) : (
+                     <p className="text-sm text-secondary italic mb-6">Nincs közvetlen kapcsolat.</p>
+                 )}
+
+                 {/* Add New Connection Input */}
+                 <div className="flex items-center gap-2 bg-stone-50 border border-stone-200 rounded-full p-1 pl-4 transition-all focus-within:ring-2 focus-within:ring-accent/20 focus-within:border-accent">
+                    <input 
+                        type="text" 
+                        value={newConnectionTopic}
+                        onChange={(e) => setNewConnectionTopic(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleAddConnection()}
+                        placeholder="Új kapcsolódó fogalom..." 
+                        className="bg-transparent border-none text-sm font-sans text-ink placeholder:text-stone-400 focus:outline-none focus:ring-0 w-full"
+                        disabled={isAddingNode}
+                    />
+                    <button 
+                        onClick={handleAddConnection}
+                        disabled={!newConnectionTopic.trim() || isAddingNode}
+                        className="p-2 bg-white rounded-full text-secondary hover:text-accent hover:bg-stone-100 disabled:opacity-50 transition-colors shadow-sm"
+                        title="Hozzáadás"
+                    >
+                        {isAddingNode ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                            <Plus className="w-4 h-4" />
+                        )}
+                    </button>
                  </div>
+
                </div>
+            )}
+            
+            {/* Delete Node Section */}
+            {!isEditing && (
+                <div className="mt-16 pt-8 border-t border-stone-200 flex justify-center">
+                    {!showDeleteConfirm ? (
+                        <button 
+                            onClick={() => setShowDeleteConfirm(true)}
+                            className="flex items-center gap-2 px-4 py-2 text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                        >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            Csomópont törlése
+                        </button>
+                    ) : (
+                        <div className="flex items-center gap-3 animate-in fade-in zoom-in duration-200">
+                             <span className="text-xs font-sans text-stone-500">Biztosan törlöd?</span>
+                             <button 
+                                onClick={() => onDelete(node.id)}
+                                className="px-3 py-1 bg-red-500 text-white text-xs font-bold uppercase tracking-widest rounded hover:bg-red-600 transition-colors"
+                             >
+                                 Igen
+                             </button>
+                             <button 
+                                onClick={() => setShowDeleteConfirm(false)}
+                                className="px-3 py-1 bg-stone-200 text-stone-600 text-xs font-bold uppercase tracking-widest rounded hover:bg-stone-300 transition-colors"
+                             >
+                                 Mégse
+                             </button>
+                        </div>
+                    )}
+                </div>
             )}
             
           </div>
