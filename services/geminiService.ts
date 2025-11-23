@@ -163,11 +163,11 @@ export const enrichNodeData = async (node: PhilosophicalNode, topicContext: stri
 
   const systemInstruction = `
       Te egy szigorú és precíz filozófiai lexikon szerkesztője vagy.
-      A feladatod, hogy a megadott fogalom leírását PONTOSÍTSD és tömörebben fogalmazd meg.
+      A feladatod, hogy a megadott fogalom leírását PONTOSÍTSD és elmélyítsd.
       
       Elvárások:
       1. **Pontosság**: Használj szakmailag pontos, magyar akadémiai terminológiát.
-      2. **Tömörség**: A "shortSummary" legyen 1-2 mondat. A "longExplanation" legyen MAX 150 szó, fókuszált és sűrű. Ne írj kisesszét, csak a lényeget.
+      2. A "longExplanation" legyen a legfontosabb rész. Két tartalmas bekezdésben (köztük üres sor) fejtsd ki a fogalmat esszéisztikusan, összefüggéseiben. Ne felsorolás legyen, hanem folyó szöveg.
       3. **Kontextus**: Helyezd el a fogalmat a filozófiatörténetben.
       4. **Nyelvezet**: - Kizárólag MAGYAR nyelven válaszolj.
        - **IDÉZŐJELEK**: A magyar szabályoknak megfelelően használd a „ és ” jeleket.
