@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { PhilosophicalNode, NodeType } from '../types';
-import { X, ArrowRightCircle, GitGraph, Lightbulb, RefreshCw, Edit3, Save, PenTool } from 'lucide-react';
+import { X, ArrowRightCircle, GitGraph, Lightbulb, RefreshCw, Edit3, Save, PenTool, GripVertical } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 interface DetailPanelProps {
@@ -13,6 +13,8 @@ interface DetailPanelProps {
   onSave: (updatedNode: PhilosophicalNode) => void;
   isRegenerating: boolean;
   isMobile: boolean;
+  width: number;
+  onResize: (width: number) => void;
 }
 
 const AutoResizeTextarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = (props) => {
@@ -35,12 +37,14 @@ const AutoResizeTextarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElem
 };
 
 
-const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNavigate, onRegenerate, onSave, isRegenerating, isMobile }) => {
+const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNavigate, onRegenerate, onSave, isRegenerating, isMobile, width, onResize }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedLabel, setEditedLabel] = useState('');
   const [editedSummary, setEditedSummary] = useState('');
   const [editedExplanation, setEditedExplanation] = useState('');
   const [editedContext, setEditedContext] = useState('');
+  
+  const isResizing = useRef(false);
 
   // Reset edit state when node changes
   useEffect(() => {
@@ -52,6 +56,43 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
         setEditedContext(node.conceptContext || '');
     }
   }, [node]);
+
+  // Resize Logic
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing.current) return;
+      
+      const newWidth = window.innerWidth - e.clientX;
+      const maxWidth = window.innerWidth / 2;
+      const minWidth = 320;
+      
+      onResize(Math.max(minWidth, Math.min(newWidth, maxWidth)));
+    };
+
+    const handleMouseUp = () => {
+      if (isResizing.current) {
+        isResizing.current = false;
+        document.body.style.cursor = 'default';
+        document.body.style.userSelect = 'auto';
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [onResize]);
+
+  const startResizing = (e: React.MouseEvent) => {
+    if (isMobile) return;
+    e.preventDefault();
+    isResizing.current = true;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+  };
 
   const handleSave = () => {
       if (!node) return;
@@ -102,16 +143,34 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
   // Dynamic classes for positioning and transition based on isMobile
   const positionClasses = isMobile 
     ? `fixed inset-x-0 bottom-0 h-[75vh] rounded-t-3xl border-t border-stone-200 shadow-[0_-10px_40px_rgba(0,0,0,0.1)] ${node ? 'translate-y-0' : 'translate-y-full'}`
-    : `fixed inset-y-0 right-0 w-full md:w-[480px] border-l border-stone-200 ${node ? 'translate-x-0' : 'translate-x-full'}`;
+    : `fixed inset-y-0 right-0 border-l border-stone-200 ${node ? 'translate-x-0' : 'translate-x-full'}`;
+  
+  const desktopStyle = !isMobile ? { width: `${width}px` } : {};
 
   return (
     <div 
         className={`${positionClasses} bg-paper shadow-2xl transform transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] z-[90] flex flex-col`}
+        style={desktopStyle}
     >
+      
+      {/* Resize Handle (Desktop Only) */}
+      {!isMobile && (
+        <div 
+            className="absolute left-0 top-0 bottom-0 w-1.5 cursor-col-resize hover:bg-accent/30 active:bg-accent transition-colors z-[100] flex flex-col justify-center items-center group"
+            onMouseDown={startResizing}
+        >
+             <div className="h-8 w-0.5 bg-stone-300 group-hover:bg-accent/50 rounded-full transition-colors delay-100" />
+        </div>
+      )}
+
       {node && (
         <>
           {/* Header */}
           <div className={`sticky top-0 bg-paper/95 backdrop-blur-sm border-b border-stone-200 px-8 py-6 flex justify-between items-start z-10 flex-none ${isMobile ? 'rounded-t-3xl' : ''}`}>
+            {isEditing && (
+                 <div className={`absolute top-0 left-0 right-0 h-1 bg-[linear-gradient(90deg,transparent_0%,#000_50%,transparent_100%)] opacity-10`} />
+            )}
+            
             <div className="flex-1 min-w-0 mr-4">
               <div className="flex items-center gap-2 mb-3 flex-wrap">
                 <span className={`inline-block px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase border rounded ${getTypeColor(node.type)}`}>
@@ -189,7 +248,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
           </div>
 
           {/* Content */}
-          <div className="flex-1 px-8 py-6 overflow-y-auto custom-scrollbar pb-24">
+          <div className={`flex-1 px-8 py-6 overflow-y-auto custom-scrollbar pb-24 ${isEditing ? 'bg-stone-50/30' : ''}`}>
             
             {isEditing ? (
                  <div className="flex flex-col gap-6 mb-10 border-2 border-dashed border-stone-200 rounded-xl p-4 -mx-4 bg-stone-50/50">
