@@ -172,7 +172,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
             )}
             
             <div className="flex-1 min-w-0 mr-4">
-              <div className="flex items-center gap-2 mb-3 flex-wrap">
+              <div className="flex items-center gap-1 mb-3 flex-wrap">
                 <span className={`inline-block px-2 py-0.5 text-[10px] font-bold tracking-widest uppercase border rounded ${getTypeColor(node.type)}`}>
                     {getTypeLabel(node.type)}
                 </span>
@@ -180,26 +180,29 @@ const DetailPanel: React.FC<DetailPanelProps> = ({ node, allNodes, onClose, onNa
                 {/* Actions */}
                 {!isEditing ? (
                     <>
+                        <div className="h-4 w-px bg-stone-300 mx-2"></div>
+                        
                         <button 
                             onClick={() => onRegenerate(node)}
                             disabled={isRegenerating}
-                            className="flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest border border-stone-300 rounded text-stone-500 hover:text-accent hover:border-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="p-1.5 text-stone-400 hover:text-accent hover:bg-stone-100 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             title="Szöveg pontosítása mesterséges intelligenciával"
                         >
-                            <RefreshCw className={`w-3 h-3 ${isRegenerating ? 'animate-spin' : ''}`} />
-                            {isRegenerating ? 'Generálás...' : 'Kifejtés'}
+                            <RefreshCw className={`w-3.5 h-3.5 ${isRegenerating ? 'animate-spin' : ''}`} />
                         </button>
+                        
                         <button 
                             onClick={() => setIsEditing(true)}
-                            className="flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest border border-stone-300 rounded text-stone-500 hover:text-ink hover:border-ink transition-colors"
+                            className="p-1.5 text-stone-400 hover:text-ink hover:bg-stone-100 rounded-md transition-colors"
                             title="Szerkesztés"
                         >
-                            <Edit3 className="w-3 h-3" />
-                            Szerkesztés
+                            <Edit3 className="w-3.5 h-3.5" />
                         </button>
                     </>
                 ) : (
                     <>
+                         <div className="h-4 w-px bg-stone-300 mx-2"></div>
+                         
                         <button 
                             onClick={handleSave}
                             className="flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest bg-ink text-white border border-ink rounded hover:bg-stone-700 transition-colors"
