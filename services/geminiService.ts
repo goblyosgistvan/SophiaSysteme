@@ -158,6 +158,43 @@ export const augmentPhilosophyData = async (originalData: GraphData, request: st
     }
 };
 
+export const createConnectedNode = async (sourceNode: PhilosophicalNode, request: string): Promise<GraphData> => {
+    if (!apiKey) throw new Error("API Key is missing.");
+
+    const systemInstruction = `${systemInstructionBase}
+      4. **ÚJ KAPCSOLÓDÓ FOGALOM LÉTREHOZÁSA**:
+         - A felhasználó egy új fogalmat akar kapcsolni közvetlenül ehhez a csomóponthoz: "${sourceNode.label}" (ID: "${sourceNode.id}").
+         - A kérés: "${request}".
+         - A feladatod:
+           1. Generálj PONTOSAN EGY ÚJ csomópontot, ami tartalmilag releváns a kéréshez.
+           2. Generálj hozzá egy kapcsolatot (link), ami az új csomópontot a "${sourceNode.id}" node-hoz köti.
+           3. A válaszban csak az új node és az egyetlen új link szerepeljen.
+    `;
+
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            config: {
+                systemInstruction,
+                responseMimeType: "application/json",
+                responseSchema: graphSchema,
+                temperature: 0.1,
+            },
+            contents: [
+                { role: "user", parts: [{ text: `Készíts egy új fogalmat, ami ehhez kapcsolódik: "${sourceNode.label}", a következő témában: "${request}".` }] }
+            ]
+        });
+
+        const text = response.text;
+        if (!text) throw new Error("No response text");
+
+        return JSON.parse(text) as GraphData;
+    } catch (error) {
+        console.error("Gemini Add Node Error:", error);
+        throw error;
+    }
+};
+
 export const enrichNodeData = async (node: PhilosophicalNode, topicContext: string): Promise<Partial<PhilosophicalNode>> => {
   if (!apiKey) throw new Error("API Key is missing.");
 
@@ -188,7 +225,7 @@ export const enrichNodeData = async (node: PhilosophicalNode, topicContext: stri
           contents: [
               { role: "user", parts: [{ text: `A téma kontextusa: "${topicContext}".
               
-              Pontosítsd és tömörítsd a következő node tartalmát:
+              Pontosítsd a következő node tartalmát:
               Label: ${node.label}
               Jelenlegi Summary: ${node.shortSummary}
               Jelenlegi Explanation: ${node.longExplanation}` }] }
