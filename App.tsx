@@ -119,12 +119,12 @@ const MOCK_DATA: GraphData = {
 };
 
 const App: React.FC = () => {
-  const [query, setQuery] = useState('Schopenhauer');
+  const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [data, setData] = useState<GraphData | null>(MOCK_DATA);
+  const [data, setData] = useState<GraphData | null>(null);
   const [selectedNode, setSelectedNode] = useState<PhilosophicalNode | null>(null);
-  const [hasSearched, setHasSearched] = useState(true);
+  const [hasSearched, setHasSearched] = useState(false);
   const [savedGraphs, setSavedGraphs] = useState<SavedGraph[]>([]);
   const [showInfo, setShowInfo] = useState(false);
   
