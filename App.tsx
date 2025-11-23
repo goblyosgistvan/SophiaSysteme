@@ -3,7 +3,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical } from 'lucide-react';
 import ConceptGraph, { ConceptGraphHandle } from './components/ConceptGraph';
 import DetailPanel from './components/DetailPanel';
-import { fetchPhilosophyData, augmentPhilosophyData, enrichNodeData } from './services/geminiService';
+import { fetchPhilosophyData, augmentPhilosophyData, enrichNodeData, createConnectedNode } from './services/geminiService';
 import { GraphData, PhilosophicalNode, NodeType } from './types';
 
 interface SavedGraph {
@@ -141,6 +141,9 @@ const App: React.FC = () => {
 
   // Node Regeneration State
   const [isRegeneratingNode, setIsRegeneratingNode] = useState(false);
+  
+  // Adding specific node connection state
+  const [isAddingConnection, setIsAddingConnection] = useState(false);
 
   const [currentSuggestions, setCurrentSuggestions] = useState<string[]>([]);
   const [renamingId, setRenamingId] = useState<string | null>(null);
@@ -419,8 +422,6 @@ const App: React.FC = () => {
                     data: parsedData
                 };
                 
-                // If on landing page, just add to history. If already searching, maybe load it? 
-                // Let's just load it to be helpful.
                 loadSavedGraph(importedGraph);
                 
             } else {
@@ -476,7 +477,6 @@ const App: React.FC = () => {
           setAugmentQuery('');
       } catch (err) {
           console.error(err);
-          // Optional: show specific error for augmentation
       } finally {
           setAugmentLoading(false);
       }
@@ -518,6 +518,97 @@ const App: React.FC = () => {
           console.error("Failed to regenerate node:", error);
       } finally {
           setIsRegeneratingNode(false);
+      }
+  };
+
+  // --- Delete Node Logic ---
+  const handleDeleteNode = (nodeId: string) => {
+      if (!data) return;
+
+      // Filter out node
+      const updatedNodes = data.nodes.filter(n => n.id !== nodeId);
+
+      // Filter out connected links (handle both string IDs and d3 objects if simulated)
+      const updatedLinks = data.links.filter(l => {
+          const s = typeof l.source === 'object' ? (l.source as any).id : l.source;
+          const t = typeof l.target === 'object' ? (l.target as any).id : l.target;
+          return s !== nodeId && t !== nodeId;
+      });
+
+      // Update connections arrays in remaining nodes
+      // (Remove the deleted ID from other nodes' connections lists)
+      const finalNodes = updatedNodes.map(n => ({
+          ...n,
+          connections: n.connections.filter(c => c !== nodeId)
+      }));
+
+      const updatedData = { nodes: finalNodes, links: updatedLinks };
+      
+      // Update Tour Path if active
+      if (tourPath.includes(nodeId)) {
+          const newPath = tourPath.filter(id => id !== nodeId);
+          setTourPath(newPath);
+          // If deleted node was current tour step, adjust index
+          if (isTourActive && tourIndex >= newPath.length) {
+              setTourIndex(newPath.length - 1);
+          }
+      }
+
+      setData(updatedData);
+      setSelectedNode(null); // Close panel
+      autoSaveGraph(query, updatedData);
+  };
+
+  // --- Add Connected Node Logic ---
+  const handleAddConnectedNode = async (sourceNode: PhilosophicalNode, topic: string) => {
+      if (!data) return;
+      setIsAddingConnection(true);
+
+      try {
+          const result = await createConnectedNode(sourceNode, topic);
+          if (!result.nodes.length || !result.links.length) return;
+
+          const newNode = result.nodes[0];
+          const newLink = result.links[0];
+          
+          // 1. Add new node
+          const updatedNodes = [...data.nodes, newNode];
+
+          // 2. Add new link
+          const updatedLinks = [...data.links, newLink];
+          
+          // 3. Update 'connections' arrays for Source and New node to reflect relationship in data
+          // Update source node in the list
+          const finalNodes = updatedNodes.map(n => {
+             if (n.id === sourceNode.id) {
+                 return { ...n, connections: [...n.connections, newNode.id] };
+             }
+             if (n.id === newNode.id) {
+                 // Ensure new node knows about source
+                 if (!n.connections.includes(sourceNode.id)) {
+                     return { ...n, connections: [...n.connections, sourceNode.id] };
+                 }
+             }
+             return n;
+          });
+
+          const updatedData = { nodes: finalNodes, links: updatedLinks };
+          setData(updatedData);
+          
+          // Automatically focus on the new node? Or keep current open?
+          // Let's keep current open but maybe refresh it if needed (it updates via selectedNode logic)
+          // Actually, we need to update selectedNode because its connections array changed
+          const updatedSourceNode = finalNodes.find(n => n.id === sourceNode.id);
+          if (updatedSourceNode) {
+              setSelectedNode(updatedSourceNode);
+          }
+
+          autoSaveGraph(query, updatedData);
+
+      } catch (err) {
+          console.error("Failed to add connected node", err);
+      } finally {
+          setIsAddingConnection(false);
       }
   };
 
@@ -1269,7 +1360,10 @@ const App: React.FC = () => {
             onNavigate={(id) => focusOnNodeById(id)}
             onRegenerate={handleRegenerateNode}
             onSave={handleNodeUpdate}
+            onDelete={handleDeleteNode}
+            onAddConnectedNode={handleAddConnectedNode}
             isRegenerating={isRegeneratingNode}
+            isAddingNode={isAddingConnection}
             isMobile={isMobile}
             width={panelWidth}
             onResize={setPanelWidth}
