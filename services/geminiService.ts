@@ -110,7 +110,7 @@ const systemInstruction = await getAugmentedInstruction(`${systemInstructionBase
        - A központi téma legyen a ROOT.
        - Generálj legalább 15-20 csomópontot.
        - Figyelj arra, hogy minden link érvényes forrásra és célra mutasson.
-  `;
+  `);
 
   try {
     const response = await ai.models.generateContent({
@@ -191,7 +191,7 @@ export const createConnectedNode = async (sourceNode: PhilosophicalNode, request
            1. Generálj PONTOSAN EGY ÚJ csomópontot, ami tartalmilag releváns a kéréshez, terminológia a forrásszöveg alapján.
            2. Generálj hozzá egy kapcsolatot (link), ami az új csomópontot a "${sourceNode.id}" node-hoz köti.
            3. A válaszban csak az új node és az egyetlen új link szerepeljen.
-    `;
+    `);
 
     try {
         const response = await ai.models.generateContent({
