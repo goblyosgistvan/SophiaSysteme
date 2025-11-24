@@ -148,7 +148,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
   const getTypeLabel = (type: NodeType) => {
     switch (type) {
       case NodeType.ROOT: return "Központi Téma";
-      case NodeType.CATEGORY: return "Filozófiai Irányzat";
+      case NodeType.CATEGORY: return "Téma"; // Changed from "Filozófiai Irányzat"
       case NodeType.CONCEPT: return "Fogalom";
       case NodeType.WORK: return "Alapmű";
       default: return "Fogalom";
