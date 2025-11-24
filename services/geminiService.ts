@@ -45,7 +45,7 @@ const singleNodeSchema: Schema = {
   type: Type.OBJECT,
   properties: {
     shortSummary: { type: Type.STRING, description: "A concise, academic summary (2-3 sentences) in Hungarian." },
-    longExplanation: { type: Type.STRING, description: "Informatív, fókuszált kifejtés (max 150 szó). Legyen tömör és lényegretörő." },
+    longExplanation: { type: Type.STRING, description: "KÖTELEZŐEN HOSSZÚ KIFEJTÉS: Minimum 100-120 szó. Két teljes, részletes bekezdés, amely mélyen elemzi a fogalmat. Tilos a rövid, 1-2 mondatos leírás!" },
     conceptContext: { type: Type.STRING, description: "Historical and theoretical context, contrasting with other schools or philosophers." }
   },
   required: ["shortSummary", "longExplanation", "conceptContext"]
@@ -75,7 +75,7 @@ const systemInstructionBase = `
 
     3. **TARTALOM ÉS MEZŐK**:
        - **conceptContext**: Ha a node FOGALOM vagy IRÁNYZAT, ide írj egy rövid, szöveges kitekintést: milyen más irányzatokkal/fogalmakkal áll párhuzamban vagy ellentétben?
-       - **longExplanation**: Ez legyen a legfontosabb rész. Két tartalmas bekezdésben fejtsd ki a fogalmat esszéisztikusan, összefüggéseiben. Ne felsorolás legyen, hanem folyó szöveg.
+       - **longExplanation**: EZ A LEGFONTOSABB MEZŐ. Minden egyes csomóponthoz KÖTELEZŐ két, tartalmas, esszé-szintű bekezdést írnod.
 `;
 
 const getAugmentedInstruction = async (baseInstruction: string): Promise<string> => {
@@ -98,6 +98,13 @@ const getAugmentedInstruction = async (baseInstruction: string): Promise<string>
        *** FORRÁSSZÖVEG KEZDETE ***
        ${limitedText}
        *** FORRÁSSZÖVEG VÉGE ***
+
+---------------------------------------------------------
+       UTOLSÓ EMLÉKEZTETŐ A GENERÁLÁSHOZ:
+       1. Használd a fenti könyv fogalomkészletét.
+       2. **HOSSZÚSÁG**: Minden egyes 'longExplanation' legyen legalább 100-150 szó! Ne rövidítsd le a listát, inkább generálj kevesebb (12-15) csomópontot, de azok legyenek nagyon részletesen kidolgozva!
+       ---------------------------------------------------------
+       
     `;
 };
 
