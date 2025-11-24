@@ -45,7 +45,7 @@ const singleNodeSchema: Schema = {
   type: Type.OBJECT,
   properties: {
     shortSummary: { type: Type.STRING, description: "A concise, academic summary (2-3 sentences) in Hungarian." },
-    longExplanation: { type: Type.STRING, description: "KÖTELEZŐEN HOSSZÚ KIFEJTÉS: Minimum 100-120 szó. Két teljes, részletes bekezdés, amely mélyen elemzi a fogalmat. Tilos a rövid, 1-2 mondatos leírás!" },
+    longExplanation: { type: Type.STRING, description: "KÖTELEZŐEN HOSSZÚ KIFEJTÉS: Minimum ~200 szó. Két teljes, részletes bekezdés, amely mélyen elemzi a fogalmat. Tilos a rövid, 1-2 mondatos leírás!" },
     conceptContext: { type: Type.STRING, description: "Historical and theoretical context, contrasting with other schools or philosophers." }
   },
   required: ["shortSummary", "longExplanation", "conceptContext"]
