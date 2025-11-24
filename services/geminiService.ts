@@ -1,6 +1,7 @@
 
 import { GoogleGenAI, Type, Schema } from "@google/genai";
 import { GraphData, NodeType, PhilosophicalNode } from '../types';
+import { loadBookContext } from './contextLoader';
 
 const apiKey = process.env.API_KEY || '';
 const ai = new GoogleGenAI({ apiKey });
@@ -77,13 +78,35 @@ const systemInstructionBase = `
        - **longExplanation**: Ez legyen a legfontosabb rész. Két tartalmas bekezdésben fejtsd ki a fogalmat esszéisztikusan, összefüggéseiben. Ne felsorolás legyen, hanem folyó szöveg.
 `;
 
+const getAugmentedInstruction = async (baseInstruction: string): Promise<string> => {
+    const bookText = await loadBookContext();
+    
+    if (!bookText) return baseInstruction;
+
+    const limitedText = bookText.slice(0, 900000);
+
+    return `${baseInstruction}
+
+    4. **SZIGORÚ TERMINOLÓGIAI REFERENCIA**:
+       A válaszok generálásakor HASZNÁLD az alábbi forrásszöveget (Boros Gábor: Filozófia) szótárként és terminológiai mankóként.
+       
+       SZABÁLYOK:
+       - **Szóhasználat**: Ha a forrásszöveg egy fogalmat specifikusan fordít (pl. „elme” vs „szellem”, „magánvaló” vs „dolog önmagában”), akkor KÖTELEZŐEN a könyv változatát használd.
+       - **Helyesírás**: Kövesd a könyvben használt nevek és címek írásmódját.
+       - **Tudásbázis**: A tartalmi kifejtéshez használd az általános tudásodat is, de a struktúra és a fogalmak legyenek összhangban a könyvvel.
+
+       *** FORRÁSSZÖVEG KEZDETE ***
+       ${limitedText}
+       *** FORRÁSSZÖVEG VÉGE ***
+    `;
+};
+
 export const fetchPhilosophyData = async (topic: string): Promise<GraphData> => {
   if (!apiKey) {
     throw new Error("API Key is missing.");
   }
 
-  const systemInstruction = `${systemInstructionBase}
-    4. **GENERÁLÁS**:
+const systemInstruction = await getAugmentedInstruction(`${systemInstructionBase}    4. **GENERÁLÁS**:
        - A központi téma legyen a ROOT.
        - Generálj legalább 15-20 csomópontot.
        - Figyelj arra, hogy minden link érvényes forrásra és célra mutasson.
@@ -99,7 +122,7 @@ export const fetchPhilosophyData = async (topic: string): Promise<GraphData> => 
         temperature: 0, 
       },
       contents: [
-        { role: "user", parts: [{ text: `Készíts átfogó fogalmi térképet erről a témáról, pontos magyar terminológiával: "${topic}"` }] }
+        { role: "user", parts: [{ text: `Készíts átfogó fogalmi térképet erről a témáról, a megadott forrásszöveg magyar terminológiájával: "${topic}"` }] }
       ]
     });
 
@@ -121,13 +144,13 @@ export const augmentPhilosophyData = async (originalData: GraphData, request: st
     const existingNodesList = originalData.nodes.map(n => `(ID: "${n.id}", Label: "${n.label}")`).join("\n");
     
     const systemInstruction = `${systemInstructionBase}
-      4. **KIEGÉSZÍTÉS (AUGMENTATION)**:
+      5. **KIEGÉSZÍTÉS (AUGMENTATION)**:
          - A felhasználó kiegészítést kér a gráfhoz: "${request}".
          - Itt vannak a JELENLEGI CSOMÓPONTOK:
          ${existingNodesList}
 
          - A feladatod:
-           1. Generálj 3-5 ÚJ csomópontot, ami releváns a kéréshez.
+           1. Generálj 3-5 ÚJ csomópontot, ami releváns a kéréshez. A forrászöveget hívd segítségül a terminológiához.
            2. SZIGORÚ INTEGRÁCIÓ: Minden új csomópontnak kapcsolódnia KELL legalább egy, a fenti listában szereplő MEGLÉVŐ ID-hoz. Ne hozz létre elszigetelt szigeteket!
            3. A kapcsolatoknál használd a pontos ID-kat a fenti listából.
            4. Csak az új node-okat és az új linkeket küldd vissza.
@@ -161,12 +184,11 @@ export const augmentPhilosophyData = async (originalData: GraphData, request: st
 export const createConnectedNode = async (sourceNode: PhilosophicalNode, request: string): Promise<GraphData> => {
     if (!apiKey) throw new Error("API Key is missing.");
 
-    const systemInstruction = `${systemInstructionBase}
-      4. **ÚJ KAPCSOLÓDÓ FOGALOM LÉTREHOZÁSA**:
+  const systemInstruction = await getAugmentedInstruction(`${systemInstructionBase}      4. **ÚJ KAPCSOLÓDÓ FOGALOM LÉTREHOZÁSA**:
          - A felhasználó egy új fogalmat akar kapcsolni közvetlenül ehhez a csomóponthoz: "${sourceNode.label}" (ID: "${sourceNode.id}").
          - A kérés: "${request}".
          - A feladatod:
-           1. Generálj PONTOSAN EGY ÚJ csomópontot, ami tartalmilag releváns a kéréshez.
+           1. Generálj PONTOSAN EGY ÚJ csomópontot, ami tartalmilag releváns a kéréshez, terminológia a forrásszöveg alapján.
            2. Generálj hozzá egy kapcsolatot (link), ami az új csomópontot a "${sourceNode.id}" node-hoz köti.
            3. A válaszban csak az új node és az egyetlen új link szerepeljen.
     `;
@@ -198,9 +220,9 @@ export const createConnectedNode = async (sourceNode: PhilosophicalNode, request
 export const enrichNodeData = async (node: PhilosophicalNode, topicContext: string): Promise<Partial<PhilosophicalNode>> => {
   if (!apiKey) throw new Error("API Key is missing.");
 
-  const systemInstruction = `
+  const systemInstruction = await getAugmentedInstruction(`
       Te egy szigorú és precíz filozófiai lexikon szerkesztője vagy.
-      A feladatod, hogy a megadott fogalom leírását PONTOSÍTSD és elmélyítsd.
+      A feladatod, hogy a megadott fogalom leírását PONTOSÍTSD és elmélyítsd, a mellékelt forrásszöveg alapján, hogy a terminológia és szöveg pontosabb legyen.
       
       Elvárások:
       1. **Pontosság**: Használj szakmailag pontos, magyar akadémiai terminológiát.
@@ -211,7 +233,7 @@ export const enrichNodeData = async (node: PhilosophicalNode, topicContext: stri
        - **MŰVEK CÍME**: DŐLT BETŰVEL írd.
       
       A kimenet JSON legyen, ami tartalmazza a frissített mezőket.
-  `;
+  `);
 
   try {
       const response = await ai.models.generateContent({
