@@ -3,5 +3,5 @@
   <circle cx="64" cy="64" r="64" fill="#2e2a26" />
   
   <!-- Betű (Paper szín) -->
-  <text x="64" y="88" font-family="Sabon" font-weight="bold" font-size="80" text-anchor="middle" fill="#F9F8F4">S</text>
+  <text x="64" y="88" font-family="Sabon" line-height="100%" font-weight="bold" font-size="80" text-anchor="middle" fill="#F9F8F4">S</text>
 </svg>
