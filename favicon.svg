@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Háttér kör (Accent szín) -->
+  <circle cx="64" cy="64" r="64" fill="#A65D57" />
+  
+  <!-- Betű (Paper szín) -->
+  <text x="64" y="88" font-family="Garamond, serif" font-weight="bold" font-size="80" text-anchor="middle" fill="#F9F8F4">S</text>
+</svg>
