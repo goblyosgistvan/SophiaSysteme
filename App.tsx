@@ -1,9 +1,10 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical } from 'lucide-react';
+import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical, Folder, File, BookOpen } from 'lucide-react';
 import ConceptGraph, { ConceptGraphHandle } from './components/ConceptGraph';
 import DetailPanel from './components/DetailPanel';
 import { fetchPhilosophyData, augmentPhilosophyData, enrichNodeData, createConnectedNode } from './services/geminiService';
+import { exportJSON, exportMarkdown } from './services/exportService';
 import { GraphData, PhilosophicalNode, NodeType } from './types';
 
 interface SavedGraph {
@@ -18,105 +19,6 @@ const ALL_SUGGESTIONS = [
     'Nietzsche', 'Arisztotelészi logika', 'Utilitarizmus', 'Fenomenológia', 'Heidegger',
     'Spinoza etikája', 'Schopenhauer', 'Metafizika', 'Episztemológia', 'Társadalmi szerződés'
 ];
-
-// Mock data for testing (Schopenhauer)
-const MOCK_DATA: GraphData = {
-  "nodes": [
-    {
-      "id": "schopenhauer_main",
-      "label": "Schopenhauer",
-      "type": "ROOT" as NodeType,
-      "shortSummary": "A 19. századi pesszimizmus és az akaratmetafizika atyja.",
-      "longExplanation": "Arthur Schopenhauer (1788–1860) a német filozófia egyik legmeghatározóbb alakja, aki radikálisan szembehelyezkedett a korabeli német idealizmussal, különösen Hegellel. Központi gondolata, hogy a világ lényege nem az ész vagy a szellem, hanem egy vak, irracionális és kielégíthetetlen erő: az Akarat. Ez a felismerés vezette el híres pesszimizmusához, mely szerint az élet alapvetően szenvedés, mivel a vágyak sosem elégíthetők ki tartósan.\n\nRendszere nagy hatást gyakorolt a későbbi életfilozófiákra, a pszichoanalízisre (Freud), a művészetelméletre, valamint olyan gondolkodókra és művészekre, mint Nietzsche, Wagner, Wittgenstein vagy Thomas Mann. Filozófiája a keleti gondolkodás (buddhizmus, upanisadok) és a nyugati metafizika (Platón, Kant) egyedülálló szintézise.",
-      "connections": ["akarat", "kepzet", "szenvedes", "reszvet", "esztetika", "aszkezis"]
-    },
-    {
-      "id": "akarat",
-      "label": "akarat",
-      "type": "CONCEPT" as NodeType,
-      "shortSummary": "A világ dologi magja (Kant magánvalója), egy vak ösztön.",
-      "longExplanation": "Schopenhauer filozófiájában az „akarat” (Wille) nem a tudatos emberi szándékot jelenti, hanem egy kozmikus, metafizikai ős-erőt. Ez a világ „magánvalója” (Ding an sich), ami minden jelenség mögött meghúzódik. Ez az erő egységes, oszthatatlan, tér és idő nélküli, és minden létezőben (a gravitációtól az emberi vágyig) ez nyilvánul meg.\n\nAz akarat lényege a hiány és a törekvés. Mivel vak és céltalan, soha nem érhet el végső kielégülést. Ez a szüntelen, kielégíthetetlen hajtóerő okozza a világban tapasztalható küzdelmet és szenvedést. Az egyénben ez az életösztönként, a fajfenntartás ösztönében és az önzésben jelenik meg leginkább.",
-      "conceptContext": "Szemben Hegel „Világszellemével”, ami racionális, Schopenhauer Akarata irracionális. Párhuzam vonható a freudi „Ösztön-én” (Id) fogalmával.",
-      "connections": ["schopenhauer_main", "szenvedes", "kepzet", "test"]
-    },
-    {
-      "id": "kepzet",
-      "label": "képzet",
-      "type": "CONCEPT" as NodeType,
-      "shortSummary": "A világ, ahogyan az a tudatunkban megjelenik (jelenség).",
-      "longExplanation": "A „képzet” (Vorstellung) a világ objektív oldala, vagyis az a mód, ahogyan a valóság a megismerő alany számára megjelenik. Ez a kanti „jelenségvilágnak” felel meg. A képzet világa alá van vetve az „elégséges alap elvének” (tér, idő, okság), tehát itt minden determinált és szükségszerű.\n\nAmikor a világot vizsgáljuk, tudományosan leírjuk, akkor a képzetek világában mozgunk. Schopenhauer szerint ez a világ azonban csak „Májá fátyla” (illúzió), amely elfedi előlünk a valóság igazi természetét, az egységes akaratot, és azt az illúziót kelti, hogy sok, egymástól elkülönült egyed (individuum) létezik.",
-      "conceptContext": "Kant ismeretelméletére épül, de Schopenhauer egyszerűsíti Kant kategóriarendszerét az okságra.",
-      "connections": ["schopenhauer_main", "akarat", "maja_fatyla"]
-    },
-    {
-      "id": "szenvedes",
-      "label": "szenvedés",
-      "type": "CONCEPT" as NodeType,
-      "shortSummary": "Az élet alapvető állapota az akarat kielégíthetetlensége miatt.",
-      "longExplanation": "Mivel az ember lényege az akarat (vágy), és a vágy mindig valamilyen hiányból fakad, az emberi lét alapállapota a fájdalom. Ha egy vágy teljesül, az csak átmeneti enyhülést hoz, amit hamarosan felvált az unalom vagy egy újabb vágy. Így az élet egy inga, amely a fájdalom és az unalom között leng.\n\nA boldogság Schopenhauer szerint sosem pozitív állapot, hanem csak a szenvedés átmeneti hiánya (negatív jellegű). Ez a pesszimista diagnózis a kiindulópontja az etikai és esztétikai megváltástannak.",
-      "conceptContext": "Erős párhuzam a buddhizmus Négy Nemes Igazságának első pontjával („minden élet szenvedés”).",
-      "connections": ["schopenhauer_main", "akarat", "unalom"]
-    },
-    {
-      "id": "esztetika",
-      "label": "esztétikai szemlélődés",
-      "type": "CATEGORY" as NodeType,
-      "shortSummary": "Az ideiglenes megváltás a szenvedéstől a művészet által.",
-      "longExplanation": "A művészet az a terület, ahol az ember képes – ha csak rövid időre is – megszabadulni az akarat uralmától. Az esztétikai élmény során „tiszta, akarat nélküli megismerő alannyá” válunk. Ilyenkor nem azt nézzük, hogy egy tárgy mire jó nekünk (érdek), hanem önmagában szemléljük azt.\n\nEbben az állapotban megszűnik a vágyakozás, és ezzel együtt a szenvedés is. A művészet tárgyai nem az egyedi dolgok, hanem a platóni ideák. A legmagasabb rendű művészet Schopenhauer szerint a zene, mert az nem az ideákat, hanem közvetlenül magát az akaratot fejezi ki.",
-      "conceptContext": "Kant „érdek nélküli tetszés” fogalmának metafizikai kiterjesztése.",
-      "connections": ["schopenhauer_main", "zene", "platoni_ideak"]
-    },
-    {
-      "id": "aszkezis",
-      "label": "aszkézis",
-      "type": "CATEGORY" as NodeType,
-      "shortSummary": "Az akarat tagadása, a végleges megváltás útja.",
-      "longExplanation": "Míg a művészet csak átmeneti enyhülést ad, a végleges megszabadulás útja az „akarat tagadása” (Verneinung des Willens). Ez egy morális fordulat, ahol az ember felismeri, hogy minden szenvedés forrása az önzés és az élni akarás.\n\nAz aszkézis révén a szent ember tudatosan elfojtja magában az életösztönt, lemond a vágyakról, a szexualitásról és az egoizmusról. Ez az állapot a teljes lelki nyugalomhoz (nirvána) vezet, ahol az akarat elcsendesedik.",
-      "conceptContext": "A keresztény misztika és a buddhista szerzetesi ideál filozófiai megfogalmazása.",
-      "connections": ["schopenhauer_main", "reszvet", "nirvana"]
-    },
-    {
-      "id": "reszvet",
-      "label": "részvét",
-      "type": "CONCEPT" as NodeType,
-      "shortSummary": "Az erkölcs alapja: a másik szenvedésének átérzése.",
-      "longExplanation": "Schopenhauer etikájának alapköve. Mivel metafizikai szinten minden egy (az Akarat egysége miatt), az egyéniség (principium individuationis) csak illúzió. A „Tat tvam asi” (Ez vagy te) ősi indiai elv alapján a másik ember szenvedése az én szenvedésem is.\n\nAz igazságosság és az emberbaráti szeretet forrása az a felismerés, hogy a másik emberrel lényegileg azonosak vagyunk. A részvét az, ami áttöri az önzés falát.",
-      "conceptContext": "Kritikája Kant racionális kötelesséetikájának; az érzelemre alapozott etika.",
-      "connections": ["schopenhauer_main", "aszkezis", "maja_fatyla"]
-    },
-    {
-      "id": "mu",
-      "label": "_A világ mint akarat és képzet_",
-      "type": "WORK" as NodeType,
-      "shortSummary": "Schopenhauer főműve (1818/1844).",
-      "longExplanation": "Ebben a monumentális műben fejti ki Schopenhauer teljes rendszerét. A könyv négy könyvre oszlik: ismeretelmélet (világ mint képzet), metafizika (világ mint akarat), esztétika (művészet mint megváltás) és etika (akarat tagadása).\n\nA mű stílusa is híres: Schopenhauer kiváló író volt, aki a sötét tartalmat világos, irodalmi igényességű német nyelven fogalmazta meg.",
-      "conceptContext": "",
-      "connections": ["schopenhauer_main"]
-    },
-    {
-      "id": "zene",
-      "label": "zene",
-      "type": "CONCEPT" as NodeType,
-      "shortSummary": "A művészetek csúcsa, az akarat közvetlen képmása.",
-      "longExplanation": "A többi művészet (építészet, szobrászat, festészet, költészet) csak az ideákat ábrázolja, amelyek az akarat objektivációi. A zene azonban kivétel: nem a jelenségvilágot másolja, hanem magának az akaratnak a mozgását, dinamikáját, örömét és fájdalmát fejezi ki közvetlenül.\n\nEzért van a zenének olyan elemi, mély hatása ránk. A zene a világ lényegének nyelve.",
-      "conceptContext": "Ez az elmélet óriási hatással volt Richard Wagnerre.",
-      "connections": ["esztetika", "akarat"]
-    }
-  ],
-  "links": [
-    { "source": "schopenhauer_main", "target": "akarat", "relationLabel": "alapfogalma" },
-    { "source": "schopenhauer_main", "target": "kepzet", "relationLabel": "alapfogalma" },
-    { "source": "akarat", "target": "szenvedes", "relationLabel": "okozza" },
-    { "source": "szenvedes", "target": "unalom", "relationLabel": "váltakozik vele" },
-    { "source": "schopenhauer_main", "target": "esztetika", "relationLabel": "megoldás 1" },
-    { "source": "schopenhauer_main", "target": "aszkezis", "relationLabel": "megoldás 2" },
-    { "source": "esztetika", "target": "zene", "relationLabel": "csúcspontja" },
-    { "source": "aszkezis", "target": "reszvet", "relationLabel": "alapja" },
-    { "source": "schopenhauer_main", "target": "mu", "relationLabel": "főműve" },
-    { "source": "kepzet", "target": "akarat", "relationLabel": "takarja" },
-    { "source": "reszvet", "target": "szenvedes", "relationLabel": "enyhíti" }
-  ]
-};
 
 const App: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -288,112 +190,15 @@ const App: React.FC = () => {
     setCurrentSuggestions(shuffled.slice(0, 5));
   };
 
-  const getCleanFileName = (topic: string) => {
-    return topic.replace(/[^a-z0-9áéíóöőúüű]/gi, '_').toLowerCase();
-  };
-
   const handleExportJSON = () => {
       if (!data) return;
-      const jsonString = JSON.stringify(data, null, 2);
-      const blob = new Blob([jsonString], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${getCleanFileName(query)}_sophia_graph.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      exportJSON(data, query);
       setShowExportMenu(false);
   }
 
   const handleExportMarkdown = () => {
     if (!data) return;
-
-    const rootNode = data.nodes.find(n => n.type === NodeType.ROOT) || data.nodes[0];
-    const categories = data.nodes.filter(n => n.type === NodeType.CATEGORY);
-    const categorizedNodes: Record<string, PhilosophicalNode[]> = {};
-    const uncategorizedNodes: PhilosophicalNode[] = [];
-    const otherNodes = data.nodes.filter(n => n.type !== NodeType.ROOT && n.type !== NodeType.CATEGORY);
-
-    otherNodes.forEach(node => {
-        const parentCategory = categories.find(cat => 
-            data.links.some(l => 
-                (l.source === cat.id && l.target === node.id) || 
-                (l.source === node.id && l.target === cat.id)
-            )
-        );
-        if (parentCategory) {
-            if (!categorizedNodes[parentCategory.id]) {
-                categorizedNodes[parentCategory.id] = [];
-            }
-            categorizedNodes[parentCategory.id].push(node);
-        } else {
-            uncategorizedNodes.push(node);
-        }
-    });
-
-    let content = `# ${rootNode.label.replace(/_/g, '')}\n\n`;
-    content += `_Generálta: SophiaSysteme - ${new Date().toLocaleDateString('hu-HU')}_\n\n`;
-    content += `${rootNode.shortSummary}\n\n`;
-    content += `${rootNode.longExplanation}\n\n`;
-    content += `---\n\n`;
-    content += `## Tartalomjegyzék\n\n`;
-    
-    categories.forEach((cat, index) => {
-        const cleanLabel = cat.label.replace(/_/g, '');
-        const anchor = cleanLabel.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
-        content += `- [${index + 1}. ${cleanLabel}](#${anchor})\n`;
-        
-        const children = categorizedNodes[cat.id] || [];
-        children.forEach((child, childIndex) => {
-             const childLabel = child.label.replace(/_/g, '');
-             const childAnchor = childLabel.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
-             content += `\t- [${index + 1}.${childIndex + 1} ${childLabel}](#${childAnchor})\n`;
-        });
-    });
-    
-    content += `\n---\n\n`;
-
-    categories.forEach((cat, index) => {
-        const catNum = index + 1;
-        const cleanLabel = cat.label.replace(/_/g, '');
-        content += `### ${catNum}. ${cleanLabel}\n\n`;
-        content += `**${cat.shortSummary}**\n\n`;
-        content += `${cat.longExplanation}\n\n`;
-        if (cat.conceptContext) {
-             content += `> **Kontextus:** ${cat.conceptContext}\n\n`;
-        }
-        const children = categorizedNodes[cat.id] || [];
-        children.forEach((child, childIndex) => {
-            const childNum = `${catNum}.${childIndex + 1}`;
-            const childLabel = child.label.replace(/_/g, '');
-            content += `#### ${childNum} ${childLabel}\n\n`;
-            content += `${child.longExplanation}\n\n`;
-            if (child.conceptContext) {
-                content += `> **Eszmetörténeti kontextus:**\n> ${child.conceptContext}\n\n`;
-            }
-        });
-        content += `----\n\n`;
-    });
-
-    if (uncategorizedNodes.length > 0) {
-        content += `### Egyéb kapcsolódó fogalmak\n\n`;
-        uncategorizedNodes.forEach(node => {
-             content += `#### ${node.label.replace(/_/g, '')}\n\n`;
-             content += `${node.longExplanation}\n\n`;
-        });
-    }
-
-    const blob = new Blob([content], { type: 'text/markdown' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${getCleanFileName(query)}_sophia_essze.md`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    exportMarkdown(data, query);
     setShowExportMenu(false);
   };
 
@@ -612,19 +417,26 @@ const App: React.FC = () => {
       }
   };
 
-  // --- Tour Logic (Robust Hermeneutic Sort) ---
+  // --- Tour Logic (Strict Hierarchy: Root -> Category -> Children) ---
 
   const generateTourPath = (graph: GraphData): string[] => {
     if (!graph.nodes.length) return [];
 
     const nodes = graph.nodes;
     const links = graph.links;
-    const nodeMap = new Map(nodes.map(n => [n.id, n]));
+    
+    // 1. Identify Structure
+    const root = nodes.find(n => n.type === NodeType.ROOT);
+    const categories = nodes.filter(n => n.type === NodeType.CATEGORY);
+    const others = nodes.filter(n => n.type !== NodeType.ROOT && n.type !== NodeType.CATEGORY);
 
-    // Helper to safely get ID from link source/target (which might be d3 objects or strings)
+    // 2. Assign 'others' (Concepts/Works) to the closest Category via BFS
+    const assignments = new Map<string, string>(); // NodeID -> CategoryID
+    const distances = new Map<string, number>(); // NodeID -> Distance from anchor
+    const nodeMap = new Map(nodes.map(n => [n.id, n]));
     const getId = (item: string | any) => typeof item === 'object' ? item.id : item;
 
-    // 1. Build Adjacency List for BFS and Degree calculations
+    // Helper: Adjacency list
     const adj = new Map<string, string[]>();
     nodes.forEach(n => adj.set(n.id, []));
     links.forEach(l => {
@@ -634,98 +446,77 @@ const App: React.FC = () => {
         adj.get(t)?.push(s);
     });
 
-    // 2. Calculate Degree Centrality (Higher = More Fundamental/Central)
-    const degrees = new Map<string, number>();
-    nodes.forEach(n => degrees.set(n.id, (adj.get(n.id)?.length || 0)));
-
-    // 3. Identify Structure (Root & Categories)
-    const root = nodes.find(n => n.type === NodeType.ROOT);
-    const categories = nodes.filter(n => n.type === NodeType.CATEGORY);
-    
-    // 4. Hermeneutic Clustering via BFS
-    const assignments = new Map<string, { anchorId: string, distance: number }>();
+    // BFS initialization from all Categories simultaneously
+    // queue: { id, anchorId, dist }
     const queue: { id: string, anchorId: string, dist: number }[] = [];
     const visited = new Set<string>();
 
-    // Priority: Categories define the contexts. Initialize BFS with all Categories.
     categories.forEach(c => {
-        assignments.set(c.id, { anchorId: c.id, distance: 0 });
         queue.push({ id: c.id, anchorId: c.id, dist: 0 });
         visited.add(c.id);
+        distances.set(c.id, 0);
     });
 
-    // Run BFS to assign ownership
+    if (root) visited.add(root.id);
+
     while (queue.length > 0) {
         const { id, anchorId, dist } = queue.shift()!;
-        const neighbors = adj.get(id) || [];
-
-        for (const nextId of neighbors) {
-             const nextNode = nodeMap.get(nextId);
-             // Stop propagation at Root or other Categories (context boundaries)
-             if (!nextNode || nextNode.type === NodeType.ROOT || nextNode.type === NodeType.CATEGORY) continue;
-
-             if (!visited.has(nextId)) {
-                 visited.add(nextId);
-                 assignments.set(nextId, { anchorId, distance: dist + 1 });
-                 queue.push({ id: nextId, anchorId, dist: dist + 1 });
-             }
-        }
-    }
-
-    // 5. Construct Path: Whole -> Parts -> Details (Hermeneutic Circle)
-    // IMPORTANT: Use a Set to prevent duplicates
-    const path: string[] = [];
-    const addedIds = new Set<string>();
-
-    const addToPath = (id: string) => {
-        if (!addedIds.has(id)) {
-            path.push(id);
-            addedIds.add(id);
-        }
-    }
-
-    // A. The Whole (Root)
-    if (root) addToPath(root.id);
-
-    // B. The Categories (Parts) - Sorted by Centrality
-    const sortedCategories = [...categories].sort((a, b) => (degrees.get(b.id)||0) - (degrees.get(a.id)||0));
-
-    sortedCategories.forEach(cat => {
-        // 1. Visit the Category itself
-        addToPath(cat.id);
         
-        // 2. Gather items belonging to this context
-        const items = nodes.filter(n => {
-            const assign = assignments.get(n.id);
-            return assign && assign.anchorId === cat.id;
-        });
-        
-        // 3. Sort items: Fundamental -> Complex
-        items.sort((a, b) => {
-            const distA = assignments.get(a.id)!.distance;
-            const distB = assignments.get(b.id)!.distance;
-            
-            if (distA !== distB) return distA - distB; // Ascending distance
-            
-            if (a.type !== b.type) {
-                if (a.type === NodeType.CONCEPT) return -1; // Concepts first
-                return 1;
+        // If it's a content node, assign it
+        const currentNode = nodeMap.get(id);
+        if (currentNode && currentNode.type !== NodeType.CATEGORY && currentNode.type !== NodeType.ROOT) {
+            if (!assignments.has(id)) {
+                assignments.set(id, anchorId);
+                distances.set(id, dist);
             }
+        }
 
-            return (degrees.get(b.id)||0) - (degrees.get(a.id)||0); // Descending degree
+        const neighbors = adj.get(id) || [];
+        for (const nextId of neighbors) {
+            if (!visited.has(nextId)) {
+                visited.add(nextId);
+                // Propagate the anchorId
+                queue.push({ id: nextId, anchorId, dist: dist + 1 });
+            }
+        }
+    }
+
+    // 3. Construct the Path
+    const path: string[] = [];
+
+    // A. Root first
+    if (root) path.push(root.id);
+
+    // B. Categories and their assigned children
+    categories.forEach(cat => {
+        // Add Category
+        path.push(cat.id);
+        
+        // Find children assigned to this category
+        const children = others.filter(n => assignments.get(n.id) === cat.id);
+        
+        // Sort children:
+        // 1. Distance (ASC) -> Ensures traversing topological order (A before B if A connects Category to B)
+        // 2. Type (Works first)
+        // 3. Label
+        children.sort((a, b) => {
+            const distA = distances.get(a.id) || 999;
+            const distB = distances.get(b.id) || 999;
+            
+            if (distA !== distB) return distA - distB; // Closer nodes first
+            
+            if (a.type === NodeType.WORK && b.type !== NodeType.WORK) return -1;
+            if (a.type !== NodeType.WORK && b.type === NodeType.WORK) return 1;
+            
+            return a.label.localeCompare(b.label);
         });
 
-        items.forEach(item => addToPath(item.id));
+        children.forEach(child => path.push(child.id));
     });
 
-    // C. Orphans
-    const orphans = nodes.filter(n => 
-        n.type !== NodeType.ROOT && 
-        n.type !== NodeType.CATEGORY && 
-        !assignments.has(n.id)
-    );
-    orphans.sort((a, b) => (degrees.get(b.id)||0) - (degrees.get(a.id)||0));
-    orphans.forEach(n => addToPath(n.id));
+    // C. Orphans (nodes reachable only from Root or isolated)
+    const orphans = others.filter(n => !assignments.has(n.id));
+    orphans.forEach(o => path.push(o.id));
 
     return path;
   };
@@ -780,18 +571,23 @@ const App: React.FC = () => {
       e.preventDefault(); 
       e.dataTransfer.dropEffect = 'move';
 
-      // Auto Scroll Logic
+      // Auto Scroll Logic - Improved sensitivity for "scroll while dragging"
       const container = outlineScrollRef.current;
       if (container) {
           const { top, bottom } = container.getBoundingClientRect();
           const hoverY = e.clientY;
-          const threshold = 60; // Distance in pixels from top/bottom to trigger scroll
-
-          // Slowed down scrolling speed from 10 to 2
+          
+          // Increased threshold area for easier scrolling
+          const threshold = 80; 
+          
+          // Speed calculation based on how close to edge
           if (hoverY < top + threshold) {
-              container.scrollTop -= 2; 
+              // Closer to top = faster scroll
+              const speed = Math.max(2, (threshold - (hoverY - top)) / 5);
+              container.scrollTop -= speed; 
           } else if (hoverY > bottom - threshold) {
-              container.scrollTop += 2;
+              const speed = Math.max(2, (threshold - (bottom - hoverY)) / 5);
+              container.scrollTop += speed;
           }
       }
 
@@ -1060,7 +856,7 @@ const App: React.FC = () => {
                               A jobb felső sarokban található „+” gombbal kiegészítheted a gráfot új elemekkel, a letöltés ikonnal pedig esszé formátumban exportálhatod a tudástárat.
                           </p>
                           <p className="text-base text-secondary pt-4 font-sans">
-                              0.3 verzió. 2025. november
+                              0.3.4 verzió. 2025. november
                           </p>
                       </div>
                   </div>
@@ -1250,6 +1046,13 @@ const App: React.FC = () => {
                         const showDropLine = dropTargetIndex === idx && !isBeingDragged;
                         const showDropLineBottom = dropTargetIndex === idx + 1 && !isBeingDragged;
 
+                        // Indentation Level Logic
+                        let paddingClass = "pl-2"; // Default (Root)
+                        if (node.type === NodeType.CATEGORY) paddingClass = "pl-6";
+                        if (node.type === NodeType.CONCEPT || node.type === NodeType.WORK) paddingClass = "pl-10";
+
+                        const nodeNumber = idx + 1;
+
                         return (
                             <div key={`${nodeId}-${idx}`} className="relative transition-all duration-200">
                                 {showDropLine && (
@@ -1266,13 +1069,22 @@ const App: React.FC = () => {
                                         flex items-center gap-2 p-2 rounded cursor-pointer transition-colors group
                                         ${isActive ? 'bg-accent/10 text-accent' : 'hover:bg-stone-100 text-ink'}
                                         ${isBeingDragged ? 'opacity-50' : 'opacity-100'}
+                                        ${paddingClass}
                                     `}
                                 >
-                                    <div className="cursor-grab active:cursor-grabbing p-1 text-stone-400 group-hover:text-stone-600">
-                                        <GripVertical size={14} />
+                                    {/* Number instead of Icon */}
+                                    <div className="text-stone-400 font-mono text-xs w-5 text-right flex-shrink-0">
+                                       {nodeNumber}.
                                     </div>
-                                    <span className="font-serif text-sm font-bold w-5 text-right shrink-0">{idx + 1}.</span>
-                                    <span className={`font-sans text-sm truncate ${isActive ? 'font-medium' : ''}`}>{node.label.replace(/_/g, '')}</span>
+
+                                    {/* Reorder Grip */}
+                                    <div className="cursor-grab active:cursor-grabbing p-1 text-stone-300 group-hover:text-stone-500 ml-auto order-last">
+                                        <GripVertical size={12} />
+                                    </div>
+                                    
+                                    <span className={`font-sans text-sm truncate ${isActive ? 'font-medium' : ''} ${node.type === NodeType.ROOT ? 'font-bold' : ''} ${node.type === NodeType.WORK ? 'italic' : ''}`}>
+                                        {node.label.replace(/_/g, '')}
+                                    </span>
                                 </div>
 
                                 {showDropLineBottom && (
