@@ -197,7 +197,8 @@ export const createConnectedNode = async (sourceNode: PhilosophicalNode, request
          - A feladatod:
            1. Generálj PONTOSAN EGY ÚJ csomópontot, ami tartalmilag releváns a kéréshez, terminológia a forrásszöveg alapján.
            2. Generálj hozzá egy kapcsolatot (link), ami az új csomópontot a "${sourceNode.id}" node-hoz köti.
-           3. A válaszban csak az új node és az egyetlen új link szerepeljen.
+           3. Amennyiben a fogalom már létezik, csak nincs ehhez a node-hoz kapcsolva, akkor kapcsold össze őket ahelyett, hogy egy node kétszer jelenjen meg.
+           4. Ha az újonnan létrehozott node máshova is kapcsolódhat a kontextus miatt, akkor több node-al is összekötheted.
     `);
 
     try {
@@ -233,7 +234,7 @@ export const enrichNodeData = async (node: PhilosophicalNode, topicContext: stri
       
       Elvárások:
       1. **Pontosság**: Használj szakmailag pontos, magyar akadémiai terminológiát.
-      2. A "longExplanation" legyen a legfontosabb rész. Két tartalmas bekezdésben (köztük üres sor) fejtsd ki a fogalmat esszéisztikusan, összefüggéseiben. Ne felsorolás legyen, hanem folyó szöveg.
+      2. A "longExplanation" legyen a legfontosabb rész. Két közepesen tartalmas bekezdésben (köztük üres sor) fejtsd ki a fogalmat esszéisztikusan, összefüggéseiben. Ne felsorolás legyen, hanem folyó szöveg.
       3. **Kontextus**: Helyezd el a fogalmat a filozófiatörténetben.
       4. **Nyelvezet**: - Kizárólag MAGYAR nyelven válaszolj.
        - **IDÉZŐJELEK**: A magyar szabályoknak megfelelően használd a „ és ” jeleket.
