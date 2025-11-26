@@ -10,7 +10,7 @@ import { GraphData, PhilosophicalNode, NodeType } from './types';
 
 declare global {
   interface Window {
-    showDirectoryPicker?: () => Promise<any>;
+    showDirectoryPicker?: (options?: any) => Promise<any>;
   }
 }
 
@@ -46,7 +46,6 @@ const App: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false); // UI feedback for saving
   const [lastFileSave, setLastFileSave] = useState<Date | null>(null);
   const [isRestoringFolder, setIsRestoringFolder] = useState(false); // New state for restoration prompt
-  const isPickerActive = useRef(false);
   
   // Environment Detection
   const [isEmbedded, setIsEmbedded] = useState(false);
@@ -338,25 +337,24 @@ const App: React.FC = () => {
   };
 
   const handleConnectFolder = async () => {
-      // Don't pre-emptively block embedded environments. 
-      // We'll catch SecurityErrors if the browser enforces them.
-      
-      if (isPickerActive.current) return;
-      isPickerActive.current = true;
-
       // 1. Check for modern File System Access API support (Chrome/Edge/Desktop)
       // @ts-ignore
       if ('showDirectoryPicker' in window) {
           try {
               // @ts-ignore
               const handle = await window.showDirectoryPicker({
-                  mode: 'readwrite', // Request write access upfront
-                  id: 'sophia-graphs', // Remembers the last location
-                  startIn: 'documents'
+                  mode: 'readwrite'
               });
               
               setFolderHandle(handle);
-              await saveDirectoryHandle(handle); // Persist
+              
+              // Attempt to persist handle, but continue if it fails (e.g. private mode / iframe IDB restriction)
+              try {
+                  await saveDirectoryHandle(handle); 
+              } catch (dbErr) {
+                  console.warn("Could not save directory handle to storage:", dbErr);
+              }
+
               await loadGraphsFromFolder(handle);
           } catch (err: any) {
               // User cancelled or denied permission
@@ -366,18 +364,13 @@ const App: React.FC = () => {
               
               console.error("Folder access error:", err);
 
-              // Handle iframe/security restrictions fallback explicitly when they happen
               if (err.name === 'SecurityError' || (err.message && err.message.includes('Cross origin'))) {
                   alert("Biztonsági korlátozás: Ebben a környezetben (pl. beágyazott ablak) a közvetlen mappa-hozzáférés nem engedélyezett.\n\nAlternatív megoldás:\n1. Használd az Importálás/Exportálás gombokat.\n2. Vagy próbáld megnyitni az alkalmazást önálló ablakban.");
               } else {
                  alert("Hiba a mappa csatlakoztatásakor: " + (err.message || "Ismeretlen hiba"));
               }
-          } finally {
-             // Small delay to ensure picker is fully closed in browser state
-             setTimeout(() => { isPickerActive.current = false; }, 500);
           }
       } else {
-          isPickerActive.current = false;
           // 2. Fallback for iOS / Safari / Firefox / Mobile
           if (isMobile) {
               alert("iOS/Android rendszeren a mappa folyamatos szinkronizálása nem támogatott.\n\nHasználd az 'Importálás' gombot fájlok betöltéséhez, és a 'Letöltés' gombot mentéshez.");
