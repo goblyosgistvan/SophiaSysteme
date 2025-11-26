@@ -125,7 +125,12 @@ const App: React.FC = () => {
                     const perm = await handle.queryPermission({ mode: 'readwrite' });
                     if (perm === 'granted') {
                         setIsRestoringFolder(false);
-                        await loadGraphsFromFolder(handle);
+                        try {
+                           await loadGraphsFromFolder(handle);
+                        } catch (loadErr) {
+                           console.warn("Permission granted but load failed on startup", loadErr);
+                           setIsRestoringFolder(true);
+                        }
                     } else {
                         // 'prompt' or 'denied' -> Show restore button
                         setIsRestoringFolder(true);
@@ -317,11 +322,13 @@ const App: React.FC = () => {
           setSavedGraphs(newGraphs);
           setFolderName(handle.name);
           setIsRestoringFolder(false); // Success, logic complete
+          return true;
 
       } catch (err) {
           console.error("Error reading folder:", err);
           // Likely permission error during iteration
           setIsRestoringFolder(true);
+          throw err;
       } finally {
           setIsSyncing(false);
       }
@@ -337,16 +344,22 @@ const App: React.FC = () => {
         
         if (perm === 'granted') {
             setIsRestoringFolder(false); // Update UI state IMMEDIATELY
-            await loadGraphsFromFolder(folderHandle);
+            try {
+                await loadGraphsFromFolder(folderHandle);
+            } catch (e) {
+                console.error("Permission granted but load failed:", e);
+                alert("Sikertelen olvasás. A mappa valószínűleg már nem elérhető ezen az útvonalon. Kérlek csatlakoztasd újra.");
+                disconnectFolder();
+            }
         } else {
             // User denied or dismissed
-            alert("A hozzáférés megújítása szükséges a mappa szinkronizálásához.");
+            console.log("Permission denied by user");
         }
     } catch (e) {
         console.error("Failed to restore permissions:", e);
         // If the handle is completely dead (e.g., folder moved, permissions revoked permanently), 
         // we must reset to avoid user frustration.
-        alert("A korábban mentett mappa elérési útja érvénytelennek tűnik. A kapcsolat megszakadt, kérlek csatlakoztasd újra.");
+        alert("A kapcsolat helyreállítása nem sikerült (érvénytelen hivatkozás). Kérlek csatlakoztasd újra a mappát.");
         disconnectFolder();
     }
   };
