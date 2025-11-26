@@ -3,6 +3,7 @@ import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical, BookOpen, FolderInput, RefreshCw, Save, HardDrive, CheckCircle, AlertCircle, FolderOpen, Cloud, ExternalLink, RefreshCcw } from 'lucide-react';
 import ConceptGraph, { ConceptGraphHandle } from './components/ConceptGraph';
 import DetailPanel from './components/DetailPanel';
+import OutlinePanel from './components/OutlinePanel';
 import { fetchPhilosophyData, augmentPhilosophyData, enrichNodeData, createConnectedNode } from './services/geminiService';
 import { exportJSON, exportMarkdown, getCleanFileName } from './services/exportService';
 import { GraphData, PhilosophicalNode, NodeType } from './types';
@@ -25,6 +26,82 @@ const ALL_SUGGESTIONS = [
     'Nietzsche', 'Arisztotelészi logika', 'Utilitarizmus', 'Fenomenológia', 'Heidegger',
     'Spinoza etikája', 'Schopenhauer', 'Metafizika', 'Episztemológia', 'Társadalmi szerződés'
 ];
+
+// Helper to generate default hierarchy order
+const generateDefaultOrder = (nodes: PhilosophicalNode[], links: any[]): string[] => {
+    if (!nodes.length) return [];
+    
+    const root = nodes.find(n => n.type === NodeType.ROOT);
+    const categories = nodes.filter(n => n.type === NodeType.CATEGORY);
+    const others = nodes.filter(n => n.type !== NodeType.ROOT && n.type !== NodeType.CATEGORY);
+
+    const assignments = new Map<string, string>(); 
+    const distances = new Map<string, number>(); 
+    const nodeMap = new Map(nodes.map(n => [n.id, n]));
+    const getId = (item: string | any) => typeof item === 'object' ? item.id : item;
+
+    const adj = new Map<string, string[]>();
+    nodes.forEach(n => adj.set(n.id, []));
+    links.forEach(l => {
+        const s = getId(l.source);
+        const t = getId(l.target);
+        adj.get(s)?.push(t);
+        adj.get(t)?.push(s);
+    });
+
+    const queue: { id: string, anchorId: string, dist: number }[] = [];
+    const visited = new Set<string>();
+
+    categories.forEach(c => {
+        queue.push({ id: c.id, anchorId: c.id, dist: 0 });
+        visited.add(c.id);
+        distances.set(c.id, 0);
+    });
+
+    if (root) visited.add(root.id);
+
+    while (queue.length > 0) {
+        const { id, anchorId, dist } = queue.shift()!;
+        
+        const currentNode = nodeMap.get(id);
+        if (currentNode && currentNode.type !== NodeType.CATEGORY && currentNode.type !== NodeType.ROOT) {
+            if (!assignments.has(id)) {
+                assignments.set(id, anchorId);
+                distances.set(id, dist);
+            }
+        }
+
+        const neighbors = adj.get(id) || [];
+        for (const nextId of neighbors) {
+            if (!visited.has(nextId)) {
+                visited.add(nextId);
+                queue.push({ id: nextId, anchorId, dist: dist + 1 });
+            }
+        }
+    }
+
+    const path: string[] = [];
+    if (root) path.push(root.id);
+
+    categories.forEach(cat => {
+        path.push(cat.id);
+        const children = others.filter(n => assignments.get(n.id) === cat.id);
+        children.sort((a, b) => {
+            const distA = distances.get(a.id) || 999;
+            const distB = distances.get(b.id) || 999;
+            if (distA !== distB) return distA - distB; 
+            if (a.type === NodeType.WORK && b.type !== NodeType.WORK) return -1;
+            if (a.type !== NodeType.WORK && b.type === NodeType.WORK) return 1;
+            return a.label.localeCompare(b.label);
+        });
+        children.forEach(child => path.push(child.id));
+    });
+
+    const orphans = others.filter(n => !assignments.has(n.id));
+    orphans.forEach(o => path.push(o.id));
+
+    return path;
+};
 
 const App: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -50,6 +127,7 @@ const App: React.FC = () => {
 
   // Panel state
   const [panelWidth, setPanelWidth] = useState(480);
+  const [isOutlineOpen, setIsOutlineOpen] = useState(false);
   
   // Augment State
   const [showAugmentInput, setShowAugmentInput] = useState(false);
@@ -69,15 +147,7 @@ const App: React.FC = () => {
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
 
-  // Tour State
-  const [isTourActive, setIsTourActive] = useState(false);
-  const [tourPath, setTourPath] = useState<string[]>([]);
-  const [tourIndex, setTourIndex] = useState(-1);
-  const [showTourOutline, setShowTourOutline] = useState(false);
-  const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null);
-  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
   
-  const outlineScrollRef = useRef<HTMLDivElement>(null);
   const toggleOutlineBtnRef = useRef<HTMLButtonElement>(null);
 
 
@@ -116,21 +186,83 @@ const App: React.FC = () => {
       setCurrentSuggestions(shuffled.slice(0, 5));
   }, []);
 
-  // Click outside to close Tour Outline
+  // Keyboard Shortcuts
   useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-          if (showTourOutline && 
-              outlineScrollRef.current && 
-              !outlineScrollRef.current.contains(event.target as Node) &&
-              toggleOutlineBtnRef.current &&
-              !toggleOutlineBtnRef.current.contains(event.target as Node)) {
-              setShowTourOutline(false);
-          }
-      };
-      
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showTourOutline]);
+    const handleKeyDown = (e: KeyboardEvent) => {
+        // Ignore if typing in input/textarea
+        if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName)) return;
+        
+        const key = e.key.toUpperCase();
+        
+        // Q: Toggle Outline
+        if (key === 'Q') {
+            setIsOutlineOpen(prev => !prev);
+        }
+        
+        // R: Toggle Detail Panel / Select Root
+        if (key === 'R') {
+            if (selectedNode) {
+                setSelectedNode(null); // Close
+            } else if (data) {
+                 const root = data.nodes.find(n => n.type === NodeType.ROOT);
+                 if (root) {
+                     setSelectedNode(root);
+                     // Focus logic
+                     if (isMobile) {
+                        graphRef.current?.focusNode(root.id, { targetYRatio: 0.2, scale: 0.5 });
+                     } else {
+                        graphRef.current?.focusNode(root.id, { fitPadding: panelWidth, scale: 0.9 });
+                     }
+                 }
+            }
+        }
+        
+        // W/E: Navigate Outline
+        if (data && data.customOrder && (key === 'W' || key === 'E')) {
+            const order = data.customOrder;
+            if (order.length === 0) return;
+            
+            let currentIndex = -1;
+            if (selectedNode) {
+                currentIndex = order.indexOf(selectedNode.id);
+            }
+            
+            let nextIndex = currentIndex;
+            
+            if (key === 'W') { // Up / Back
+                 if (currentIndex === -1) {
+                     nextIndex = 0; // If nothing selected, start at top
+                 } else if (currentIndex > 0) {
+                     nextIndex = currentIndex - 1;
+                 }
+            }
+            
+            if (key === 'E') { // Down
+                if (currentIndex === -1) {
+                    nextIndex = 0;
+                } else if (currentIndex < order.length - 1) {
+                    nextIndex = currentIndex + 1;
+                }
+            }
+            
+            if (nextIndex !== -1 && nextIndex !== currentIndex) {
+                const nodeId = order[nextIndex];
+                const node = data.nodes.find(n => n.id === nodeId);
+                if (node) {
+                    setSelectedNode(node);
+                     if (isMobile) {
+                        graphRef.current?.focusNode(node.id, { targetYRatio: 0.2, scale: 0.5 });
+                    } else {
+                        graphRef.current?.focusNode(node.id, { fitPadding: panelWidth, scale: 0.9 });
+                    }
+                }
+            }
+        }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [data, selectedNode, panelWidth, isMobile]);
 
   // Click outside to close Export Menu
   useEffect(() => {
@@ -205,7 +337,7 @@ const App: React.FC = () => {
         // Update SavedGraphs list date
         const updatedDate = new Date().toLocaleDateString('hu-HU');
         setSavedGraphs(prev => prev.map(g => 
-            g.topic.toLowerCase() === topic.toLowerCase() ? { ...g, date: updatedDate } : g
+            g.topic.toLowerCase() === topic.toLowerCase() ? { ...g, date: updatedDate, data: graphData } : g
         ));
         
     } catch (err) {
@@ -219,29 +351,39 @@ const App: React.FC = () => {
     const exists = savedGraphs.some(g => g.topic.toLowerCase() === topic.toLowerCase());
     let updatedGraphs: SavedGraph[];
 
+    // Ensure customOrder is defined in the graph data before saving
+    const dataToSave = {
+        ...graphData,
+        customOrder: graphData.customOrder || generateDefaultOrder(graphData.nodes, graphData.links)
+    };
+
     if (exists) {
         updatedGraphs = savedGraphs.map(g => 
-            g.topic.toLowerCase() === topic.toLowerCase() ? { ...g, data: graphData, date: new Date().toLocaleDateString('hu-HU') } : g
+            g.topic.toLowerCase() === topic.toLowerCase() ? { ...g, data: dataToSave, date: new Date().toLocaleDateString('hu-HU') } : g
         );
     } else {
         const newGraph: SavedGraph = {
           id: Date.now().toString(),
           topic: topic.charAt(0).toUpperCase() + topic.slice(1),
           date: new Date().toLocaleDateString('hu-HU'),
-          data: graphData
+          data: dataToSave
         };
         updatedGraphs = [newGraph, ...savedGraphs];
     }
     
     // Update State
     setSavedGraphs(updatedGraphs);
+    // Update current working data reference to ensure local order state is reflected if updated
+    if (data && data.nodes.length === dataToSave.nodes.length) {
+       setData(dataToSave);
+    }
 
     // Only update LocalStorage if NO folder is connected.
     if (!folderHandle) {
         localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
     } else {
         // Trigger folder save
-        saveToFolder(topic, graphData, false);
+        saveToFolder(topic, dataToSave, false);
     }
   };
 
@@ -262,6 +404,11 @@ const App: React.FC = () => {
                           const rootNode = parsedData.nodes.find((n: any) => n.type === 'ROOT');
                           const topic = rootNode ? rootNode.label : entry.name.replace('.json', '');
                           
+                          // Ensure order exists
+                          if (!parsedData.customOrder) {
+                              parsedData.customOrder = generateDefaultOrder(parsedData.nodes, parsedData.links);
+                          }
+
                           newGraphs.push({
                               id: `file-${entry.name}-${Date.now()}`,
                               topic: topic,
@@ -366,6 +513,10 @@ const App: React.FC = () => {
                           const rootNode = parsedData.nodes.find((n: any) => n.type === 'ROOT');
                           const topic = rootNode ? rootNode.label : file.name.replace('.json', '');
                           
+                          if (!parsedData.customOrder) {
+                              parsedData.customOrder = generateDefaultOrder(parsedData.nodes, parsedData.links);
+                          }
+
                           resolve({
                               id: `imported-${file.name}-${Date.now()}`,
                               topic: topic,
@@ -457,10 +608,18 @@ const App: React.FC = () => {
 
   const loadSavedGraph = (graph: SavedGraph) => {
     setQuery(graph.topic);
-    setData(graph.data);
+    
+    // Ensure data has custom order if missing from old save
+    const dataToLoad = { ...graph.data };
+    if (!dataToLoad.customOrder) {
+        dataToLoad.customOrder = generateDefaultOrder(dataToLoad.nodes, dataToLoad.links);
+    }
+    
+    setData(dataToLoad);
     setHasSearched(true);
     setSelectedNode(null);
     setError(null);
+    setIsOutlineOpen(false); // Should stay closed
   };
 
   const goHome = async () => {
@@ -469,7 +628,7 @@ const App: React.FC = () => {
     setHasSearched(false);
     setQuery('');
     setSelectedNode(null);
-    stopTour();
+    setIsOutlineOpen(false);
     setLastFileSave(null);
     const shuffled = [...ALL_SUGGESTIONS].sort(() => 0.5 - Math.random());
     setCurrentSuggestions(shuffled.slice(0, 5));
@@ -491,6 +650,7 @@ const App: React.FC = () => {
 
   const handleExportJSON = () => {
       if (!data) return;
+      // Ensure current order is in export
       exportJSON(data, query);
       setShowExportMenu(false);
   }
@@ -514,6 +674,10 @@ const App: React.FC = () => {
                 
                 const rootNode = parsedData.nodes.find((n: any) => n.type === 'ROOT');
                 const topic = rootNode ? rootNode.label : file.name.replace('.json', '');
+                
+                if (!parsedData.customOrder) {
+                    parsedData.customOrder = generateDefaultOrder(parsedData.nodes, parsedData.links);
+                }
 
                 autoSaveGraph(topic, parsedData);
                 const importedGraph: SavedGraph = {
@@ -552,9 +716,13 @@ const App: React.FC = () => {
           const newData = await augmentPhilosophyData(data, augmentQuery);
           
           const mergedNodes = [...data.nodes];
+          // Collect new node IDs to append to order
+          const newIds: string[] = [];
+
           newData.nodes.forEach(newNode => {
               if (!mergedNodes.some(n => n.id === newNode.id)) {
                   mergedNodes.push(newNode);
+                  newIds.push(newNode.id);
               }
           });
 
@@ -568,7 +736,12 @@ const App: React.FC = () => {
               }
           });
           
-          const updatedData = { nodes: mergedNodes, links: mergedLinks };
+          const updatedData = { 
+              nodes: mergedNodes, 
+              links: mergedLinks, 
+              customOrder: [...(data.customOrder || []), ...newIds] 
+          };
+          
           setData(updatedData);
           autoSaveGraph(query, updatedData); 
           setShowAugmentInput(false);
@@ -625,16 +798,11 @@ const App: React.FC = () => {
           connections: n.connections.filter(c => c !== nodeId)
       }));
 
-      const updatedData = { nodes: finalNodes, links: updatedLinks };
-      
-      if (tourPath.includes(nodeId)) {
-          const newPath = tourPath.filter(id => id !== nodeId);
-          setTourPath(newPath);
-          if (isTourActive && tourIndex >= newPath.length) {
-              setTourIndex(newPath.length - 1);
-          }
-      }
+      // Remove from order
+      const newOrder = (data.customOrder || []).filter(id => id !== nodeId);
 
+      const updatedData = { nodes: finalNodes, links: updatedLinks, customOrder: newOrder };
+      
       setData(updatedData);
       setSelectedNode(null);
       autoSaveGraph(query, updatedData);
@@ -666,7 +834,16 @@ const App: React.FC = () => {
              return n;
           });
 
-          const updatedData = { nodes: finalNodes, links: updatedLinks };
+          // Insert new node after source node in order if possible, or at end
+          const currentOrder = [...(data.customOrder || [])];
+          const sourceIndex = currentOrder.indexOf(sourceNode.id);
+          if (sourceIndex !== -1) {
+              currentOrder.splice(sourceIndex + 1, 0, newNode.id);
+          } else {
+              currentOrder.push(newNode.id);
+          }
+
+          const updatedData = { nodes: finalNodes, links: updatedLinks, customOrder: currentOrder };
           setData(updatedData);
           
           const updatedSourceNode = finalNodes.find(n => n.id === sourceNode.id);
@@ -683,192 +860,12 @@ const App: React.FC = () => {
       }
   };
 
-  // --- Tour Logic ---
-
-  const generateTourPath = (graph: GraphData): string[] => {
-    if (!graph.nodes.length) return [];
-    const nodes = graph.nodes;
-    const links = graph.links;
-    
-    const root = nodes.find(n => n.type === NodeType.ROOT);
-    const categories = nodes.filter(n => n.type === NodeType.CATEGORY);
-    const others = nodes.filter(n => n.type !== NodeType.ROOT && n.type !== NodeType.CATEGORY);
-
-    const assignments = new Map<string, string>(); 
-    const distances = new Map<string, number>(); 
-    const nodeMap = new Map(nodes.map(n => [n.id, n]));
-    const getId = (item: string | any) => typeof item === 'object' ? item.id : item;
-
-    const adj = new Map<string, string[]>();
-    nodes.forEach(n => adj.set(n.id, []));
-    links.forEach(l => {
-        const s = getId(l.source);
-        const t = getId(l.target);
-        adj.get(s)?.push(t);
-        adj.get(t)?.push(s);
-    });
-
-    const queue: { id: string, anchorId: string, dist: number }[] = [];
-    const visited = new Set<string>();
-
-    categories.forEach(c => {
-        queue.push({ id: c.id, anchorId: c.id, dist: 0 });
-        visited.add(c.id);
-        distances.set(c.id, 0);
-    });
-
-    if (root) visited.add(root.id);
-
-    while (queue.length > 0) {
-        const { id, anchorId, dist } = queue.shift()!;
-        
-        const currentNode = nodeMap.get(id);
-        if (currentNode && currentNode.type !== NodeType.CATEGORY && currentNode.type !== NodeType.ROOT) {
-            if (!assignments.has(id)) {
-                assignments.set(id, anchorId);
-                distances.set(id, dist);
-            }
-        }
-
-        const neighbors = adj.get(id) || [];
-        for (const nextId of neighbors) {
-            if (!visited.has(nextId)) {
-                visited.add(nextId);
-                queue.push({ id: nextId, anchorId, dist: dist + 1 });
-            }
-        }
-    }
-
-    const path: string[] = [];
-    if (root) path.push(root.id);
-
-    categories.forEach(cat => {
-        path.push(cat.id);
-        const children = others.filter(n => assignments.get(n.id) === cat.id);
-        children.sort((a, b) => {
-            const distA = distances.get(a.id) || 999;
-            const distB = distances.get(b.id) || 999;
-            if (distA !== distB) return distA - distB; 
-            if (a.type === NodeType.WORK && b.type !== NodeType.WORK) return -1;
-            if (a.type !== NodeType.WORK && b.type === NodeType.WORK) return 1;
-            return a.label.localeCompare(b.label);
-        });
-        children.forEach(child => path.push(child.id));
-    });
-
-    const orphans = others.filter(n => !assignments.has(n.id));
-    orphans.forEach(o => path.push(o.id));
-
-    return path;
-  };
-
-  const startTour = () => {
-    if (!data) return;
-    const path = generateTourPath(data);
-    setTourPath(path);
-    setTourIndex(0);
-    setIsTourActive(true);
-    focusOnNodeById(path[0]);
-  };
-
-  const nextStep = () => {
-    if (tourIndex < tourPath.length - 1) {
-      const newIndex = tourIndex + 1;
-      setTourIndex(newIndex);
-      focusOnNodeById(tourPath[newIndex]);
-    } else {
-      stopTour();
-    }
-  };
-
-  const prevStep = () => {
-    if (tourIndex > 0) {
-      const newIndex = tourIndex - 1;
-      setTourIndex(newIndex);
-      focusOnNodeById(tourPath[newIndex]);
-    }
-  };
-
-  const stopTour = () => {
-    setIsTourActive(false);
-    setShowTourOutline(false);
-    setTourIndex(-1);
-    setSelectedNode(null); 
-    graphRef.current?.resetZoom(); 
-  };
-
-  const handleTourJump = (index: number) => {
-      setTourIndex(index);
-      focusOnNodeById(tourPath[index]);
-  };
-
-  const handleDragStart = (e: React.DragEvent, index: number) => {
-      setDraggedItemIndex(index);
-      e.dataTransfer.effectAllowed = 'move';
-  };
-
-  const handleDragOver = (e: React.DragEvent, index: number) => {
-      e.preventDefault(); 
-      e.dataTransfer.dropEffect = 'move';
-      const container = outlineScrollRef.current;
-      if (container) {
-          const { top, bottom } = container.getBoundingClientRect();
-          const hoverY = e.clientY;
-          const threshold = 80; 
-          if (hoverY < top + threshold) {
-              const speed = Math.max(2, (threshold - (hoverY - top)) / 5);
-              container.scrollTop -= speed; 
-          } else if (hoverY > bottom - threshold) {
-              const speed = Math.max(2, (threshold - (bottom - hoverY)) / 5);
-              container.scrollTop += speed;
-          }
-      }
-
-      if (draggedItemIndex === null) return;
-      if (index === draggedItemIndex) {
-          setDropTargetIndex(null);
-          return;
-      }
-      
-      const rect = e.currentTarget.getBoundingClientRect();
-      const midY = rect.top + rect.height / 2;
-      if (e.clientY < midY) {
-          setDropTargetIndex(index); 
-      } else {
-          setDropTargetIndex(index + 1); 
-      }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-      e.preventDefault();
-      
-      if (draggedItemIndex === null || dropTargetIndex === null) return;
-      if (draggedItemIndex === dropTargetIndex) {
-        setDraggedItemIndex(null);
-        setDropTargetIndex(null);
-        return;
-      }
-
-      const newPath = [...tourPath];
-      const [draggedItem] = newPath.splice(draggedItemIndex, 1);
-      
-      let insertionIndex = dropTargetIndex;
-      if (draggedItemIndex < dropTargetIndex) {
-          insertionIndex -= 1;
-      }
-      
-      newPath.splice(insertionIndex, 0, draggedItem);
-      
-      setTourPath(newPath);
-
-      const currentActiveId = tourPath[tourIndex];
-      const newActiveIndex = newPath.indexOf(currentActiveId);
-      if (newActiveIndex !== -1) {
-          setTourIndex(newActiveIndex);
-      }
-
-      setDraggedItemIndex(null);
-      setDropTargetIndex(null);
+  const handleOrderChange = (newOrder: string[]) => {
+      if (!data) return;
+      const updatedData = { ...data, customOrder: newOrder };
+      setData(updatedData);
+      // Auto save the new order preference
+      autoSaveGraph(query, updatedData);
   };
 
   const focusOnNodeById = (id: string) => {
@@ -895,10 +892,12 @@ const App: React.FC = () => {
     setData(null);
     setSelectedNode(null);
     setHasSearched(true);
-    stopTour();
+    setIsOutlineOpen(false); // Closed by default
 
     try {
       const graphData = await fetchPhilosophyData(query);
+      // Generate initial order
+      graphData.customOrder = generateDefaultOrder(graphData.nodes, graphData.links);
       setData(graphData);
       autoSaveGraph(query, graphData); 
     } catch (err: any) {
@@ -918,14 +917,7 @@ const App: React.FC = () => {
         graphRef.current?.focusNode(pNode.id, { fitPadding: panelWidth, scale: 0.9 });
     }
     setSelectedNode(pNode);
-
-    if (isTourActive) {
-        const indexInPath = tourPath.indexOf(pNode.id);
-        if (indexInPath !== -1) {
-            setTourIndex(indexInPath);
-        }
-    }
-  }, [isTourActive, tourPath, isMobile, panelWidth]);
+  }, [isMobile, panelWidth]);
 
   return (
     <div className="h-screen w-screen flex flex-col bg-paper text-ink overflow-hidden relative">
@@ -1411,142 +1403,23 @@ const App: React.FC = () => {
             </div>
         )}
 
-        {/* Persistent Floating Bottom Interaction Bar with Morphing Animation */}
+        {/* --- Persistent Outline Panel (Left) --- */}
         {data && !loading && (
-            <>
-             <div 
-                className={`absolute bottom-8 transform -translate-x-1/2 z-[100] bg-white/95 backdrop-blur shadow-lg border border-stone-200 rounded-full flex items-center transition-all duration-500 ease-in-out overflow-visible ${isTourActive ? 'w-[320px] h-[52px]' : 'w-[150px] h-[44px]'}`}
-                style={{
-                    left: (selectedNode && windowWidth >= 768) ? `calc((100% - ${panelWidth}px) / 2)` : '50%'
-                }}
-             >
-                 {/* Tour Outline Popup */}
-                 <div 
-                    ref={outlineScrollRef}
-                    className={`absolute bottom-16 left-0 w-full bg-white/95 backdrop-blur shadow-2xl border border-stone-200 rounded-2xl p-2 max-h-64 overflow-y-auto custom-scrollbar flex flex-col gap-1 z-[110] transition-all duration-300 origin-bottom transform ${isTourActive && showTourOutline ? 'opacity-100 scale-y-100 translate-y-0' : 'opacity-0 scale-y-90 translate-y-4 pointer-events-none'}`}
-                 >
-                    {tourPath.map((nodeId, idx) => {
-                        const node = data.nodes.find(n => n.id === nodeId);
-                        if (!node) return null;
-                        const isActive = idx === tourIndex;
-                        const isBeingDragged = draggedItemIndex === idx;
-                        
-                        const showDropLine = dropTargetIndex === idx && !isBeingDragged;
-                        const showDropLineBottom = dropTargetIndex === idx + 1 && !isBeingDragged;
-
-                        // Indentation Level Logic
-                        let paddingClass = "pl-2"; // Default (Root)
-                        if (node.type === NodeType.CATEGORY) paddingClass = "pl-6";
-                        if (node.type === NodeType.CONCEPT || node.type === NodeType.WORK) paddingClass = "pl-10";
-
-                        const nodeNumber = idx + 1;
-
-                        return (
-                            <div key={`${nodeId}-${idx}`} className="relative transition-all duration-200">
-                                {showDropLine && (
-                                    <div className="absolute -top-1 left-0 right-0 h-0.5 bg-accent rounded-full z-10" />
-                                )}
-                                
-                                <div 
-                                    draggable
-                                    onDragStart={(e) => handleDragStart(e, idx)}
-                                    onDragOver={(e) => handleDragOver(e, idx)}
-                                    onDrop={handleDrop}
-                                    onClick={() => handleTourJump(idx)}
-                                    className={`
-                                        flex items-center gap-2 p-2 rounded cursor-pointer transition-colors group
-                                        ${isActive ? 'bg-accent/10 text-accent' : 'hover:bg-stone-100 text-ink'}
-                                        ${isBeingDragged ? 'opacity-50' : 'opacity-100'}
-                                        ${paddingClass}
-                                    `}
-                                >
-                                    {/* Number instead of Icon */}
-                                    <div className="text-stone-400 font-mono text-xs w-5 text-right flex-shrink-0">
-                                       {nodeNumber}.
-                                    </div>
-
-                                    {/* Reorder Grip */}
-                                    <div className="cursor-grab active:cursor-grabbing p-1 text-stone-300 group-hover:text-stone-500 ml-auto order-last">
-                                        <GripVertical size={12} />
-                                    </div>
-                                    
-                                    <span className={`font-sans text-sm truncate ${isActive ? 'font-medium' : ''} ${node.type === NodeType.ROOT ? 'font-bold' : ''} ${node.type === NodeType.WORK ? 'italic' : ''}`}>
-                                        {node.label.replace(/_/g, '')}
-                                    </span>
-                                </div>
-
-                                {showDropLineBottom && (
-                                    <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent rounded-full z-10" />
-                                )}
-                            </div>
-                        )
-                    })}
-                 </div>
-
-                 <div className="relative w-full h-full overflow-hidden rounded-full">
-                    
-                    {/* Start Button View */}
-                    <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${!isTourActive ? 'opacity-100 delay-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-                        <button 
-                            onClick={startTour}
-                            className="flex items-center gap-3 w-full h-full justify-center text-ink group"
-                        >
-                            <Eye className="w-4 h-4 text-secondary group-hover:text-ink transition-colors" />
-                            <span className="font-sans text-sm uppercase tracking-wider font-medium pt-0.5 whitespace-nowrap">Áttekintés</span>
-                        </button>
-                    </div>
-
-                   {/* Tour Controls View */}
-                   <div className={`absolute inset-0 flex items-center justify-between px-4 transition-opacity duration-300 ${isTourActive ? 'opacity-100 delay-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-                      
-                      {/* Outline Toggle */}
-                      <button 
-                        ref={toggleOutlineBtnRef}
-                        onClick={() => setShowTourOutline(!showTourOutline)}
-                        className={`p-2 rounded-full transition-colors shrink-0 mr-1 ${showTourOutline ? 'bg-accent text-white' : 'hover:bg-stone-100 text-secondary'}`}
-                        title="Vázlat"
-                      >
-                          <List className="w-4 h-4" />
-                      </button>
-
-                      <div className="w-px h-6 bg-stone-300 mx-1 shrink-0" />
-
-                      <button 
-                        onClick={prevStep} 
-                        disabled={tourIndex === 0}
-                        className="p-2 hover:bg-stone-100 rounded-full disabled:opacity-30 transition-colors shrink-0"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </button>
-                      
-                      <span className="font-serif text-lg text-center whitespace-nowrap w-12">
-                        {tourIndex + 1} / {tourPath.length}
-                      </span>
-
-                      <button 
-                        onClick={nextStep}
-                        className="p-2 hover:bg-stone-100 rounded-full transition-colors shrink-0"
-                      >
-                          {tourIndex === tourPath.length - 1 ? <X className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-                      </button>
-
-                      <div className="w-px h-6 bg-stone-300 mx-1 shrink-0" />
-
-                      <button 
-                        onClick={stopTour}
-                        className="px-2 py-1 text-xs uppercase tracking-wider text-secondary hover:text-ink hover:bg-stone-100 rounded transition-colors font-sans whitespace-nowrap"
-                      >
-                        Kilépés
-                      </button>
-                   </div>
-                 </div>
-            </div>
-            </>
+           <OutlinePanel 
+             nodes={data.nodes}
+             order={data.customOrder || []}
+             isOpen={isOutlineOpen}
+             onToggle={() => setIsOutlineOpen(!isOutlineOpen)}
+             onNodeClick={focusOnNodeById}
+             onOrderChange={handleOrderChange}
+             selectedNodeId={selectedNode?.id || null}
+             isMobile={isMobile}
+           />
         )}
-        
+
         {/* --- Concept Graph Visualization --- */}
         {data && !loading && (
-            <div className="flex-1 relative h-full w-full">
+            <div className={`flex-1 relative h-full w-full transition-all duration-300 ${isOutlineOpen && !isMobile ? 'ml-80' : ''}`}>
                <ConceptGraph 
                  ref={graphRef}
                  data={data} 
