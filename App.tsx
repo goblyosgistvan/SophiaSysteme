@@ -5,7 +5,6 @@ import ConceptGraph, { ConceptGraphHandle } from './components/ConceptGraph';
 import DetailPanel from './components/DetailPanel';
 import { fetchPhilosophyData, augmentPhilosophyData, enrichNodeData, createConnectedNode } from './services/geminiService';
 import { exportJSON, exportMarkdown, getCleanFileName } from './services/exportService';
-import { saveDirectoryHandle, getDirectoryHandle, clearDirectoryHandle } from './services/fileHandleStorage';
 import { GraphData, PhilosophicalNode, NodeType } from './types';
 
 declare global {
@@ -45,7 +44,6 @@ const App: React.FC = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isSaving, setIsSaving] = useState(false); // UI feedback for saving
   const [lastFileSave, setLastFileSave] = useState<Date | null>(null);
-  const [isRestoringFolder, setIsRestoringFolder] = useState(false); // New state for restoration prompt
   
   // Environment Detection
   const [isEmbedded, setIsEmbedded] = useState(false);
@@ -100,62 +98,22 @@ const App: React.FC = () => {
         setIsEmbedded(true);
     }
 
+    // Load from LocalStorage initially (Folder access is always manual on reload)
+    const saved = localStorage.getItem('sophia_saved_graphs');
+    if (saved) {
+        try {
+            setSavedGraphs(JSON.parse(saved));
+        } catch (e) {
+            console.error("Failed to load saved graphs", e);
+        }
+    }
+
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   useEffect(() => {
       const shuffled = [...ALL_SUGGESTIONS].sort(() => 0.5 - Math.random());
       setCurrentSuggestions(shuffled.slice(0, 5));
-  }, []);
-
-  // --- Automatic Restoration Logic ---
-  useEffect(() => {
-      const restoreSession = async () => {
-        try {
-            const handle = await getDirectoryHandle();
-            if (handle) {
-                // We have a remembered handle
-                setFolderHandle(handle);
-                setFolderName(handle.name);
-                
-                // Try to query permission. 
-                // Browsers often return 'prompt' here on reload, meaning we can't read yet without gesture.
-                // We set isRestoringFolder(true) to show the UI button.
-                try {
-                    const perm = await handle.queryPermission({ mode: 'readwrite' });
-                    if (perm === 'granted') {
-                        setIsRestoringFolder(false);
-                        try {
-                           await loadGraphsFromFolder(handle);
-                        } catch (loadErr) {
-                           console.warn("Permission granted but load failed on startup", loadErr);
-                           setIsRestoringFolder(true);
-                        }
-                    } else {
-                        // 'prompt' or 'denied' -> Show restore button
-                        setIsRestoringFolder(true);
-                    }
-                } catch (e) {
-                    // If queryPermission throws, the handle might be stale, but let's try prompting via UI first
-                    console.warn("Error querying permission:", e);
-                    setIsRestoringFolder(true);
-                }
-            } else {
-                // Normal LocalStorage Load
-                const saved = localStorage.getItem('sophia_saved_graphs');
-                if (saved) {
-                    try {
-                        setSavedGraphs(JSON.parse(saved));
-                    } catch (e) {
-                        console.error("Failed to load saved graphs", e);
-                    }
-                }
-            }
-        } catch (err) {
-            console.error("Error restoring session:", err);
-        }
-      };
-      restoreSession();
   }, []);
 
   // Click outside to close Tour Outline
@@ -228,7 +186,6 @@ const App: React.FC = () => {
         if (!hasPermission) {
              console.warn("Permission denied for folder access.");
              setIsSaving(false);
-             setIsRestoringFolder(true); // If permission was lost during session
              return;
         }
 
@@ -321,47 +278,14 @@ const App: React.FC = () => {
           // REPLACE state with folder contents (Exclusive View)
           setSavedGraphs(newGraphs);
           setFolderName(handle.name);
-          setIsRestoringFolder(false); // Success, logic complete
           return true;
 
       } catch (err) {
           console.error("Error reading folder:", err);
-          // Likely permission error during iteration
-          setIsRestoringFolder(true);
           throw err;
       } finally {
           setIsSyncing(false);
       }
-  };
-
-  // Specific function to handle the restoration gesture
-  const handleRestoreAccess = async () => {
-    if (!folderHandle) return;
-    try {
-        // This MUST be triggered by a user click/gesture
-        // Explicitly request readwrite mode to avoid double prompting
-        const perm = await folderHandle.requestPermission({ mode: 'readwrite' });
-        
-        if (perm === 'granted') {
-            setIsRestoringFolder(false); // Update UI state IMMEDIATELY
-            try {
-                await loadGraphsFromFolder(folderHandle);
-            } catch (e) {
-                console.error("Permission granted but load failed:", e);
-                alert("Sikertelen olvasás. A mappa valószínűleg már nem elérhető ezen az útvonalon. Kérlek csatlakoztasd újra.");
-                disconnectFolder();
-            }
-        } else {
-            // User denied or dismissed
-            console.log("Permission denied by user");
-        }
-    } catch (e) {
-        console.error("Failed to restore permissions:", e);
-        // If the handle is completely dead (e.g., folder moved, permissions revoked permanently), 
-        // we must reset to avoid user frustration.
-        alert("A kapcsolat helyreállítása nem sikerült (érvénytelen hivatkozás). Kérlek csatlakoztasd újra a mappát.");
-        disconnectFolder();
-    }
   };
 
   const handleConnectFolder = async () => {
@@ -375,13 +299,8 @@ const App: React.FC = () => {
               });
               
               setFolderHandle(handle);
+              // We do not save handle to IndexedDB anymore (requested feature removal)
               
-              try {
-                  await saveDirectoryHandle(handle); 
-              } catch (dbErr) {
-                  console.warn("Could not save directory handle to storage:", dbErr);
-              }
-
               await loadGraphsFromFolder(handle);
           } catch (err: any) {
               // User cancelled or denied permission
@@ -412,8 +331,6 @@ const App: React.FC = () => {
   const disconnectFolder = async () => {
       setFolderHandle(null);
       setFolderName(null);
-      setIsRestoringFolder(false);
-      await clearDirectoryHandle();
       
       // Reload from LocalStorage when disconnecting folder
       const saved = localStorage.getItem('sophia_saved_graphs');
@@ -962,6 +879,8 @@ const App: React.FC = () => {
       if (isMobile) {
           graphRef.current?.focusNode(id, { targetYRatio: 0.2, scale: 0.5 });
       } else {
+          // Pass full panelWidth as padding. Since container is full width, 
+          // this centers the node in the remaining space.
           graphRef.current?.focusNode(id, { fitPadding: panelWidth, scale: 0.9 });
       }
     }
@@ -1262,9 +1181,9 @@ const App: React.FC = () => {
                             
                             {folderHandle ? (
                                 <div className="space-y-3">
-                                    <div className={`flex items-center gap-2 text-xs font-mono ${isRestoringFolder ? 'text-amber-700 bg-amber-50 border-amber-100' : 'text-green-700 bg-green-50 border-green-100'} px-3 py-2 rounded border`}>
-                                        <div className={`w-2 h-2 ${isRestoringFolder ? 'bg-amber-500' : 'bg-green-500'} rounded-full animate-pulse`} />
-                                        {isRestoringFolder ? 'Kapcsolat szükséges' : `Csatlakoztatva: ${folderName || 'Mappa'}`}
+                                    <div className="flex items-center gap-2 text-xs font-mono text-green-700 bg-green-50 border border-green-100 px-3 py-2 rounded">
+                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                                        {`Csatlakoztatva: ${folderName || 'Mappa'}`}
                                     </div>
                                     <div className="flex gap-4">
                                         <button 
@@ -1273,14 +1192,6 @@ const App: React.FC = () => {
                                         >
                                             Kapcsolat bontása
                                         </button>
-                                        {isRestoringFolder && (
-                                            <button 
-                                                onClick={handleRestoreAccess}
-                                                className="text-xs text-amber-600 hover:text-amber-800 underline underline-offset-2 font-bold"
-                                            >
-                                                Hozzáférés megújítása
-                                            </button>
-                                        )}
                                     </div>
                                 </div>
                             ) : (
@@ -1356,9 +1267,9 @@ const App: React.FC = () => {
                              <div className="flex items-center gap-3">
                                  <h3 className="font-serif text-2xl text-ink">Előzmények</h3>
                                  {folderHandle ? (
-                                     <span className={`flex items-center gap-1.5 px-2 py-0.5 ${isRestoringFolder ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-green-100 text-green-700 border-green-200'} rounded-full text-[10px] font-bold uppercase tracking-widest border`}>
-                                        <div className={`w-1.5 h-1.5 ${isRestoringFolder ? 'bg-amber-500' : 'bg-green-500'} rounded-full animate-pulse`}></div>
-                                        {isRestoringFolder ? 'Kapcsolat szükséges' : (folderName || 'Szinkronizálva')}
+                                     <span className="flex items-center gap-1.5 px-2 py-0.5 bg-green-100 text-green-700 border border-green-200 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                                        {folderName || 'Szinkronizálva'}
                                      </span>
                                  ) : null}
                              </div>
@@ -1368,13 +1279,11 @@ const App: React.FC = () => {
                                  <button
                                      type="button"
                                      onClick={() => setShowStorageModal(true)}
-                                     className={`flex items-center gap-2 transition-colors text-sm font-sans cursor-pointer ${folderHandle || isRestoringFolder ? 'text-secondary hover:text-accent' : 'text-secondary hover:text-accent'}`}
-                                     title={isRestoringFolder ? "Válts tárhelyet vagy újítsd meg a kapcsolatot" : "Mappa beállítások"}
+                                     className={`flex items-center gap-2 transition-colors text-sm font-sans cursor-pointer ${folderHandle ? 'text-secondary hover:text-accent' : 'text-secondary hover:text-accent'}`}
+                                     title="Mappa beállítások"
                                  >
                                      {isSyncing ? (
                                         <Loader2 className="w-4 h-4 animate-spin" />
-                                     ) : isRestoringFolder ? (
-                                        <AlertCircle className="w-4 h-4 text-amber-500" />
                                      ) : (
                                         <FolderInput className="w-4 h-4" />
                                      )}
@@ -1460,19 +1369,9 @@ const App: React.FC = () => {
                             <div className="text-center py-8">
                                 <p className="text-secondary/50 italic mb-2">
                                     {folderHandle 
-                                        ? (isRestoringFolder 
-                                            ? "A mappa tartalma nem érhető el. A hozzáférés megújításához kattints az alábbi gombra." 
-                                            : "A mappa üres.") 
+                                        ? "A mappa üres."
                                         : "Még nincsenek mentett gráfjaid."}
                                 </p>
-                                {isRestoringFolder && (
-                                    <button 
-                                        onClick={handleRestoreAccess}
-                                        className="px-4 py-2 bg-amber-50 text-amber-800 border border-amber-200 rounded hover:bg-amber-100 transition-colors text-sm font-medium"
-                                    >
-                                        Hozzáférés megújítása
-                                    </button>
-                                )}
                             </div>
                         )}
                     </div>
@@ -1647,7 +1546,7 @@ const App: React.FC = () => {
         
         {/* --- Concept Graph Visualization --- */}
         {data && !loading && (
-            <div className={`flex-1 relative transition-all duration-300 ${selectedNode && !isMobile ? 'mr-[480px]' : ''}`} style={{ marginRight: selectedNode && !isMobile ? panelWidth : 0 }}>
+            <div className="flex-1 relative h-full w-full">
                <ConceptGraph 
                  ref={graphRef}
                  data={data} 
