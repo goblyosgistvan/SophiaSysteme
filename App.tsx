@@ -46,6 +46,7 @@ const App: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false); // UI feedback for saving
   const [lastFileSave, setLastFileSave] = useState<Date | null>(null);
   const [isRestoringFolder, setIsRestoringFolder] = useState(false); // New state for restoration prompt
+  const isPickerActive = useRef(false);
   
   // Environment Detection
   const [isEmbedded, setIsEmbedded] = useState(false);
@@ -327,12 +328,12 @@ const App: React.FC = () => {
         if (perm === 'granted') {
             await loadGraphsFromFolder(folderHandle);
         } else {
-            alert("A mappa hozzáférés megtagadva. Kérlek próbáld újra, vagy válassz másik mappát a Beállításokban.");
+            alert("A hozzáférés megújítása sikertelen (megtagadva).");
         }
     } catch (e) {
         console.error("Failed to restore permissions:", e);
         // If the handle is completely dead, prompt to reconnect
-        alert("A korábban csatolt mappa már nem elérhető. Kérlek csatlakoztasd újra a Beállítások menüben.");
+        alert("Nem sikerült megújítani a hozzáférést. Kérlek csatlakoztasd újra a mappát a Beállításokban.");
     }
   };
 
@@ -341,6 +342,9 @@ const App: React.FC = () => {
           alert("Biztonsági figyelmeztetés:\n\nA böngésző korlátozza a mappa-hozzáférést beágyazott (iframe) környezetben. A funkció használatához nyisd meg az alkalmazást egy önálló böngészőablakban.");
           return;
       }
+
+      if (isPickerActive.current) return;
+      isPickerActive.current = true;
 
       // 1. Check for modern File System Access API support (Chrome/Edge/Desktop)
       // @ts-ignore
@@ -358,7 +362,7 @@ const App: React.FC = () => {
               await loadGraphsFromFolder(handle);
           } catch (err: any) {
               // User cancelled or denied permission
-              if (err.name === 'AbortError') {
+              if (err.name === 'AbortError' || err.message?.includes('already active')) {
                   return; 
               }
               
@@ -370,8 +374,12 @@ const App: React.FC = () => {
               } else {
                  alert("Hiba a mappa csatlakoztatásakor: " + (err.message || "Ismeretlen hiba"));
               }
+          } finally {
+             // Small delay to ensure picker is fully closed in browser state
+             setTimeout(() => { isPickerActive.current = false; }, 500);
           }
       } else {
+          isPickerActive.current = false;
           // 2. Fallback for iOS / Safari / Firefox / Mobile
           if (isMobile) {
               alert("iOS/Android rendszeren a mappa folyamatos szinkronizálása nem támogatott.\n\nHasználd az 'Importálás' gombot fájlok betöltéséhez, és a 'Letöltés' gombot mentéshez.");
@@ -1234,16 +1242,26 @@ const App: React.FC = () => {
                             
                             {folderHandle ? (
                                 <div className="space-y-3">
-                                    <div className="flex items-center gap-2 text-xs font-mono text-green-700 bg-green-50 px-3 py-2 rounded border border-green-100">
-                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                                        Csatlakoztatva: {folderName || 'Mappa'}
+                                    <div className={`flex items-center gap-2 text-xs font-mono ${isRestoringFolder ? 'text-amber-700 bg-amber-50 border-amber-100' : 'text-green-700 bg-green-50 border-green-100'} px-3 py-2 rounded border`}>
+                                        <div className={`w-2 h-2 ${isRestoringFolder ? 'bg-amber-500' : 'bg-green-500'} rounded-full animate-pulse`} />
+                                        {isRestoringFolder ? 'Kapcsolat szükséges' : `Csatlakoztatva: ${folderName || 'Mappa'}`}
                                     </div>
-                                    <button 
-                                        onClick={disconnectFolder}
-                                        className="text-xs text-red-500 hover:text-red-700 underline underline-offset-2"
-                                    >
-                                        Kapcsolat bontása
-                                    </button>
+                                    <div className="flex gap-4">
+                                        <button 
+                                            onClick={disconnectFolder}
+                                            className="text-xs text-red-500 hover:text-red-700 underline underline-offset-2"
+                                        >
+                                            Kapcsolat bontása
+                                        </button>
+                                        {isRestoringFolder && (
+                                            <button 
+                                                onClick={handleRestoreAccess}
+                                                className="text-xs text-amber-600 hover:text-amber-800 underline underline-offset-2 font-bold"
+                                            >
+                                                Hozzáférés megújítása
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             ) : (
                                 <button 
@@ -1423,7 +1441,7 @@ const App: React.FC = () => {
                                 <p className="text-secondary/50 italic mb-2">
                                     {folderHandle 
                                         ? (isRestoringFolder 
-                                            ? "A mappa tartalma nem érhető el. Újítsd meg a hozzáférést a fenti gombbal." 
+                                            ? "A mappa tartalma nem érhető el. A hozzáférés megújításához kattints az alábbi gombra." 
                                             : "A mappa üres.") 
                                         : "Még nincsenek mentett gráfjaid."}
                                 </p>
