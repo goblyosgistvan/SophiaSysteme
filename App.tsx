@@ -338,11 +338,9 @@ const App: React.FC = () => {
   };
 
   const handleConnectFolder = async () => {
-      if (isEmbedded) {
-          alert("Biztonsági figyelmeztetés:\n\nA böngésző korlátozza a mappa-hozzáférést beágyazott (iframe) környezetben. A funkció használatához nyisd meg az alkalmazást egy önálló böngészőablakban.");
-          return;
-      }
-
+      // Don't pre-emptively block embedded environments. 
+      // We'll catch SecurityErrors if the browser enforces them.
+      
       if (isPickerActive.current) return;
       isPickerActive.current = true;
 
@@ -368,9 +366,9 @@ const App: React.FC = () => {
               
               console.error("Folder access error:", err);
 
-              // Handle iframe/security restrictions fallback
+              // Handle iframe/security restrictions fallback explicitly when they happen
               if (err.name === 'SecurityError' || (err.message && err.message.includes('Cross origin'))) {
-                  alert("Biztonsági korlátozás: Ebben a környezetben a közvetlen mappa-hozzáférés nem engedélyezett.\n\nAlternatív megoldás:\n1. Használd az Importálás/Exportálás gombokat.\n2. Vagy próbáld megnyitni az alkalmazást önálló ablakban.");
+                  alert("Biztonsági korlátozás: Ebben a környezetben (pl. beágyazott ablak) a közvetlen mappa-hozzáférés nem engedélyezett.\n\nAlternatív megoldás:\n1. Használd az Importálás/Exportálás gombokat.\n2. Vagy próbáld megnyitni az alkalmazást önálló ablakban.");
               } else {
                  alert("Hiba a mappa csatlakoztatásakor: " + (err.message || "Ismeretlen hiba"));
               }
@@ -1266,8 +1264,7 @@ const App: React.FC = () => {
                             ) : (
                                 <button 
                                     onClick={handleConnectFolder}
-                                    className={`px-4 py-2 bg-white border border-stone-300 rounded hover:border-accent hover:text-accent transition-colors text-sm font-sans flex items-center gap-2 shadow-sm ${isEmbedded ? 'opacity-50 cursor-not-allowed' : ''}`}
-                                    title={isEmbedded ? "Beágyazott nézetben nem elérhető" : ""}
+                                    className="px-4 py-2 bg-white border border-stone-300 rounded hover:border-accent hover:text-accent transition-colors text-sm font-sans flex items-center gap-2 shadow-sm"
                                 >
                                     <FolderInput className="w-4 h-4" />
                                     Mappa kiválasztása
