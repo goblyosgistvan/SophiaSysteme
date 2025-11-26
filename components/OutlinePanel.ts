@@ -154,7 +154,7 @@ const OutlinePanel: React.FC<OutlinePanelProps> = ({
   const widthClass = isMobile ? "w-[85vw]" : "w-80";
 
   return (
-    <>
+    <
       {/* Toggle Button (Visible when closed) */}
       {!isOpen && (
          <button
