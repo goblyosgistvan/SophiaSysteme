@@ -118,17 +118,21 @@ const App: React.FC = () => {
                 setFolderHandle(handle);
                 setFolderName(handle.name);
                 
-                // Try to read immediately to see if we have permission
+                // Try to query permission. 
+                // Browsers often return 'prompt' here on reload, meaning we can't read yet without gesture.
+                // We set isRestoringFolder(true) to show the UI button.
                 try {
-                    // This often returns 'prompt' on reload, meaning we can't read yet without gesture
                     const perm = await handle.queryPermission({ mode: 'readwrite' });
                     if (perm === 'granted') {
+                        setIsRestoringFolder(false);
                         await loadGraphsFromFolder(handle);
                     } else {
-                        // We need user gesture. Show the "Restore" button state.
+                        // 'prompt' or 'denied' -> Show restore button
                         setIsRestoringFolder(true);
                     }
                 } catch (e) {
+                    // If queryPermission throws, the handle might be stale, but let's try prompting via UI first
+                    console.warn("Error querying permission:", e);
                     setIsRestoringFolder(true);
                 }
             } else {
@@ -219,6 +223,7 @@ const App: React.FC = () => {
         if (!hasPermission) {
              console.warn("Permission denied for folder access.");
              setIsSaving(false);
+             setIsRestoringFolder(true); // If permission was lost during session
              return;
         }
 
@@ -272,6 +277,9 @@ const App: React.FC = () => {
     // Only update LocalStorage if NO folder is connected.
     if (!folderHandle) {
         localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
+    } else {
+        // Trigger folder save
+        saveToFolder(topic, graphData, false);
     }
   };
 
@@ -308,11 +316,12 @@ const App: React.FC = () => {
           // REPLACE state with folder contents (Exclusive View)
           setSavedGraphs(newGraphs);
           setFolderName(handle.name);
-          setIsRestoringFolder(false); // Success
+          setIsRestoringFolder(false); // Success, logic complete
 
       } catch (err) {
           console.error("Error reading folder:", err);
-          // If error is permission related, keep isRestoringFolder true
+          // Likely permission error during iteration
+          setIsRestoringFolder(true);
       } finally {
           setIsSyncing(false);
       }
@@ -323,16 +332,22 @@ const App: React.FC = () => {
     if (!folderHandle) return;
     try {
         // This MUST be triggered by a user click/gesture
+        // Explicitly request readwrite mode to avoid double prompting
         const perm = await folderHandle.requestPermission({ mode: 'readwrite' });
+        
         if (perm === 'granted') {
+            setIsRestoringFolder(false); // Update UI state IMMEDIATELY
             await loadGraphsFromFolder(folderHandle);
         } else {
-            alert("A hozzáférés megújítása sikertelen (megtagadva).");
+            // User denied or dismissed
+            alert("A hozzáférés megújítása szükséges a mappa szinkronizálásához.");
         }
     } catch (e) {
         console.error("Failed to restore permissions:", e);
-        // If the handle is completely dead, prompt to reconnect
-        alert("Nem sikerült megújítani a hozzáférést. Kérlek csatlakoztasd újra a mappát a Beállításokban.");
+        // If the handle is completely dead (e.g., folder moved, permissions revoked permanently), 
+        // we must reset to avoid user frustration.
+        alert("A korábban mentett mappa elérési útja érvénytelennek tűnik. A kapcsolat megszakadt, kérlek csatlakoztasd újra.");
+        disconnectFolder();
     }
   };
 
