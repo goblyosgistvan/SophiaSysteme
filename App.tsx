@@ -337,18 +337,17 @@ const App: React.FC = () => {
   };
 
   const handleConnectFolder = async () => {
-      // 1. Check for modern File System Access API support (Chrome/Edge/Desktop)
-      // @ts-ignore
-      if ('showDirectoryPicker' in window) {
+      // Robust check for File System Access API
+      const showDirectoryPicker = (window as any).showDirectoryPicker;
+
+      if (showDirectoryPicker) {
           try {
-              // @ts-ignore
-              const handle = await window.showDirectoryPicker({
+              const handle = await showDirectoryPicker({
                   mode: 'readwrite'
               });
               
               setFolderHandle(handle);
               
-              // Attempt to persist handle, but continue if it fails (e.g. private mode / iframe IDB restriction)
               try {
                   await saveDirectoryHandle(handle); 
               } catch (dbErr) {
@@ -365,17 +364,19 @@ const App: React.FC = () => {
               console.error("Folder access error:", err);
 
               if (err.name === 'SecurityError' || (err.message && err.message.includes('Cross origin'))) {
-                  alert("Biztonsági korlátozás: Ebben a környezetben (pl. beágyazott ablak) a közvetlen mappa-hozzáférés nem engedélyezett.\n\nAlternatív megoldás:\n1. Használd az Importálás/Exportálás gombokat.\n2. Vagy próbáld megnyitni az alkalmazást önálló ablakban.");
+                  alert("Biztonsági korlátozás: Ebben a környezetben a mappa-hozzáférés nem engedélyezett (pl. beágyazott ablak).\n\nPróbáld meg önálló ablakban megnyitni.");
+              } else if (err.name === 'NotAllowedError') {
+                  alert("Nem adtál engedélyt a mappa eléréséhez.");
               } else {
                  alert("Hiba a mappa csatlakoztatásakor: " + (err.message || "Ismeretlen hiba"));
               }
           }
       } else {
-          // 2. Fallback for iOS / Safari / Firefox / Mobile
+          // Fallback
           if (isMobile) {
-              alert("iOS/Android rendszeren a mappa folyamatos szinkronizálása nem támogatott.\n\nHasználd az 'Importálás' gombot fájlok betöltéséhez, és a 'Letöltés' gombot mentéshez.");
+              alert("iOS/Android rendszeren a mappa szinkronizáció nem támogatott.\n\nHasználd az 'Importálás' gombot.");
           } else {
-              alert("A böngésződ nem támogatja a mappa közvetlen elérését. Használd az Import/Export gombokat.");
+              alert("A böngésződ nem támogatja a mappa közvetlen elérését (File System Access API). Használd Chrome, Edge vagy Opera böngészőt asztali gépen.");
           }
       }
   };
@@ -1256,6 +1257,7 @@ const App: React.FC = () => {
                                 </div>
                             ) : (
                                 <button 
+                                    type="button"
                                     onClick={handleConnectFolder}
                                     className="px-4 py-2 bg-white border border-stone-300 rounded hover:border-accent hover:text-accent transition-colors text-sm font-sans flex items-center gap-2 shadow-sm"
                                 >
