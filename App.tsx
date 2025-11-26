@@ -1,11 +1,17 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical, Folder, File, BookOpen } from 'lucide-react';
+import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical, BookOpen, FolderInput, RefreshCw, Save, HardDrive, CheckCircle, AlertCircle, FolderOpen, Cloud, ExternalLink } from 'lucide-react';
 import ConceptGraph, { ConceptGraphHandle } from './components/ConceptGraph';
 import DetailPanel from './components/DetailPanel';
 import { fetchPhilosophyData, augmentPhilosophyData, enrichNodeData, createConnectedNode } from './services/geminiService';
-import { exportJSON, exportMarkdown } from './services/exportService';
+import { exportJSON, exportMarkdown, getCleanFileName } from './services/exportService';
 import { GraphData, PhilosophicalNode, NodeType } from './types';
+
+declare global {
+  interface Window {
+    showDirectoryPicker?: () => Promise<any>;
+  }
+}
 
 interface SavedGraph {
   id: string;
@@ -30,7 +36,18 @@ const App: React.FC = () => {
   const [savedGraphs, setSavedGraphs] = useState<SavedGraph[]>([]);
   const [showInfo, setShowInfo] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
+  const [showStorageModal, setShowStorageModal] = useState(false);
   
+  // File System Access State
+  const [folderHandle, setFolderHandle] = useState<any>(null); // FileSystemDirectoryHandle
+  const [folderName, setFolderName] = useState<string | null>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false); // UI feedback for saving
+  const [lastFileSave, setLastFileSave] = useState<Date | null>(null);
+  
+  // Environment Detection
+  const [isEmbedded, setIsEmbedded] = useState(false);
+
   // Panel state
   const [panelWidth, setPanelWidth] = useState(480);
   
@@ -40,6 +57,7 @@ const App: React.FC = () => {
   const [augmentLoading, setAugmentLoading] = useState(false);
   const augmentInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const directoryInputRef = useRef<HTMLInputElement>(null);
 
   // Node Regeneration State
   const [isRegeneratingNode, setIsRegeneratingNode] = useState(false);
@@ -72,6 +90,14 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
+    
+    // Check if running in iframe
+    try {
+        setIsEmbedded(window.self !== window.top);
+    } catch (e) {
+        setIsEmbedded(true);
+    }
+
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -125,29 +151,265 @@ const App: React.FC = () => {
       }
   }, [showAugmentInput]);
 
-  const autoSaveGraph = (topic: string, graphData: GraphData) => {
-    const exists = savedGraphs.some(g => g.topic.toLowerCase() === topic.toLowerCase());
+  // --- File System Access Logic ---
+
+  // Helper to verify permissions
+  const verifyPermission = async (fileHandle: any, readWrite: boolean) => {
+    const options: any = {};
+    if (readWrite) {
+      options.mode = 'readwrite';
+    }
+    // Check if permission was already granted. If so, return true.
+    if ((await fileHandle.queryPermission(options)) === 'granted') {
+      return true;
+    }
+    // Request permission. If the user grants permission, return true.
+    if ((await fileHandle.requestPermission(options)) === 'granted') {
+      return true;
+    }
+    // The user didn't grant permission, so return false.
+    return false;
+  };
+
+  const saveToFolder = async (topic: string, graphData: GraphData, manual = false) => {
+    // If we don't have a handle (e.g. iOS fallback import), we can't write to folder directly.
+    if (!folderHandle) return;
     
+    // Simple Debounce/Check: Don't auto-save if saved less than 2 seconds ago unless manual
+    if (!manual && lastFileSave && (new Date().getTime() - lastFileSave.getTime() < 2000)) {
+        return;
+    }
+
+    try {
+        setIsSaving(true);
+        // Verify permission first
+        const hasPermission = await verifyPermission(folderHandle, true);
+        if (!hasPermission) {
+             console.warn("Permission denied for folder access.");
+             setIsSaving(false);
+             return;
+        }
+
+        const fileName = `${getCleanFileName(topic)}.json`;
+        // Create or get file
+        const fileHandle = await folderHandle.getFileHandle(fileName, { create: true });
+        // Create a writable stream
+        const writable = await fileHandle.createWritable();
+        // Write the contents
+        await writable.write(JSON.stringify(graphData, null, 2));
+        // Close the file
+        await writable.close();
+        
+        console.log(`Saved ${fileName} to folder.`);
+        setLastFileSave(new Date());
+        
+        // Update SavedGraphs list date
+        const updatedDate = new Date().toLocaleDateString('hu-HU');
+        setSavedGraphs(prev => prev.map(g => 
+            g.topic.toLowerCase() === topic.toLowerCase() ? { ...g, date: updatedDate } : g
+        ));
+        
+    } catch (err) {
+        console.error("Error saving to folder:", err);
+    } finally {
+        setTimeout(() => setIsSaving(false), 500);
+    }
+  };
+
+  const autoSaveGraph = (topic: string, graphData: GraphData) => {
+    // 1. Save to Local Storage (Always backup locally for speed)
+    const exists = savedGraphs.some(g => g.topic.toLowerCase() === topic.toLowerCase());
+    let updatedGraphs: SavedGraph[];
+
     if (exists) {
-        // Update existing if it exists (for regeneration/augmentation)
-        const updated = savedGraphs.map(g => 
+        updatedGraphs = savedGraphs.map(g => 
             g.topic.toLowerCase() === topic.toLowerCase() ? { ...g, data: graphData, date: new Date().toLocaleDateString('hu-HU') } : g
         );
-        setSavedGraphs(updated);
-        localStorage.setItem('sophia_saved_graphs', JSON.stringify(updated));
     } else {
-        // Create new
         const newGraph: SavedGraph = {
           id: Date.now().toString(),
           topic: topic.charAt(0).toUpperCase() + topic.slice(1),
           date: new Date().toLocaleDateString('hu-HU'),
           data: graphData
         };
-        const updated = [newGraph, ...savedGraphs];
-        setSavedGraphs(updated);
-        localStorage.setItem('sophia_saved_graphs', JSON.stringify(updated));
+        updatedGraphs = [newGraph, ...savedGraphs];
     }
+    setSavedGraphs(updatedGraphs);
+    localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
+    
+    // Note: We do NOT auto-write to disk on every node change to avoid IO thrashing.
+    // Disk write happens on: 'Save' button click OR 'Go Home' OR 'Manual Sync'.
   };
+
+  const loadGraphsFromFolder = async (handle: any) => {
+      setIsSyncing(true);
+      const newGraphs: SavedGraph[] = [];
+      try {
+          // Iterate through files in directory
+          for await (const e of handle.values()) {
+              const entry: any = e;
+              if (entry.kind === 'file' && entry.name.endsWith('.json')) {
+                  try {
+                      const file: any = await entry.getFile();
+                      const text = await file.text();
+                      const parsedData = JSON.parse(text);
+                      // Basic validation
+                      if (parsedData.nodes && parsedData.links) {
+                          const rootNode = parsedData.nodes.find((n: any) => n.type === 'ROOT');
+                          const topic = rootNode ? rootNode.label : entry.name.replace('.json', '');
+                          
+                          newGraphs.push({
+                              id: `file-${entry.name}-${Date.now()}`,
+                              topic: topic,
+                              date: new Date(file.lastModified).toLocaleDateString('hu-HU'),
+                              data: parsedData
+                          });
+                      }
+                  } catch (e) {
+                      console.warn(`Skipping invalid/unreadable JSON: ${entry.name}`, e);
+                  }
+              }
+          }
+
+          // Merge Strategy: Prefer folder data, deduplicate by topic
+          const merged = [...savedGraphs];
+          newGraphs.forEach(ng => {
+              const idx = merged.findIndex(g => g.topic.toLowerCase() === ng.topic.toLowerCase());
+              if (idx !== -1) {
+                  merged[idx] = ng; // Overwrite local with folder version
+              } else {
+                  merged.push(ng);
+              }
+          });
+          
+          setSavedGraphs(merged);
+          localStorage.setItem('sophia_saved_graphs', JSON.stringify(merged));
+          setFolderName(handle.name);
+
+      } catch (err) {
+          console.error("Error reading folder:", err);
+          alert("Nem sikerült beolvasni a mappa tartalmát. Ellenőrizd a jogosultságokat.");
+      } finally {
+          setIsSyncing(false);
+      }
+  };
+
+  const handleConnectFolder = async () => {
+      if (isEmbedded) {
+          alert("Biztonsági figyelmeztetés:\n\nA böngésző korlátozza a mappa-hozzáférést beágyazott (iframe) környezetben. A funkció használatához nyisd meg az alkalmazást egy önálló böngészőablakban.");
+          return;
+      }
+
+      // 1. Check for modern File System Access API support (Chrome/Edge/Desktop)
+      // @ts-ignore
+      if ('showDirectoryPicker' in window) {
+          try {
+              // @ts-ignore
+              const handle = await window.showDirectoryPicker({
+                  mode: 'readwrite', // Request write access upfront
+                  id: 'sophia-graphs', // Remembers the last location
+                  startIn: 'documents'
+              });
+              
+              setFolderHandle(handle);
+              await loadGraphsFromFolder(handle);
+          } catch (err: any) {
+              // User cancelled or denied permission
+              if (err.name === 'AbortError') {
+                  return; 
+              }
+              
+              console.error("Folder access error:", err);
+
+              // Handle iframe/security restrictions fallback
+              if (err.name === 'SecurityError' || (err.message && err.message.includes('Cross origin'))) {
+                  alert("Biztonsági korlátozás: Ebben a környezetben a közvetlen mappa-hozzáférés nem engedélyezett.\n\nAlternatív megoldás:\n1. Használd az Importálás/Exportálás gombokat.\n2. Vagy próbáld megnyitni az alkalmazást önálló ablakban.");
+              } else {
+                 alert("Hiba a mappa csatlakoztatásakor: " + (err.message || "Ismeretlen hiba"));
+              }
+          }
+      } else {
+          // 2. Fallback for iOS / Safari / Firefox / Mobile
+          if (isMobile) {
+              alert("iOS/Android rendszeren a mappa folyamatos szinkronizálása nem támogatott.\n\nHasználd az 'Importálás' gombot fájlok betöltéséhez, és a 'Letöltés' gombot mentéshez.");
+          } else {
+              alert("A böngésződ nem támogatja a mappa közvetlen elérését. Használd az Import/Export gombokat.");
+          }
+      }
+  };
+
+  const disconnectFolder = () => {
+      setFolderHandle(null);
+      setFolderName(null);
+  };
+
+  const handleDirectoryImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const files = event.target.files;
+      if (!files || files.length === 0) return;
+
+      setIsSyncing(true);
+      const readers: Promise<SavedGraph | null>[] = [];
+
+      Array.from(files).forEach((file: any) => {
+          if (!file.name.endsWith('.json')) return;
+
+          const readerPromise = new Promise<SavedGraph | null>((resolve) => {
+              const reader = new FileReader();
+              reader.onload = (e) => {
+                  try {
+                      const text = e.target?.result as string;
+                      const parsedData = JSON.parse(text);
+                      
+                      if (parsedData.nodes && parsedData.links) {
+                          const rootNode = parsedData.nodes.find((n: any) => n.type === 'ROOT');
+                          const topic = rootNode ? rootNode.label : file.name.replace('.json', '');
+                          
+                          resolve({
+                              id: `imported-${file.name}-${Date.now()}`,
+                              topic: topic,
+                              date: new Date(file.lastModified).toLocaleDateString('hu-HU'),
+                              data: parsedData
+                          });
+                      } else {
+                          resolve(null);
+                      }
+                  } catch (err) {
+                      console.warn("Invalid JSON:", file.name);
+                      resolve(null);
+                  }
+              };
+              reader.onerror = () => resolve(null);
+              reader.readAsText(file);
+          });
+          readers.push(readerPromise);
+      });
+
+      Promise.all(readers).then((results) => {
+          const validGraphs = results.filter((g): g is SavedGraph => g !== null);
+          
+          setSavedGraphs(prev => {
+              const merged = [...prev];
+              validGraphs.forEach(ng => {
+                  // Deduplicate by topic, overwrite if exists
+                  const idx = merged.findIndex(g => g.topic.toLowerCase() === ng.topic.toLowerCase());
+                  if (idx !== -1) {
+                      merged[idx] = ng;
+                  } else {
+                      merged.push(ng);
+                  }
+              });
+              localStorage.setItem('sophia_saved_graphs', JSON.stringify(merged));
+              return merged;
+          });
+          
+          setIsSyncing(false);
+          event.target.value = '';
+          if (!folderHandle) {
+             alert(`${validGraphs.length} gráf sikeresen importálva!`);
+          }
+      });
+  };
+
 
   const deleteGraph = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -180,14 +442,30 @@ const App: React.FC = () => {
     setError(null);
   };
 
-  const goHome = () => {
+  const goHome = async () => {
+    // SAVE ON EXIT logic
+    if (folderHandle && data && query) {
+        try {
+            await saveToFolder(query, data, true); // Force save on exit
+        } catch (e) {
+            console.error("Failed to save to folder on exit:", e);
+        }
+    } 
+    
     setData(null);
     setHasSearched(false);
     setQuery('');
     setSelectedNode(null);
     stopTour();
+    setLastFileSave(null);
     const shuffled = [...ALL_SUGGESTIONS].sort(() => 0.5 - Math.random());
     setCurrentSuggestions(shuffled.slice(0, 5));
+  };
+
+  // Explicit Manual Save
+  const handleManualSave = async () => {
+      if (!data || !query || !folderHandle) return;
+      await saveToFolder(query, data, true);
   };
 
   const handleExportJSON = () => {
@@ -211,14 +489,11 @@ const App: React.FC = () => {
         const content = e.target?.result as string;
         try {
             const parsedData = JSON.parse(content);
-            // Basic validation check
             if (parsedData.nodes && Array.isArray(parsedData.nodes) && parsedData.links && Array.isArray(parsedData.links)) {
                 
-                // Determine topic name
                 const rootNode = parsedData.nodes.find((n: any) => n.type === 'ROOT');
                 const topic = rootNode ? rootNode.label : file.name.replace('.json', '');
 
-                // Save and Load
                 autoSaveGraph(topic, parsedData);
                 const importedGraph: SavedGraph = {
                     id: Date.now().toString(),
@@ -238,7 +513,6 @@ const App: React.FC = () => {
         }
     };
     reader.readAsText(file);
-    // Reset input so same file can be selected again
     event.target.value = '';
   };
 
@@ -256,7 +530,6 @@ const App: React.FC = () => {
       try {
           const newData = await augmentPhilosophyData(data, augmentQuery);
           
-          // Merge Nodes
           const mergedNodes = [...data.nodes];
           newData.nodes.forEach(newNode => {
               if (!mergedNodes.some(n => n.id === newNode.id)) {
@@ -264,7 +537,6 @@ const App: React.FC = () => {
               }
           });
 
-          // Merge Links
           const mergedLinks = [...data.links];
           newData.links.forEach(newLink => {
               const exists = mergedLinks.some(l => 
@@ -277,7 +549,7 @@ const App: React.FC = () => {
           
           const updatedData = { nodes: mergedNodes, links: mergedLinks };
           setData(updatedData);
-          autoSaveGraph(query, updatedData); // Save the augmented version
+          autoSaveGraph(query, updatedData); 
           setShowAugmentInput(false);
           setAugmentQuery('');
       } catch (err) {
@@ -287,37 +559,28 @@ const App: React.FC = () => {
       }
   };
 
-  // --- Update Node Logic (Manual Edit) ---
   const handleNodeUpdate = (updatedNode: PhilosophicalNode) => {
       if (!data) return;
-      
       const updatedNodes = data.nodes.map(n => n.id === updatedNode.id ? updatedNode : n);
       const updatedData = { ...data, nodes: updatedNodes };
-      
       setData(updatedData);
       setSelectedNode(updatedNode);
       autoSaveGraph(query, updatedData);
   }
 
-  // --- Regenerate Node Logic ---
-  
   const handleRegenerateNode = async (node: PhilosophicalNode) => {
       if (!data) return;
       setIsRegeneratingNode(true);
 
       try {
           const enrichedFields = await enrichNodeData(node, query);
-          
-          // Create updated node
           const updatedNode = { ...node, ...enrichedFields };
-          
-          // Update Graph Data state
           const updatedNodes = data.nodes.map(n => n.id === node.id ? updatedNode : n);
           const updatedData = { ...data, nodes: updatedNodes };
           
           setData(updatedData);
-          setSelectedNode(updatedNode); // Update currently viewed node
-          autoSaveGraph(query, updatedData); // Save progress
+          setSelectedNode(updatedNode); 
+          autoSaveGraph(query, updatedData); 
 
       } catch (error) {
           console.error("Failed to regenerate node:", error);
@@ -326,22 +589,16 @@ const App: React.FC = () => {
       }
   };
 
-  // --- Delete Node Logic ---
   const handleDeleteNode = (nodeId: string) => {
       if (!data) return;
 
-      // Filter out node
       const updatedNodes = data.nodes.filter(n => n.id !== nodeId);
-
-      // Filter out connected links (handle both string IDs and d3 objects if simulated)
       const updatedLinks = data.links.filter(l => {
           const s = typeof l.source === 'object' ? (l.source as any).id : l.source;
           const t = typeof l.target === 'object' ? (l.target as any).id : l.target;
           return s !== nodeId && t !== nodeId;
       });
 
-      // Update connections arrays in remaining nodes
-      // (Remove the deleted ID from other nodes' connections lists)
       const finalNodes = updatedNodes.map(n => ({
           ...n,
           connections: n.connections.filter(c => c !== nodeId)
@@ -349,22 +606,19 @@ const App: React.FC = () => {
 
       const updatedData = { nodes: finalNodes, links: updatedLinks };
       
-      // Update Tour Path if active
       if (tourPath.includes(nodeId)) {
           const newPath = tourPath.filter(id => id !== nodeId);
           setTourPath(newPath);
-          // If deleted node was current tour step, adjust index
           if (isTourActive && tourIndex >= newPath.length) {
               setTourIndex(newPath.length - 1);
           }
       }
 
       setData(updatedData);
-      setSelectedNode(null); // Close panel
+      setSelectedNode(null);
       autoSaveGraph(query, updatedData);
   };
 
-  // --- Add Connected Node Logic ---
   const handleAddConnectedNode = async (sourceNode: PhilosophicalNode, topic: string) => {
       if (!data) return;
       setIsAddingConnection(true);
@@ -376,20 +630,14 @@ const App: React.FC = () => {
           const newNode = result.nodes[0];
           const newLink = result.links[0];
           
-          // 1. Add new node
           const updatedNodes = [...data.nodes, newNode];
-
-          // 2. Add new link
           const updatedLinks = [...data.links, newLink];
           
-          // 3. Update 'connections' arrays for Source and New node to reflect relationship in data
-          // Update source node in the list
           const finalNodes = updatedNodes.map(n => {
              if (n.id === sourceNode.id) {
                  return { ...n, connections: [...n.connections, newNode.id] };
              }
              if (n.id === newNode.id) {
-                 // Ensure new node knows about source
                  if (!n.connections.includes(sourceNode.id)) {
                      return { ...n, connections: [...n.connections, sourceNode.id] };
                  }
@@ -400,9 +648,6 @@ const App: React.FC = () => {
           const updatedData = { nodes: finalNodes, links: updatedLinks };
           setData(updatedData);
           
-          // Automatically focus on the new node? Or keep current open?
-          // Let's keep current open but maybe refresh it if needed (it updates via selectedNode logic)
-          // Actually, we need to update selectedNode because its connections array changed
           const updatedSourceNode = finalNodes.find(n => n.id === sourceNode.id);
           if (updatedSourceNode) {
               setSelectedNode(updatedSourceNode);
@@ -417,26 +662,22 @@ const App: React.FC = () => {
       }
   };
 
-  // --- Tour Logic (Strict Hierarchy: Root -> Category -> Children) ---
+  // --- Tour Logic ---
 
   const generateTourPath = (graph: GraphData): string[] => {
     if (!graph.nodes.length) return [];
-
     const nodes = graph.nodes;
     const links = graph.links;
     
-    // 1. Identify Structure
     const root = nodes.find(n => n.type === NodeType.ROOT);
     const categories = nodes.filter(n => n.type === NodeType.CATEGORY);
     const others = nodes.filter(n => n.type !== NodeType.ROOT && n.type !== NodeType.CATEGORY);
 
-    // 2. Assign 'others' (Concepts/Works) to the closest Category via BFS
-    const assignments = new Map<string, string>(); // NodeID -> CategoryID
-    const distances = new Map<string, number>(); // NodeID -> Distance from anchor
+    const assignments = new Map<string, string>(); 
+    const distances = new Map<string, number>(); 
     const nodeMap = new Map(nodes.map(n => [n.id, n]));
     const getId = (item: string | any) => typeof item === 'object' ? item.id : item;
 
-    // Helper: Adjacency list
     const adj = new Map<string, string[]>();
     nodes.forEach(n => adj.set(n.id, []));
     links.forEach(l => {
@@ -446,8 +687,6 @@ const App: React.FC = () => {
         adj.get(t)?.push(s);
     });
 
-    // BFS initialization from all Categories simultaneously
-    // queue: { id, anchorId, dist }
     const queue: { id: string, anchorId: string, dist: number }[] = [];
     const visited = new Set<string>();
 
@@ -462,7 +701,6 @@ const App: React.FC = () => {
     while (queue.length > 0) {
         const { id, anchorId, dist } = queue.shift()!;
         
-        // If it's a content node, assign it
         const currentNode = nodeMap.get(id);
         if (currentNode && currentNode.type !== NodeType.CATEGORY && currentNode.type !== NodeType.ROOT) {
             if (!assignments.has(id)) {
@@ -475,46 +713,28 @@ const App: React.FC = () => {
         for (const nextId of neighbors) {
             if (!visited.has(nextId)) {
                 visited.add(nextId);
-                // Propagate the anchorId
                 queue.push({ id: nextId, anchorId, dist: dist + 1 });
             }
         }
     }
 
-    // 3. Construct the Path
     const path: string[] = [];
-
-    // A. Root first
     if (root) path.push(root.id);
 
-    // B. Categories and their assigned children
     categories.forEach(cat => {
-        // Add Category
         path.push(cat.id);
-        
-        // Find children assigned to this category
         const children = others.filter(n => assignments.get(n.id) === cat.id);
-        
-        // Sort children:
-        // 1. Distance (ASC) -> Ensures traversing topological order (A before B if A connects Category to B)
-        // 2. Type (Works first)
-        // 3. Label
         children.sort((a, b) => {
             const distA = distances.get(a.id) || 999;
             const distB = distances.get(b.id) || 999;
-            
-            if (distA !== distB) return distA - distB; // Closer nodes first
-            
+            if (distA !== distB) return distA - distB; 
             if (a.type === NodeType.WORK && b.type !== NodeType.WORK) return -1;
             if (a.type !== NodeType.WORK && b.type === NodeType.WORK) return 1;
-            
             return a.label.localeCompare(b.label);
         });
-
         children.forEach(child => path.push(child.id));
     });
 
-    // C. Orphans (nodes reachable only from Root or isolated)
     const orphans = others.filter(n => !assignments.has(n.id));
     orphans.forEach(o => path.push(o.id));
 
@@ -552,8 +772,8 @@ const App: React.FC = () => {
     setIsTourActive(false);
     setShowTourOutline(false);
     setTourIndex(-1);
-    setSelectedNode(null); // Close panel
-    graphRef.current?.resetZoom(); // Center camera
+    setSelectedNode(null); 
+    graphRef.current?.resetZoom(); 
   };
 
   const handleTourJump = (index: number) => {
@@ -564,25 +784,17 @@ const App: React.FC = () => {
   const handleDragStart = (e: React.DragEvent, index: number) => {
       setDraggedItemIndex(index);
       e.dataTransfer.effectAllowed = 'move';
-      // Hide ghost image slightly if desired, or set a custom one
   };
 
   const handleDragOver = (e: React.DragEvent, index: number) => {
       e.preventDefault(); 
       e.dataTransfer.dropEffect = 'move';
-
-      // Auto Scroll Logic - Improved sensitivity for "scroll while dragging"
       const container = outlineScrollRef.current;
       if (container) {
           const { top, bottom } = container.getBoundingClientRect();
           const hoverY = e.clientY;
-          
-          // Increased threshold area for easier scrolling
           const threshold = 80; 
-          
-          // Speed calculation based on how close to edge
           if (hoverY < top + threshold) {
-              // Closer to top = faster scroll
               const speed = Math.max(2, (threshold - (hoverY - top)) / 5);
               container.scrollTop -= speed; 
           } else if (hoverY > bottom - threshold) {
@@ -591,7 +803,6 @@ const App: React.FC = () => {
           }
       }
 
-      // Visual Drop Indicator Logic
       if (draggedItemIndex === null) return;
       if (index === draggedItemIndex) {
           setDropTargetIndex(null);
@@ -600,11 +811,10 @@ const App: React.FC = () => {
       
       const rect = e.currentTarget.getBoundingClientRect();
       const midY = rect.top + rect.height / 2;
-      
       if (e.clientY < midY) {
-          setDropTargetIndex(index); // Insert before
+          setDropTargetIndex(index); 
       } else {
-          setDropTargetIndex(index + 1); // Insert after
+          setDropTargetIndex(index + 1); 
       }
   };
 
@@ -621,7 +831,6 @@ const App: React.FC = () => {
       const newPath = [...tourPath];
       const [draggedItem] = newPath.splice(draggedItemIndex, 1);
       
-      // Calculate insertion index
       let insertionIndex = dropTargetIndex;
       if (draggedItemIndex < dropTargetIndex) {
           insertionIndex -= 1;
@@ -631,7 +840,6 @@ const App: React.FC = () => {
       
       setTourPath(newPath);
 
-      // Adjust active tour index to track the current node
       const currentActiveId = tourPath[tourIndex];
       const newActiveIndex = newPath.indexOf(currentActiveId);
       if (newActiveIndex !== -1) {
@@ -648,10 +856,8 @@ const App: React.FC = () => {
     if (node) {
       setSelectedNode(node);
       if (isMobile) {
-          // Mobile: Focus on the center of the top 40% (targetYRatio 0.2) with less zoom (scale 0.5)
           graphRef.current?.focusNode(id, { targetYRatio: 0.2, scale: 0.5 });
       } else {
-          // Desktop: Default behavior, offset for right panel
           graphRef.current?.focusNode(id, { fitPadding: panelWidth, scale: 0.9 });
       }
     }
@@ -679,13 +885,11 @@ const App: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [query, savedGraphs]);
+  }, [query, savedGraphs, folderHandle]);
 
   const handleNodeClick = useCallback((node: any) => {
     const pNode = node as PhilosophicalNode;
-    // Trigger focus with specific params when manually clicking too
     if (isMobile) {
-        // Same as tour: Center in the top 40% with less zoom (scale 0.5)
         graphRef.current?.focusNode(pNode.id, { targetYRatio: 0.2, scale: 0.5 });
     } else {
         graphRef.current?.focusNode(pNode.id, { fitPadding: panelWidth, scale: 0.9 });
@@ -696,9 +900,6 @@ const App: React.FC = () => {
         const indexInPath = tourPath.indexOf(pNode.id);
         if (indexInPath !== -1) {
             setTourIndex(indexInPath);
-        } else {
-            // Do not stop tour if clicking around, just don't update index if not in path
-            // stopTour(); 
         }
     }
   }, [isTourActive, tourPath, isMobile, panelWidth]);
@@ -706,10 +907,20 @@ const App: React.FC = () => {
   return (
     <div className="h-screen w-screen flex flex-col bg-paper text-ink overflow-hidden relative">
       
+      {/* Hidden fallback input for directory import */}
+      <input 
+          type="file" 
+          ref={directoryInputRef}
+          onChange={handleDirectoryImport}
+          className="hidden"
+          multiple // Allow selecting multiple files (essential for iOS file picker)
+          accept=".json"
+      />
+
       {/* --- Floating Controls (Left) --- */}
       <div className="absolute top-4 left-6 z-50 flex items-center gap-3 pointer-events-auto">
           <div className="w-10 h-10 bg-ink text-paper rounded-full flex items-center justify-center font-serif text-2xl cursor-pointer shadow-md hover:scale-105 transition-transform" onClick={goHome}>
-              S
+              {isSaving ? <Loader2 className="w-5 h-5 animate-spin" /> : 'S'}
           </div>
           {hasSearched && !loading && (
             <h1 className="font-serif text-xl tracking-wide hidden md:block cursor-pointer text-[#D1D1D1] hover:text-ink transition-colors" onClick={goHome}>Sophia</h1>
@@ -721,7 +932,7 @@ const App: React.FC = () => {
         
         {data && !loading && (
             <>
-                {/* Augment Bar (Expanding) */}
+                {/* Augment Bar */}
                 <div className={`
                     flex items-center transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]
                     ${showAugmentInput 
@@ -812,13 +1023,22 @@ const App: React.FC = () => {
                 <button 
                 onClick={goHome}
                 className="text-[#D1D1D1] hover:text-ink transition-colors"
-                title="Főoldal"
+                title="Főoldal és Mentés"
                 >
                     <Home className="w-6 h-6" />
                 </button>
             </>
         )}
         
+        {/* Storage Management Button */}
+        <button 
+            onClick={() => setShowStorageModal(true)}
+            className={`transition-colors ${folderHandle ? 'text-green-600' : 'text-[#D1D1D1] hover:text-ink'}`}
+            title="Tárhely és Szinkronizáció"
+        >
+            <HardDrive className="w-6 h-6" />
+        </button>
+
         {/* Info Button */}
         <button 
         onClick={() => setShowInfo(true)}
@@ -850,19 +1070,118 @@ const App: React.FC = () => {
                               A SophiaSysteme a görög bölcsesség (sophia) és a francia rendszer (systéme) szó összegyúrásából keletkezett. Ez egy kísérleti tanulási felület, amely gráfok segítségével igyekszik vizualizálni az összetett filozófiai rendszerek kapcsolódási pontjait és összefüggéseit.
                           </p>
                           <p>
-                              A használat elég egyszerű: megadsz egy témát és a mesterséges intelligencia összeállítja neked a tartalmat. Ezután a bal egérgomb lenyomásával tudod mozgatni a térképet, a görgővel tudsz nagyítani, és a csomópontokra kattintva elolvashatod azok kifejtéseit. Az „Áttekintés” gombra kattintva, hierarchikusan, egyesével végigvezet a fogalmakon és koncepciókon.
+                              A használat elég egyszerű: megadsz egy témát és a mesterséges intelligencia összeállítja neked a tartalmat. Ezután a bal egérgomb lenyomásával tudod mozgatni a térképet, a görgővel tudsz nagyítani, és a csomópontokra kattintva elolvashatod azok kifejtéseit.
                           </p>
                           <p>
                               A jobb felső sarokban található „+” gombbal kiegészítheted a gráfot új elemekkel, a letöltés ikonnal pedig esszé formátumban exportálhatod a tudástárat.
                           </p>
                           <p className="text-base text-secondary pt-4 font-sans">
-                              0.3.4 verzió. 2025. november
+                              0.3.5 verzió. 2025. november
                           </p>
                       </div>
                   </div>
-                  
               </div>
           </div>
+      )}
+
+      {/* --- Storage Modal --- */}
+      {showStorageModal && (
+        <div className="fixed inset-0 z-[60] bg-ink/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowStorageModal(false)}>
+          <div 
+            className="bg-paper max-w-lg w-full rounded-xl shadow-2xl overflow-hidden flex flex-col" 
+            onClick={e => e.stopPropagation()}
+          >
+             <div className="p-6 border-b border-stone-200 bg-paper shrink-0 flex justify-between items-center">
+                  <h2 className="text-xl font-serif font-bold text-ink flex items-center gap-2">
+                      <HardDrive className="w-5 h-5" />
+                      Tárhely kezelés
+                  </h2>
+                  <button onClick={() => setShowStorageModal(false)} className="text-secondary hover:text-ink p-1">
+                      <X size={20} /> 
+                  </button>
+             </div>
+             
+             <div className="p-6 space-y-6">
+                {/* Option 1: Local Storage */}
+                <div className={`p-4 rounded-lg border transition-colors ${!folderHandle ? 'bg-white border-accent shadow-sm' : 'bg-stone-50 border-stone-200 opacity-60 hover:opacity-100'}`}>
+                    <div className="flex items-start gap-4">
+                        <div className={`p-2 rounded-full ${!folderHandle ? 'bg-accent/10 text-accent' : 'bg-stone-200 text-stone-500'}`}>
+                           <Cloud className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1">
+                            <div className="flex items-center justify-between mb-1">
+                                <h3 className="font-bold text-ink text-sm uppercase tracking-wide">Böngésző memória</h3>
+                                {!folderHandle && <CheckCircle className="w-4 h-4 text-accent" />}
+                            </div>
+                            <p className="text-sm text-secondary mb-2">A gráfokat a böngésződ tárolja. Gyors és automatikus.</p>
+                            <div className="flex items-center gap-2 text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded w-fit">
+                                <AlertCircle className="w-3 h-3" />
+                                <span>Elveszhet, ha törlöd a böngészési adatokat.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Option 2: Folder Sync */}
+                <div className={`p-4 rounded-lg border transition-colors ${folderHandle ? 'bg-white border-green-500 shadow-sm' : 'bg-stone-50 border-stone-200'}`}>
+                    <div className="flex items-start gap-4">
+                         <div className={`p-2 rounded-full ${folderHandle ? 'bg-green-100 text-green-600' : 'bg-stone-200 text-stone-500'}`}>
+                           <FolderOpen className="w-5 h-5" />
+                        </div>
+                        <div className="flex-1">
+                             <div className="flex items-center justify-between mb-1">
+                                <h3 className="font-bold text-ink text-sm uppercase tracking-wide">Helyi mappa szinkronizáció</h3>
+                                {folderHandle && <CheckCircle className="w-4 h-4 text-green-600" />}
+                            </div>
+                            
+                            {isEmbedded && !folderHandle && (
+                                <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+                                    <div className="flex items-start gap-2">
+                                        <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                                        <span>
+                                            <strong>Korlátozott hozzáférés:</strong> Úgy tűnik, beágyazott ablakban (pl. előnézetben) futtatod az alkalmazást. 
+                                            Biztonsági okokból a közvetlen mappahozzáférés itt nem engedélyezett.
+                                        </span>
+                                    </div>
+                                    <div className="mt-3 text-xs font-mono ml-6">
+                                        Tipp: Nyisd meg az alkalmazást önálló ablakban, vagy használd a lenti Import/Export gombokat.
+                                    </div>
+                                </div>
+                            )}
+
+                            <p className="text-sm text-secondary mb-3">
+                                Válassz egy mappát a számítógépeden. A gráfok <span className="font-mono text-xs bg-stone-100 px-1 rounded">.json</span> fájlként kerülnek mentésre.
+                            </p>
+                            
+                            {folderHandle ? (
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-2 text-xs font-mono text-green-700 bg-green-50 px-3 py-2 rounded border border-green-100">
+                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                                        Csatlakoztatva: {folderName || 'Mappa'}
+                                    </div>
+                                    <button 
+                                        onClick={disconnectFolder}
+                                        className="text-xs text-red-500 hover:text-red-700 underline underline-offset-2"
+                                    >
+                                        Kapcsolat bontása
+                                    </button>
+                                </div>
+                            ) : (
+                                <button 
+                                    onClick={handleConnectFolder}
+                                    className={`px-4 py-2 bg-white border border-stone-300 rounded hover:border-accent hover:text-accent transition-colors text-sm font-sans flex items-center gap-2 shadow-sm ${isEmbedded ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                    title={isEmbedded ? "Beágyazott nézetben nem elérhető" : ""}
+                                >
+                                    <FolderInput className="w-4 h-4" />
+                                    Mappa kiválasztása
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+             </div>
+          </div>
+        </div>
       )}
 
       {/* --- Main Content --- */}
@@ -915,27 +1234,51 @@ const App: React.FC = () => {
                         </div>
                     </div>
 
-                    <div className="w-full max-w-3xl text-left animate-in fade-in slide-in-from-bottom-8 duration-700 pb-20">
+                    <div className="w-full max-w-3xl text-left pb-20 transition-opacity duration-700">
                         <div className="flex justify-between items-end mb-6 border-b border-stone-200 pb-2">
-                             <h3 className="font-serif text-2xl text-ink">Előzmények</h3>
+                             <div className="flex items-center gap-3">
+                                 <h3 className="font-serif text-2xl text-ink">Előzmények</h3>
+                                 {folderHandle && (
+                                     <span className="flex items-center gap-1.5 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-[10px] font-bold uppercase tracking-widest border border-green-200">
+                                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                                        {folderName || 'Szinkronizálva'}
+                                     </span>
+                                 )}
+                             </div>
                              
-                             {/* Import Button */}
-                             <div>
-                                <input 
-                                    type="file" 
-                                    ref={fileInputRef}
-                                    onChange={handleImportGraph}
-                                    accept=".json" 
-                                    className="hidden" 
-                                />
-                                <button 
-                                    onClick={triggerFileUpload}
-                                    className="flex items-center gap-2 text-secondary hover:text-accent transition-colors text-sm font-sans"
-                                    title="Mentett gráf importálása"
-                                >
-                                    <Upload className="w-4 h-4" />
-                                    <span>Importálás</span>
-                                </button>
+                             <div className="flex items-center gap-4">
+                                 {/* Folder Connect Button - Shortcut */}
+                                 <button
+                                     type="button"
+                                     onClick={() => setShowStorageModal(true)}
+                                     className={`flex items-center gap-2 transition-colors text-sm font-sans cursor-pointer ${folderHandle ? 'text-green-600 hover:text-green-700' : 'text-secondary hover:text-accent'}`}
+                                 >
+                                     {isSyncing ? (
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                     ) : (
+                                        <FolderInput className="w-4 h-4" />
+                                     )}
+                                     <span>{folderHandle ? "Beállítások" : "Mappa csatolása"}</span>
+                                 </button>
+
+                                 {/* Import Button */}
+                                 <div>
+                                    <input 
+                                        type="file" 
+                                        ref={fileInputRef}
+                                        onChange={handleImportGraph}
+                                        accept=".json" 
+                                        className="hidden" 
+                                    />
+                                    <button 
+                                        onClick={triggerFileUpload}
+                                        className="flex items-center gap-2 text-secondary hover:text-accent transition-colors text-sm font-sans"
+                                        title="Mentett gráf importálása"
+                                    >
+                                        <Upload className="w-4 h-4" />
+                                        <span>Importálás</span>
+                                    </button>
+                                 </div>
                              </div>
                         </div>
 
@@ -1008,6 +1351,14 @@ const App: React.FC = () => {
              </div>
         )}
 
+        {/* Saving Overlay */}
+        {isSaving && (
+             <div className="absolute inset-0 flex flex-col items-center justify-center bg-paper/80 backdrop-blur-sm z-[150]">
+                <Save className="w-10 h-10 text-accent mb-4 animate-pulse" />
+                <p className="font-serif text-xl">Mentés mappába...</p>
+             </div>
+        )}
+
         {/* Error State */}
         {error && (
             <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none">
@@ -1027,7 +1378,7 @@ const App: React.FC = () => {
         {data && !loading && (
             <>
              <div 
-                className={`absolute bottom-8 transform -translate-x-1/2 z-[100] bg-white/95 backdrop-blur shadow-lg border border-stone-200 rounded-full flex items-center transition-all duration-500 ease-in-out overflow-visible ${isTourActive ? 'w-[320px] h-[52px]' : 'w-[150px] h-[44px]'}`}
+                className={`absolute bottom-8 transform -translate-x-1/2 z-[100] bg-white/95 backdrop-blur shadow-lg border border-stone-200 rounded-full flex items-center transition-all duration-500 ease-in-out overflow-visible ${isTourActive ? 'w-[320px] h-[52px]' : 'min-w-[150px] h-[44px] px-2'}`}
                 style={{
                     left: (selectedNode && windowWidth >= 768) ? `calc((100% - ${panelWidth}px) / 2)` : '50%'
                 }}
@@ -1091,94 +1442,104 @@ const App: React.FC = () => {
                                     <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent rounded-full z-10" />
                                 )}
                             </div>
-                        )
+                        );
                     })}
                  </div>
 
-                 <div className="relative w-full h-full overflow-hidden rounded-full">
-                    
-                    {/* Start Button View */}
-                    <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${!isTourActive ? 'opacity-100 delay-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-                        <button 
-                            onClick={startTour}
-                            className="flex items-center gap-3 w-full h-full justify-center text-ink group"
+                 {isTourActive ? (
+                    <div className="flex items-center justify-between w-full px-2">
+                        {/* Outline Toggle */}
+                        <button
+                            ref={toggleOutlineBtnRef}
+                            onClick={() => setShowTourOutline(!showTourOutline)}
+                            className={`p-2 rounded-full transition-colors ${showTourOutline ? 'bg-accent/10 text-accent' : 'text-stone-400 hover:text-ink'}`}
+                            title="Tartalomjegyzék"
                         >
-                            <Eye className="w-4 h-4 text-secondary group-hover:text-ink transition-colors" />
-                            <span className="font-sans text-sm uppercase tracking-wider font-medium pt-0.5 whitespace-nowrap">Áttekintés</span>
+                            <List size={20} />
+                        </button>
+                        
+                        <div className="h-6 w-px bg-stone-200 mx-1"></div>
+
+                        <button onClick={prevStep} disabled={tourIndex <= 0} className="p-2 rounded-full hover:bg-stone-100 text-ink disabled:opacity-30 disabled:hover:bg-transparent transition-colors">
+                            <ChevronLeft size={24} />
+                        </button>
+                        
+                        <div className="flex flex-col items-center">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-secondary">Lépés</span>
+                            <span className="font-serif text-lg font-medium leading-none text-ink w-12 text-center">
+                                {tourIndex + 1} / {tourPath.length}
+                            </span>
+                        </div>
+
+                        <button onClick={nextStep} className="p-2 rounded-full hover:bg-stone-100 text-ink transition-colors">
+                             {tourIndex === tourPath.length - 1 ? (
+                                <Check size={24} className="text-green-600" />
+                             ) : (
+                                <ChevronRight size={24} />
+                             )}
+                        </button>
+                        
+                        <div className="h-6 w-px bg-stone-200 mx-1"></div>
+
+                        <button onClick={stopTour} className="p-2 rounded-full hover:bg-stone-100 text-red-500 transition-colors" title="Kilépés">
+                            <X size={20} />
                         </button>
                     </div>
-
-                   {/* Tour Controls View */}
-                   <div className={`absolute inset-0 flex items-center justify-between px-4 transition-opacity duration-300 ${isTourActive ? 'opacity-100 delay-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-                      
-                      {/* Outline Toggle */}
-                      <button 
-                        ref={toggleOutlineBtnRef}
-                        onClick={() => setShowTourOutline(!showTourOutline)}
-                        className={`p-2 rounded-full transition-colors shrink-0 mr-1 ${showTourOutline ? 'bg-accent text-white' : 'hover:bg-stone-100 text-secondary'}`}
-                        title="Vázlat"
-                      >
-                          <List className="w-4 h-4" />
-                      </button>
-
-                      <div className="w-px h-6 bg-stone-300 mx-1 shrink-0" />
-
-                      <button 
-                        onClick={prevStep} 
-                        disabled={tourIndex === 0}
-                        className="p-2 hover:bg-stone-100 rounded-full disabled:opacity-30 transition-colors shrink-0"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </button>
-                      
-                      <span className="font-serif text-lg text-center whitespace-nowrap w-12">
-                        {tourIndex + 1} / {tourPath.length}
-                      </span>
-
-                      <button 
-                        onClick={nextStep}
-                        className="p-2 hover:bg-stone-100 rounded-full transition-colors shrink-0"
-                      >
-                          {tourIndex === tourPath.length - 1 ? <X className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
-                      </button>
-
-                      <div className="w-px h-6 bg-stone-300 mx-1 shrink-0" />
-
-                      <button 
-                        onClick={stopTour}
-                        className="px-2 py-1 text-xs uppercase tracking-wider text-secondary hover:text-ink hover:bg-stone-100 rounded transition-colors font-sans whitespace-nowrap"
-                      >
-                        Kilépés
-                      </button>
-                   </div>
-                 </div>
+                 ) : (
+                    <div className="flex items-center justify-center w-full">
+                        <button 
+                            onClick={startTour}
+                            className="flex-1 flex items-center justify-center gap-2 text-ink hover:text-accent transition-colors font-serif text-lg px-4 h-full"
+                        >
+                            <BookOpen size={20} />
+                            <span>Áttekintés</span>
+                        </button>
+                        
+                        {folderHandle && (
+                            <>
+                                <div className="h-6 w-px bg-stone-200"></div>
+                                <button 
+                                    onClick={handleManualSave}
+                                    className="p-2 mx-1 text-secondary hover:text-green-600 transition-colors rounded-full hover:bg-green-50"
+                                    title="Mentés lemezre most"
+                                >
+                                    <Save size={18} />
+                                </button>
+                            </>
+                        )}
+                    </div>
+                 )}
+             </div>
+             </>
+        )}
+        
+        {/* --- Concept Graph Visualization --- */}
+        {data && !loading && (
+            <div className={`flex-1 relative transition-all duration-300 ${selectedNode && !isMobile ? 'mr-[480px]' : ''}`} style={{ marginRight: selectedNode && !isMobile ? panelWidth : 0 }}>
+               <ConceptGraph 
+                 ref={graphRef}
+                 data={data} 
+                 onNodeClick={handleNodeClick}
+                 selectedNodeId={selectedNode?.id || null}
+               />
             </div>
-            </>
         )}
 
-        <div className="flex-1 relative bg-paper h-full min-w-0">
-            <ConceptGraph 
-                ref={graphRef}
-                data={data} 
-                onNodeClick={handleNodeClick}
-                selectedNodeId={selectedNode?.id || null}
-            />
-        </div>
-
+        {/* --- Detail Panel (Slide-in) --- */}
         <DetailPanel 
-            node={selectedNode} 
-            allNodes={data?.nodes || []}
-            onClose={() => setSelectedNode(null)} 
-            onNavigate={(id) => focusOnNodeById(id)}
-            onRegenerate={handleRegenerateNode}
-            onSave={handleNodeUpdate}
-            onDelete={handleDeleteNode}
-            onAddConnectedNode={handleAddConnectedNode}
-            isRegenerating={isRegeneratingNode}
-            isAddingNode={isAddingConnection}
-            isMobile={isMobile}
-            width={panelWidth}
-            onResize={setPanelWidth}
+          node={selectedNode}
+          allNodes={data?.nodes || []}
+          onClose={() => setSelectedNode(null)}
+          onNavigate={(nodeId) => focusOnNodeById(nodeId)}
+          onRegenerate={handleRegenerateNode}
+          onSave={handleNodeUpdate}
+          onDelete={handleDeleteNode}
+          onAddConnectedNode={handleAddConnectedNode}
+          isRegenerating={isRegeneratingNode}
+          isAddingNode={isAddingConnection}
+          isMobile={isMobile}
+          width={panelWidth}
+          onResize={setPanelWidth}
         />
 
       </main>
