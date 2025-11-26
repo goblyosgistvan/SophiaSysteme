@@ -464,7 +464,15 @@ const App: React.FC = () => {
 
   // Explicit Manual Save
   const handleManualSave = async () => {
-      if (!data || !query || !folderHandle) return;
+      if (!data || !query) return;
+
+      // If no folder connected, act as "Setup Storage" button
+      if (!folderHandle) {
+          setShowStorageModal(true);
+          return;
+      }
+      
+      // If folder connected, save to disk
       await saveToFolder(query, data, true);
   };
 
@@ -1027,18 +1035,18 @@ const App: React.FC = () => {
                 >
                     <Home className="w-6 h-6" />
                 </button>
+
+                {/* SAVE BUTTON - REPLACES STORAGE BUTTON */}
+                <button 
+                    onClick={handleManualSave}
+                    className={`transition-colors ${isSaving ? 'text-accent' : 'text-[#D1D1D1] hover:text-ink'}`}
+                    title={folderHandle ? "Mentés mappába" : "Mentés (Böngésző / Mappa beállítása)"}
+                >
+                    {isSaving ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
+                </button>
             </>
         )}
         
-        {/* Storage Management Button */}
-        <button 
-            onClick={() => setShowStorageModal(true)}
-            className={`transition-colors ${folderHandle ? 'text-green-600' : 'text-[#D1D1D1] hover:text-ink'}`}
-            title="Tárhely és Szinkronizáció"
-        >
-            <HardDrive className="w-6 h-6" />
-        </button>
-
         {/* Info Button */}
         <button 
         onClick={() => setShowInfo(true)}
@@ -1494,19 +1502,6 @@ const App: React.FC = () => {
                             <BookOpen size={20} />
                             <span>Áttekintés</span>
                         </button>
-                        
-                        {folderHandle && (
-                            <>
-                                <div className="h-6 w-px bg-stone-200"></div>
-                                <button 
-                                    onClick={handleManualSave}
-                                    className="p-2 mx-1 text-secondary hover:text-green-600 transition-colors rounded-full hover:bg-green-50"
-                                    title="Mentés lemezre most"
-                                >
-                                    <Save size={18} />
-                                </button>
-                            </>
-                        )}
                     </div>
                  )}
              </div>
