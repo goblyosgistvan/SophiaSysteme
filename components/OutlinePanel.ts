@@ -159,7 +159,7 @@ const OutlinePanel: React.FC<OutlinePanelProps> = ({
       {!isOpen && (
          <button
             onClick={onToggle}
-            className="absolute top-20 left-6 z-40 p-2 bg-white border border-stone-200 shadow-md rounded-full text-secondary hover:text-ink hover:bg-stone-50 transition-all"
+            className="absolute top-15 left-6 z-40 p-2 bg-white border border-stone-200 shadow-md rounded-full text-secondary hover:text-ink hover:bg-stone-50 transition-all"
             title="Vázlat megnyitása (Q)"
          >
             <List className="w-5 h-5" />
