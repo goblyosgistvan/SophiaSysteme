@@ -318,27 +318,28 @@ const App: React.FC = () => {
       }
   };
 
+  // Specific function to handle the restoration gesture
+  const handleRestoreAccess = async () => {
+    if (!folderHandle) return;
+    try {
+        // This MUST be triggered by a user click/gesture
+        const perm = await folderHandle.requestPermission({ mode: 'readwrite' });
+        if (perm === 'granted') {
+            await loadGraphsFromFolder(folderHandle);
+        } else {
+            alert("A mappa hozzáférés megtagadva. Kérlek próbáld újra, vagy válassz másik mappát a Beállításokban.");
+        }
+    } catch (e) {
+        console.error("Failed to restore permissions:", e);
+        // If the handle is completely dead, prompt to reconnect
+        alert("A korábban csatolt mappa már nem elérhető. Kérlek csatlakoztasd újra a Beállítások menüben.");
+    }
+  };
+
   const handleConnectFolder = async () => {
       if (isEmbedded) {
           alert("Biztonsági figyelmeztetés:\n\nA böngésző korlátozza a mappa-hozzáférést beágyazott (iframe) környezetben. A funkció használatához nyisd meg az alkalmazást egy önálló böngészőablakban.");
           return;
-      }
-
-      // If we are just restoring permission for an existing handle
-      if (isRestoringFolder && folderHandle) {
-          try {
-             // This trigger is a user gesture, so requestPermission should work
-             const perm = await folderHandle.requestPermission({ mode: 'readwrite' });
-             if (perm === 'granted') {
-                 await loadGraphsFromFolder(folderHandle);
-             } else {
-                 alert("A mappa hozzáférés megtagadva.");
-             }
-             return;
-          } catch(e) {
-              console.error("Restoration failed", e);
-              // Fallback to picking new folder if old handle is stale
-          }
       }
 
       // 1. Check for modern File System Access API support (Chrome/Edge/Desktop)
@@ -1095,14 +1096,16 @@ const App: React.FC = () => {
                     )}
                 </div>
 
-                 {/* SAVE BUTTON - Swapped position */}
-                 <button 
-                    onClick={handleManualSave}
-                    className={`transition-colors ${isSaving ? 'text-accent' : 'text-[#D1D1D1] hover:text-ink'}`}
-                    title={folderHandle ? "Mentés mappába" : "Mentés (Böngésző / Mappa beállítása)"}
-                >
-                    {isSaving ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
-                </button>
+                 {/* SAVE BUTTON - Conditionally rendered */}
+                 {folderHandle && (
+                     <button 
+                        onClick={handleManualSave}
+                        className={`transition-colors ${isSaving ? 'text-accent' : 'text-[#D1D1D1] hover:text-ink'}`}
+                        title="Mentés mappába"
+                    >
+                        {isSaving ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
+                    </button>
+                 )}
 
                 {/* HOME BUTTON - Swapped position */}
                 <button 
@@ -1326,22 +1329,19 @@ const App: React.FC = () => {
                                  {/* Folder Connect Button - Shortcut */}
                                  <button
                                      type="button"
-                                     onClick={() => isRestoringFolder ? handleConnectFolder() : setShowStorageModal(true)}
+                                     onClick={() => setShowStorageModal(true)}
                                      className={`flex items-center gap-2 transition-colors text-sm font-sans cursor-pointer ${folderHandle || isRestoringFolder ? 'text-secondary hover:text-accent' : 'text-secondary hover:text-accent'}`}
-                                     title={isRestoringFolder ? "Kattints a hozzáférés megújításához" : "Mappa beállítások"}
+                                     title={isRestoringFolder ? "Válts tárhelyet vagy újítsd meg a kapcsolatot" : "Mappa beállítások"}
                                  >
                                      {isSyncing ? (
                                         <Loader2 className="w-4 h-4 animate-spin" />
                                      ) : isRestoringFolder ? (
-                                        <RefreshCcw className="w-4 h-4" />
+                                        <AlertCircle className="w-4 h-4 text-amber-500" />
                                      ) : (
                                         <FolderInput className="w-4 h-4" />
                                      )}
                                      <span className={isMobile ? "hidden" : ""}>
-                                         {isRestoringFolder 
-                                            ? "Csatlakozás megújítása" 
-                                            : (folderHandle ? "Beállítások" : "Mappa csatolása")
-                                         }
+                                         {folderHandle ? "Beállítások" : "Mappa csatolása"}
                                      </span>
                                  </button>
 
@@ -1429,7 +1429,7 @@ const App: React.FC = () => {
                                 </p>
                                 {isRestoringFolder && (
                                     <button 
-                                        onClick={handleConnectFolder}
+                                        onClick={handleRestoreAccess}
                                         className="px-4 py-2 bg-amber-50 text-amber-800 border border-amber-200 rounded hover:bg-amber-100 transition-colors text-sm font-medium"
                                     >
                                         Hozzáférés megújítása
