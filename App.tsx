@@ -107,15 +107,18 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const saved = localStorage.getItem('sophia_saved_graphs');
-    if (saved) {
-      try {
-        setSavedGraphs(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to load saved graphs", e);
-      }
+    // Only load from LocalStorage if NOT using a folder
+    if (!folderHandle) {
+        const saved = localStorage.getItem('sophia_saved_graphs');
+        if (saved) {
+        try {
+            setSavedGraphs(JSON.parse(saved));
+        } catch (e) {
+            console.error("Failed to load saved graphs", e);
+        }
+        }
     }
-  }, []);
+  }, [folderHandle]);
 
   // Click outside to close Tour Outline
   useEffect(() => {
@@ -217,7 +220,6 @@ const App: React.FC = () => {
   };
 
   const autoSaveGraph = (topic: string, graphData: GraphData) => {
-    // 1. Save to Local Storage (Always backup locally for speed)
     const exists = savedGraphs.some(g => g.topic.toLowerCase() === topic.toLowerCase());
     let updatedGraphs: SavedGraph[];
 
@@ -234,11 +236,16 @@ const App: React.FC = () => {
         };
         updatedGraphs = [newGraph, ...savedGraphs];
     }
-    setSavedGraphs(updatedGraphs);
-    localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
     
-    // Note: We do NOT auto-write to disk on every node change to avoid IO thrashing.
-    // Disk write happens on: 'Save' button click OR 'Go Home' OR 'Manual Sync'.
+    // Update State
+    setSavedGraphs(updatedGraphs);
+
+    // Only update LocalStorage if NO folder is connected.
+    // If a folder is connected, we use the FileSystem API (triggered manually or by specific events),
+    // and we don't pollute localStorage with folder files.
+    if (!folderHandle) {
+        localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
+    }
   };
 
   const loadGraphsFromFolder = async (handle: any) => {
@@ -271,19 +278,8 @@ const App: React.FC = () => {
               }
           }
 
-          // Merge Strategy: Prefer folder data, deduplicate by topic
-          const merged = [...savedGraphs];
-          newGraphs.forEach(ng => {
-              const idx = merged.findIndex(g => g.topic.toLowerCase() === ng.topic.toLowerCase());
-              if (idx !== -1) {
-                  merged[idx] = ng; // Overwrite local with folder version
-              } else {
-                  merged.push(ng);
-              }
-          });
-          
-          setSavedGraphs(merged);
-          localStorage.setItem('sophia_saved_graphs', JSON.stringify(merged));
+          // REPLACE state with folder contents (Exclusive View)
+          setSavedGraphs(newGraphs);
           setFolderName(handle.name);
 
       } catch (err) {
@@ -341,6 +337,18 @@ const App: React.FC = () => {
   const disconnectFolder = () => {
       setFolderHandle(null);
       setFolderName(null);
+      
+      // Reload from LocalStorage when disconnecting folder
+      const saved = localStorage.getItem('sophia_saved_graphs');
+      if (saved) {
+          try {
+              setSavedGraphs(JSON.parse(saved));
+          } catch (e) {
+              setSavedGraphs([]);
+          }
+      } else {
+          setSavedGraphs([]);
+      }
   };
 
   const handleDirectoryImport = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -398,7 +406,11 @@ const App: React.FC = () => {
                       merged.push(ng);
                   }
               });
-              localStorage.setItem('sophia_saved_graphs', JSON.stringify(merged));
+              // Note: Directory import usually implies we just want to load them into the view/memory, 
+              // but if no folder connection is active, we might want to save to localstorage.
+              if (!folderHandle) {
+                localStorage.setItem('sophia_saved_graphs', JSON.stringify(merged));
+              }
               return merged;
           });
           
@@ -413,9 +425,20 @@ const App: React.FC = () => {
 
   const deleteGraph = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    // If folder connected, we currently don't implement "Delete File from Disk" via this UI for safety,
+    // just remove from view. Real delete would require fileHandle.removeEntry().
+    // For now, let's keep it simple:
+    
     const updated = savedGraphs.filter(g => g.id !== id);
     setSavedGraphs(updated);
-    localStorage.setItem('sophia_saved_graphs', JSON.stringify(updated));
+    
+    if (!folderHandle) {
+        localStorage.setItem('sophia_saved_graphs', JSON.stringify(updated));
+    } else {
+        // If folder is connected, deleting from the list is visual only unless we implement file deletion.
+        // Alert user.
+        alert("A listából törölve. A fájl a mappában megmaradt.");
+    }
   }
 
   const startRenaming = (id: string, currentName: string, e: React.MouseEvent) => {
@@ -430,7 +453,12 @@ const App: React.FC = () => {
       
       const updated = savedGraphs.map(g => g.id === renamingId ? { ...g, topic: renameValue } : g);
       setSavedGraphs(updated);
-      localStorage.setItem('sophia_saved_graphs', JSON.stringify(updated));
+      
+      if (!folderHandle) {
+          localStorage.setItem('sophia_saved_graphs', JSON.stringify(updated));
+      }
+      // Note: Renaming file on disk is complex (read/write/delete old), skipped for now in "Semi-automatic" mode.
+      
       setRenamingId(null);
   }
 
@@ -443,15 +471,7 @@ const App: React.FC = () => {
   };
 
   const goHome = async () => {
-    // SAVE ON EXIT logic
-    if (folderHandle && data && query) {
-        try {
-            await saveToFolder(query, data, true); // Force save on exit
-        } catch (e) {
-            console.error("Failed to save to folder on exit:", e);
-        }
-    } 
-    
+    // No Auto Save on exit requested by user
     setData(null);
     setHasSearched(false);
     setQuery('');
@@ -1028,21 +1048,22 @@ const App: React.FC = () => {
                     )}
                 </div>
 
-                <button 
-                onClick={goHome}
-                className="text-[#D1D1D1] hover:text-ink transition-colors"
-                title="Főoldal és Mentés"
-                >
-                    <Home className="w-6 h-6" />
-                </button>
-
-                {/* SAVE BUTTON - REPLACES STORAGE BUTTON */}
-                <button 
+                 {/* SAVE BUTTON - Swapped position */}
+                 <button 
                     onClick={handleManualSave}
                     className={`transition-colors ${isSaving ? 'text-accent' : 'text-[#D1D1D1] hover:text-ink'}`}
                     title={folderHandle ? "Mentés mappába" : "Mentés (Böngésző / Mappa beállítása)"}
                 >
                     {isSaving ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
+                </button>
+
+                {/* HOME BUTTON - Swapped position */}
+                <button 
+                onClick={goHome}
+                className="text-[#D1D1D1] hover:text-ink transition-colors"
+                title="Főoldal"
+                >
+                    <Home className="w-6 h-6" />
                 </button>
             </>
         )}
@@ -1259,7 +1280,7 @@ const App: React.FC = () => {
                                  <button
                                      type="button"
                                      onClick={() => setShowStorageModal(true)}
-                                     className={`flex items-center gap-2 transition-colors text-sm font-sans cursor-pointer ${folderHandle ? 'text-green-600 hover:text-green-700' : 'text-secondary hover:text-accent'}`}
+                                     className={`flex items-center gap-2 transition-colors text-sm font-sans cursor-pointer ${folderHandle ? 'text-secondary hover:text-accent' : 'text-secondary hover:text-accent'}`}
                                  >
                                      {isSyncing ? (
                                         <Loader2 className="w-4 h-4 animate-spin" />
@@ -1343,7 +1364,9 @@ const App: React.FC = () => {
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-secondary/50 italic text-center py-8">Még nincsenek mentett gráfjaid.</p>
+                            <p className="text-secondary/50 italic text-center py-8">
+                                {folderHandle ? "A mappa üres." : "Még nincsenek mentett gráfjaid."}
+                            </p>
                         )}
                     </div>
                 </div>
