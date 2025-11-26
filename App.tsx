@@ -1,10 +1,11 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical, BookOpen, FolderInput, RefreshCw, Save, HardDrive, CheckCircle, AlertCircle, FolderOpen, Cloud, ExternalLink } from 'lucide-react';
+import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical, BookOpen, FolderInput, RefreshCw, Save, HardDrive, CheckCircle, AlertCircle, FolderOpen, Cloud, ExternalLink, RefreshCcw } from 'lucide-react';
 import ConceptGraph, { ConceptGraphHandle } from './components/ConceptGraph';
 import DetailPanel from './components/DetailPanel';
 import { fetchPhilosophyData, augmentPhilosophyData, enrichNodeData, createConnectedNode } from './services/geminiService';
 import { exportJSON, exportMarkdown, getCleanFileName } from './services/exportService';
+import { saveDirectoryHandle, getDirectoryHandle, clearDirectoryHandle } from './services/fileHandleStorage';
 import { GraphData, PhilosophicalNode, NodeType } from './types';
 
 declare global {
@@ -44,6 +45,7 @@ const App: React.FC = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [isSaving, setIsSaving] = useState(false); // UI feedback for saving
   const [lastFileSave, setLastFileSave] = useState<Date | null>(null);
+  const [isRestoringFolder, setIsRestoringFolder] = useState(false); // New state for restoration prompt
   
   // Environment Detection
   const [isEmbedded, setIsEmbedded] = useState(false);
@@ -106,19 +108,46 @@ const App: React.FC = () => {
       setCurrentSuggestions(shuffled.slice(0, 5));
   }, []);
 
+  // --- Automatic Restoration Logic ---
   useEffect(() => {
-    // Only load from LocalStorage if NOT using a folder
-    if (!folderHandle) {
-        const saved = localStorage.getItem('sophia_saved_graphs');
-        if (saved) {
+      const restoreSession = async () => {
         try {
-            setSavedGraphs(JSON.parse(saved));
-        } catch (e) {
-            console.error("Failed to load saved graphs", e);
+            const handle = await getDirectoryHandle();
+            if (handle) {
+                // We have a remembered handle
+                setFolderHandle(handle);
+                setFolderName(handle.name);
+                
+                // Try to read immediately to see if we have permission
+                try {
+                    // This often returns 'prompt' on reload, meaning we can't read yet without gesture
+                    const perm = await handle.queryPermission({ mode: 'readwrite' });
+                    if (perm === 'granted') {
+                        await loadGraphsFromFolder(handle);
+                    } else {
+                        // We need user gesture. Show the "Restore" button state.
+                        setIsRestoringFolder(true);
+                    }
+                } catch (e) {
+                    setIsRestoringFolder(true);
+                }
+            } else {
+                // Normal LocalStorage Load
+                const saved = localStorage.getItem('sophia_saved_graphs');
+                if (saved) {
+                    try {
+                        setSavedGraphs(JSON.parse(saved));
+                    } catch (e) {
+                        console.error("Failed to load saved graphs", e);
+                    }
+                }
+            }
+        } catch (err) {
+            console.error("Error restoring session:", err);
         }
-        }
-    }
-  }, [folderHandle]);
+      };
+      restoreSession();
+  }, []);
 
   // Click outside to close Tour Outline
   useEffect(() => {
@@ -241,8 +270,6 @@ const App: React.FC = () => {
     setSavedGraphs(updatedGraphs);
 
     // Only update LocalStorage if NO folder is connected.
-    // If a folder is connected, we use the FileSystem API (triggered manually or by specific events),
-    // and we don't pollute localStorage with folder files.
     if (!folderHandle) {
         localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
     }
@@ -281,10 +308,11 @@ const App: React.FC = () => {
           // REPLACE state with folder contents (Exclusive View)
           setSavedGraphs(newGraphs);
           setFolderName(handle.name);
+          setIsRestoringFolder(false); // Success
 
       } catch (err) {
           console.error("Error reading folder:", err);
-          alert("Nem sikerült beolvasni a mappa tartalmát. Ellenőrizd a jogosultságokat.");
+          // If error is permission related, keep isRestoringFolder true
       } finally {
           setIsSyncing(false);
       }
@@ -294,6 +322,23 @@ const App: React.FC = () => {
       if (isEmbedded) {
           alert("Biztonsági figyelmeztetés:\n\nA böngésző korlátozza a mappa-hozzáférést beágyazott (iframe) környezetben. A funkció használatához nyisd meg az alkalmazást egy önálló böngészőablakban.");
           return;
+      }
+
+      // If we are just restoring permission for an existing handle
+      if (isRestoringFolder && folderHandle) {
+          try {
+             // This trigger is a user gesture, so requestPermission should work
+             const perm = await folderHandle.requestPermission({ mode: 'readwrite' });
+             if (perm === 'granted') {
+                 await loadGraphsFromFolder(folderHandle);
+             } else {
+                 alert("A mappa hozzáférés megtagadva.");
+             }
+             return;
+          } catch(e) {
+              console.error("Restoration failed", e);
+              // Fallback to picking new folder if old handle is stale
+          }
       }
 
       // 1. Check for modern File System Access API support (Chrome/Edge/Desktop)
@@ -308,6 +353,7 @@ const App: React.FC = () => {
               });
               
               setFolderHandle(handle);
+              await saveDirectoryHandle(handle); // Persist
               await loadGraphsFromFolder(handle);
           } catch (err: any) {
               // User cancelled or denied permission
@@ -334,9 +380,11 @@ const App: React.FC = () => {
       }
   };
 
-  const disconnectFolder = () => {
+  const disconnectFolder = async () => {
       setFolderHandle(null);
       setFolderName(null);
+      setIsRestoringFolder(false);
+      await clearDirectoryHandle();
       
       // Reload from LocalStorage when disconnecting folder
       const saved = localStorage.getItem('sophia_saved_graphs');
@@ -457,7 +505,6 @@ const App: React.FC = () => {
       if (!folderHandle) {
           localStorage.setItem('sophia_saved_graphs', JSON.stringify(updated));
       }
-      // Note: Renaming file on disk is complex (read/write/delete old), skipped for now in "Semi-automatic" mode.
       
       setRenamingId(null);
   }
@@ -965,10 +1012,10 @@ const App: React.FC = () => {
                     flex items-center transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]
                     ${showAugmentInput 
                         ? (isMobile 
-                            ? 'absolute right-0 w-[calc(100vw-3rem)] z-50 bg-white shadow-lg border border-stone-200 rounded-full pr-1' 
-                            : 'w-72 bg-white shadow-md border border-stone-200 rounded-full pr-1'
+                            ? 'absolute right-0 w-[calc(100vw-3rem)] z-50 bg-white shadow-lg border border-stone-200 rounded-full' 
+                            : 'w-72 bg-white shadow-md border border-stone-200 rounded-full'
                           )
-                        : 'relative w-10'
+                        : 'relative w-10 justify-center'
                     }
                 `}>
                     
@@ -977,8 +1024,8 @@ const App: React.FC = () => {
                         className={`
                            transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] flex items-center mb-0
                            ${showAugmentInput 
-                               ? (isMobile ? 'flex-1 opacity-100 h-10 pl-4' : 'w-72 opacity-100 h-10 ml-5') 
-                               : 'w-0 opacity-0 h-10 ml-0 overflow-hidden'
+                               ? (isMobile ? 'flex-1 opacity-100 h-10 pl-4' : 'w-full opacity-100 h-10 pl-5 pr-1') 
+                               : 'w-0 opacity-0 h-10 overflow-hidden'
                            }
                         `}
                     >
@@ -1019,7 +1066,7 @@ const App: React.FC = () => {
                 </div>
 
                 {/* Export Dropdown */}
-                <div className="relative export-container">
+                <div className="relative flex items-center export-container">
                     <button 
                         onClick={() => setShowExportMenu(!showExportMenu)}
                         className={`text-[#D1D1D1] hover:text-ink transition-colors ${showExportMenu ? 'text-ink' : ''}`}
@@ -1267,27 +1314,35 @@ const App: React.FC = () => {
                         <div className="flex justify-between items-end mb-6 border-b border-stone-200 pb-2">
                              <div className="flex items-center gap-3">
                                  <h3 className="font-serif text-2xl text-ink">Előzmények</h3>
-                                 {folderHandle && (
-                                     <span className="flex items-center gap-1.5 px-2 py-0.5 bg-green-100 text-green-700 rounded-full text-[10px] font-bold uppercase tracking-widest border border-green-200">
-                                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                                        {folderName || 'Szinkronizálva'}
+                                 {folderHandle ? (
+                                     <span className={`flex items-center gap-1.5 px-2 py-0.5 ${isRestoringFolder ? 'bg-amber-100 text-amber-700 border-amber-200' : 'bg-green-100 text-green-700 border-green-200'} rounded-full text-[10px] font-bold uppercase tracking-widest border`}>
+                                        <div className={`w-1.5 h-1.5 ${isRestoringFolder ? 'bg-amber-500' : 'bg-green-500'} rounded-full animate-pulse`}></div>
+                                        {isRestoringFolder ? 'Kapcsolat szükséges' : (folderName || 'Szinkronizálva')}
                                      </span>
-                                 )}
+                                 ) : null}
                              </div>
                              
-                             <div className="flex items-center gap-4">
+                             <div className="flex items-center gap-2 md:gap-4">
                                  {/* Folder Connect Button - Shortcut */}
                                  <button
                                      type="button"
-                                     onClick={() => setShowStorageModal(true)}
-                                     className={`flex items-center gap-2 transition-colors text-sm font-sans cursor-pointer ${folderHandle ? 'text-secondary hover:text-accent' : 'text-secondary hover:text-accent'}`}
+                                     onClick={() => isRestoringFolder ? handleConnectFolder() : setShowStorageModal(true)}
+                                     className={`flex items-center gap-2 transition-colors text-sm font-sans cursor-pointer ${folderHandle || isRestoringFolder ? 'text-secondary hover:text-accent' : 'text-secondary hover:text-accent'}`}
+                                     title={isRestoringFolder ? "Kattints a hozzáférés megújításához" : "Mappa beállítások"}
                                  >
                                      {isSyncing ? (
                                         <Loader2 className="w-4 h-4 animate-spin" />
+                                     ) : isRestoringFolder ? (
+                                        <RefreshCcw className="w-4 h-4" />
                                      ) : (
                                         <FolderInput className="w-4 h-4" />
                                      )}
-                                     <span>{folderHandle ? "Beállítások" : "Mappa csatolása"}</span>
+                                     <span className={isMobile ? "hidden" : ""}>
+                                         {isRestoringFolder 
+                                            ? "Csatlakozás megújítása" 
+                                            : (folderHandle ? "Beállítások" : "Mappa csatolása")
+                                         }
+                                     </span>
                                  </button>
 
                                  {/* Import Button */}
@@ -1305,7 +1360,7 @@ const App: React.FC = () => {
                                         title="Mentett gráf importálása"
                                     >
                                         <Upload className="w-4 h-4" />
-                                        <span>Importálás</span>
+                                        <span className={isMobile ? "hidden" : ""}>Importálás</span>
                                     </button>
                                  </div>
                              </div>
@@ -1364,9 +1419,23 @@ const App: React.FC = () => {
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-secondary/50 italic text-center py-8">
-                                {folderHandle ? "A mappa üres." : "Még nincsenek mentett gráfjaid."}
-                            </p>
+                            <div className="text-center py-8">
+                                <p className="text-secondary/50 italic mb-2">
+                                    {folderHandle 
+                                        ? (isRestoringFolder 
+                                            ? "A mappa tartalma nem érhető el. Újítsd meg a hozzáférést a fenti gombbal." 
+                                            : "A mappa üres.") 
+                                        : "Még nincsenek mentett gráfjaid."}
+                                </p>
+                                {isRestoringFolder && (
+                                    <button 
+                                        onClick={handleConnectFolder}
+                                        className="px-4 py-2 bg-amber-50 text-amber-800 border border-amber-200 rounded hover:bg-amber-100 transition-colors text-sm font-medium"
+                                    >
+                                        Hozzáférés megújítása
+                                    </button>
+                                )}
+                            </div>
                         )}
                     </div>
                 </div>
@@ -1409,7 +1478,7 @@ const App: React.FC = () => {
         {data && !loading && (
             <>
              <div 
-                className={`absolute bottom-8 transform -translate-x-1/2 z-[100] bg-white/95 backdrop-blur shadow-lg border border-stone-200 rounded-full flex items-center transition-all duration-500 ease-in-out overflow-visible ${isTourActive ? 'w-[320px] h-[52px]' : 'min-w-[150px] h-[44px] px-2'}`}
+                className={`absolute bottom-8 transform -translate-x-1/2 z-[100] bg-white/95 backdrop-blur shadow-lg border border-stone-200 rounded-full flex items-center transition-all duration-500 ease-in-out overflow-visible ${isTourActive ? 'w-[320px] h-[52px]' : 'w-[150px] h-[44px]'}`}
                 style={{
                     left: (selectedNode && windowWidth >= 768) ? `calc((100% - ${panelWidth}px) / 2)` : '50%'
                 }}
@@ -1473,62 +1542,69 @@ const App: React.FC = () => {
                                     <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent rounded-full z-10" />
                                 )}
                             </div>
-                        );
+                        )
                     })}
                  </div>
 
-                 {isTourActive ? (
-                    <div className="flex items-center justify-between w-full px-2">
-                        {/* Outline Toggle */}
-                        <button
-                            ref={toggleOutlineBtnRef}
-                            onClick={() => setShowTourOutline(!showTourOutline)}
-                            className={`p-2 rounded-full transition-colors ${showTourOutline ? 'bg-accent/10 text-accent' : 'text-stone-400 hover:text-ink'}`}
-                            title="Tartalomjegyzék"
-                        >
-                            <List size={20} />
-                        </button>
-                        
-                        <div className="h-6 w-px bg-stone-200 mx-1"></div>
-
-                        <button onClick={prevStep} disabled={tourIndex <= 0} className="p-2 rounded-full hover:bg-stone-100 text-ink disabled:opacity-30 disabled:hover:bg-transparent transition-colors">
-                            <ChevronLeft size={24} />
-                        </button>
-                        
-                        <div className="flex flex-col items-center">
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-secondary">Lépés</span>
-                            <span className="font-serif text-lg font-medium leading-none text-ink w-12 text-center">
-                                {tourIndex + 1} / {tourPath.length}
-                            </span>
-                        </div>
-
-                        <button onClick={nextStep} className="p-2 rounded-full hover:bg-stone-100 text-ink transition-colors">
-                             {tourIndex === tourPath.length - 1 ? (
-                                <Check size={24} className="text-green-600" />
-                             ) : (
-                                <ChevronRight size={24} />
-                             )}
-                        </button>
-                        
-                        <div className="h-6 w-px bg-stone-200 mx-1"></div>
-
-                        <button onClick={stopTour} className="p-2 rounded-full hover:bg-stone-100 text-red-500 transition-colors" title="Kilépés">
-                            <X size={20} />
-                        </button>
-                    </div>
-                 ) : (
-                    <div className="flex items-center justify-center w-full">
+                 <div className="relative w-full h-full overflow-hidden rounded-full">
+                    
+                    {/* Start Button View */}
+                    <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${!isTourActive ? 'opacity-100 delay-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
                         <button 
                             onClick={startTour}
-                            className="flex-1 flex items-center justify-center gap-2 text-ink hover:text-accent transition-colors font-serif text-lg px-4 h-full"
+                            className="flex items-center gap-3 w-full h-full justify-center text-ink group"
                         >
-                            <BookOpen size={20} />
-                            <span>Áttekintés</span>
+                            <Eye className="w-4 h-4 text-secondary group-hover:text-ink transition-colors" />
+                            <span className="font-sans text-sm uppercase tracking-wider font-medium pt-0.5 whitespace-nowrap">Áttekintés</span>
                         </button>
                     </div>
-                 )}
-             </div>
-             </>
+
+                   {/* Tour Controls View */}
+                   <div className={`absolute inset-0 flex items-center justify-between px-4 transition-opacity duration-300 ${isTourActive ? 'opacity-100 delay-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                      
+                      {/* Outline Toggle */}
+                      <button 
+                        ref={toggleOutlineBtnRef}
+                        onClick={() => setShowTourOutline(!showTourOutline)}
+                        className={`p-2 rounded-full transition-colors shrink-0 mr-1 ${showTourOutline ? 'bg-accent text-white' : 'hover:bg-stone-100 text-secondary'}`}
+                        title="Vázlat"
+                      >
+                          <List className="w-4 h-4" />
+                      </button>
+
+                      <div className="w-px h-6 bg-stone-300 mx-1 shrink-0" />
+
+                      <button 
+                        onClick={prevStep} 
+                        disabled={tourIndex === 0}
+                        className="p-2 hover:bg-stone-100 rounded-full disabled:opacity-30 transition-colors shrink-0"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      
+                      <span className="font-serif text-lg text-center whitespace-nowrap w-12">
+                        {tourIndex + 1} / {tourPath.length}
+                      </span>
+
+                      <button 
+                        onClick={nextStep}
+                        className="p-2 hover:bg-stone-100 rounded-full transition-colors shrink-0"
+                      >
+                          {tourIndex === tourPath.length - 1 ? <X className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
+                      </button>
+
+                      <div className="w-px h-6 bg-stone-300 mx-1 shrink-0" />
+
+                      <button 
+                        onClick={stopTour}
+                        className="px-2 py-1 text-xs uppercase tracking-wider text-secondary hover:text-ink hover:bg-stone-100 rounded transition-colors font-sans whitespace-nowrap"
+                      >
+                        Kilépés
+                      </button>
+                   </div>
+                 </div>
+            </div>
+            </>
         )}
         
         {/* --- Concept Graph Visualization --- */}
