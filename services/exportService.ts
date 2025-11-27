@@ -84,7 +84,7 @@ export const exportMarkdown = (data: GraphData, topic: string) => {
             content += `#### ${childNum} ${childLabel}\n\n`;
             content += `${child.longExplanation}\n\n`;
             if (child.conceptContext) {
-                content += `> **Eszmetörténeti kontextus:**\n> ${child.conceptContext}\n\n`;
+                content += `> **Kontextus:**\n> ${child.conceptContext}\n\n`;
             }
         });
         content += `----\n\n`;
