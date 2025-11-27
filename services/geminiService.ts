@@ -19,7 +19,7 @@ const graphSchema: Schema = {
           type: { type: Type.STRING, enum: [NodeType.ROOT, NodeType.CATEGORY, NodeType.CONCEPT, NodeType.WORK] },
           shortSummary: { type: Type.STRING, description: "A 1-2 sentence summary in Hungarian" },
           longExplanation: { type: Type.STRING, description: "A detailed explanation (2 paragraphs) in Hungarian. Focus on depth." },
-          conceptContext: { type: Type.STRING, description: "If the node is a CONCEPT/CATEGORY: Describe parallels or opposites from other schools in 1-2 sentences. If Person/Work, leave empty." },
+          conceptContext: { type: Type.STRING, description: "Kontextus: Párhuzamok más filozófusokkal és interdiszciplináris (pl. tudományos, művészeti) analógiák. If Person/Work, leave empty." },
           connections: { type: Type.ARRAY, items: { type: Type.STRING }, description: "IDs of other nodes this helps explain or relates to" }
         },
         required: ["id", "label", "type", "shortSummary", "longExplanation", "connections"]
@@ -46,7 +46,7 @@ const singleNodeSchema: Schema = {
   properties: {
     shortSummary: { type: Type.STRING, description: "A concise, academic summary (2-3 sentences) in Hungarian." },
     longExplanation: { type: Type.STRING, description: "KÖTELEZŐEN HOSSZÚ KIFEJTÉS: Minimum ~200 szó. Két teljes, részletes bekezdés, amely mélyen elemzi a fogalmat. Tilos a rövid, 1-2 mondatos leírás!" },
-    conceptContext: { type: Type.STRING, description: "Historical and theoretical context, contrasting with other schools or philosophers." }
+    conceptContext: { type: Type.STRING, description: "Context: Parallels with other philosophers and interdisciplinary examples (science, art analogies)." }
   },
   required: ["shortSummary", "longExplanation", "conceptContext"]
 };
@@ -74,7 +74,7 @@ const systemInstructionBase = `
          - Schopenhauer: _A világ mint akarat és képzet_.
 
     3. **TARTALOM ÉS MEZŐK**:
-       - **conceptContext**: Ha a node FOGALOM vagy IRÁNYZAT, ide írj egy rövid, szöveges kitekintést: milyen más irányzatokkal/fogalmakkal áll párhuzamban vagy ellentétben?
+       - **conceptContext**: Ha a node FOGALOM vagy IRÁNYZAT, ide írj egy rövid kitekintést: 1. Mely más filozófusok fogalmaihoz hasonlít? (közte üres sor) 2. Hozz egy vagy több interdiszciplináris példát (pl. fizika, matematika, zeneelmélet, biológia, pszichológia vagy művészet analógia), ami megvilágítja a fogalmat.
        - **longExplanation**: EZ A LEGFONTOSABB MEZŐ. Minden egyes csomóponthoz KÖTELEZŐ két, tartalmas, esszé-szintű bekezdést írnod.
 `;
 
@@ -108,18 +108,41 @@ const getAugmentedInstruction = async (baseInstruction: string): Promise<string>
     `;
 };
 
-export const fetchPhilosophyData = async (topic: string): Promise<GraphData> => {
+export const fetchPhilosophyData = async (topic: string, fileData?: FileInput): Promise<GraphData> => {
   if (!apiKey) {
     throw new Error("API Key is missing.");
   }
 
-const systemInstruction = await getAugmentedInstruction(`${systemInstructionBase}    4. **GENERÁLÁS**:
-       - A központi téma legyen a ROOT.
+  const systemInstruction = `${systemInstructionBase}
+    4. **GENERÁLÁS**:
+       - A központi téma legyen a ROOT. Ha van csatolt dokumentum, akkor a ROOT a dokumentum fő témája vagy címe legyen.
        - Generálj legalább 15-20 csomópontot.
        - Figyelj arra, hogy minden link érvényes forrásra és célra mutasson.
-  `);
+       - Ha dokumentumot kapsz, szigorúan annak a tartalmára támaszkodj, de használd a filozófiai háttértudásodat a kontextushoz.
+  `;
 
   try {
+    let contents = [];
+    
+    if (fileData) {
+        contents = [
+            { 
+                role: "user", 
+                parts: [
+                    { inlineData: { mimeType: fileData.mimeType, data: fileData.data } },
+                    { text: `Készíts átfogó fogalmi térképet a csatolt dokumentum alapján. A felhasználó által megadott fókusz/téma: "${topic || 'A dokumentum átfogó elemzése'}". Használj pontos magyar terminológiát.` }
+                ] 
+            }
+        ];
+    } else {
+        contents = [
+            { 
+                role: "user", 
+                parts: [{ text: `Készíts átfogó fogalmi térképet erről a témáról, pontos magyar terminológiával: "${topic}"` }] 
+            }
+        ];
+    }
+
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
       config: {
@@ -128,9 +151,7 @@ const systemInstruction = await getAugmentedInstruction(`${systemInstructionBase
         responseSchema: graphSchema,
         temperature: 0, 
       },
-      contents: [
-        { role: "user", parts: [{ text: `Készíts átfogó fogalmi térképet erről a témáról, a megadott forrásszöveg magyar terminológiájával: "${topic}"` }] }
-      ]
+      contents: contents
     });
 
     const text = response.text;
@@ -235,7 +256,7 @@ export const enrichNodeData = async (node: PhilosophicalNode, topicContext: stri
       Elvárások:
       1. **Pontosság**: Használj szakmailag pontos, magyar akadémiai terminológiát.
       2. A "longExplanation" legyen a legfontosabb rész. Két közepesen tartalmas bekezdésben (köztük üres sor) fejtsd ki a fogalmat esszéisztikusan, összefüggéseiben. Ne felsorolás legyen, hanem folyó szöveg.
-      3. **Kontextus**: Helyezd el a fogalmat a filozófiatörténetben.
+      3. **Kontextus**: Ha a node FOGALOM vagy IRÁNYZAT, ide írj egy rövid kitekintést: 1. Mely más filozófusok fogalmaihoz hasonlít? 2. Hozz egy interdiszciplináris példát (pl. fizika, biológia, pszichológia vagy művészet analógia), ami megvilágítja a fogalmat.
       4. **Nyelvezet**: - Kizárólag MAGYAR nyelven válaszolj.
        - **IDÉZŐJELEK**: A magyar szabályoknak megfelelően használd a „ és ” jeleket.
        - **MŰVEK CÍME**: DŐLT BETŰVEL írd.
