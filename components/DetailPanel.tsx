@@ -65,6 +65,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   const isResizing = useRef(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Reset states when node changes
   useEffect(() => {
@@ -76,6 +77,11 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
         setEditedSummary(node.shortSummary);
         setEditedExplanation(node.longExplanation);
         setEditedContext(node.conceptContext || '');
+    }
+
+    // Scroll to top
+    if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTop = 0;
     }
   }, [node]);
 
@@ -278,7 +284,10 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
           </div>
 
           {/* Content */}
-          <div className={`flex-1 px-8 py-6 overflow-y-auto custom-scrollbar pb-10 ${isEditing ? 'bg-stone-50/30' : ''}`}>
+          <div 
+            ref={scrollContainerRef}
+            className={`flex-1 px-8 py-6 overflow-y-auto custom-scrollbar pb-10 ${isEditing ? 'bg-stone-50/30' : ''}`}
+          >
             
             {isEditing ? (
                  <div className="flex flex-col gap-6 mb-10 border-2 border-dashed border-stone-200 rounded-xl p-4 -mx-4 bg-stone-50/50">
@@ -294,7 +303,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                     <div className="mt-2 border-t border-stone-200 pt-6">
                         <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-secondary mb-4">
                             <Lightbulb className="w-4 h-4" />
-                            Eszmetörténeti Kontextus
+                            Kontextus
                         </h3>
                         <AutoResizeTextarea 
                             value={editedContext}
@@ -318,7 +327,7 @@ const DetailPanel: React.FC<DetailPanelProps> = ({
                     <div className={`mb-8 border-t border-stone-200 pt-6 transition-opacity duration-500 ${isRegenerating ? 'opacity-50' : 'opacity-100'}`}>
                         <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-secondary mb-4">
                         <Lightbulb className="w-4 h-4" />
-                        Eszmetörténeti Kontextus
+                        Kontextus
                         </h3>
                         <div className="font-serif text-lg leading-relaxed text-ink [&_em]:italic">
                         <ReactMarkdown components={{
