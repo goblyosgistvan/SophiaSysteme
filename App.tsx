@@ -1,10 +1,10 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical, BookOpen, FolderInput, RefreshCw, Save, HardDrive, CheckCircle, AlertCircle, FolderOpen, Cloud, ExternalLink, RefreshCcw } from 'lucide-react';
+import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical, BookOpen, FolderInput, RefreshCw, Save, HardDrive, CheckCircle, AlertCircle, FolderOpen, Cloud, ExternalLink, RefreshCcw, Paperclip, File } from 'lucide-react';
 import ConceptGraph, { ConceptGraphHandle } from './components/ConceptGraph';
 import DetailPanel from './components/DetailPanel';
 import OutlinePanel from './components/OutlinePanel';
-import { fetchPhilosophyData, augmentPhilosophyData, enrichNodeData, createConnectedNode } from './services/geminiService';
+import { fetchPhilosophyData, augmentPhilosophyData, enrichNodeData, createConnectedNode, FileInput } from './services/geminiService';
 import { exportJSON, exportMarkdown, getCleanFileName } from './services/exportService';
 import { GraphData, PhilosophicalNode, NodeType } from './types';
 
@@ -122,6 +122,10 @@ const App: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false); // UI feedback for saving
   const [lastFileSave, setLastFileSave] = useState<Date | null>(null);
   
+  // File Upload for Generation State
+  const [uploadedFile, setUploadedFile] = useState<{ name: string, data: string, mimeType: string } | null>(null);
+  const documentInputRef = useRef<HTMLInputElement>(null);
+
   // Environment Detection
   const [isEmbedded, setIsEmbedded] = useState(false);
 
@@ -134,7 +138,7 @@ const App: React.FC = () => {
   const [augmentQuery, setAugmentQuery] = useState('');
   const [augmentLoading, setAugmentLoading] = useState(false);
   const augmentInputRef = useRef<HTMLInputElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null); // for JSON import
   const directoryInputRef = useRef<HTMLInputElement>(null);
 
   // Node Regeneration State
@@ -364,7 +368,7 @@ const App: React.FC = () => {
     } else {
         const newGraph: SavedGraph = {
           id: Date.now().toString(),
-          topic: topic.charAt(0).toUpperCase() + topic.slice(1),
+          topic: topic,
           date: new Date().toLocaleDateString('hu-HU'),
           data: dataToSave
         };
@@ -608,6 +612,7 @@ const App: React.FC = () => {
 
   const loadSavedGraph = (graph: SavedGraph) => {
     setQuery(graph.topic);
+    setUploadedFile(null); // Clear uploaded file if loading a saved graph
     
     // Ensure data has custom order if missing from old save
     const dataToLoad = { ...graph.data };
@@ -627,6 +632,7 @@ const App: React.FC = () => {
     setData(null);
     setHasSearched(false);
     setQuery('');
+    setUploadedFile(null);
     setSelectedNode(null);
     setIsOutlineOpen(false);
     setLastFileSave(null);
@@ -704,6 +710,40 @@ const App: React.FC = () => {
   const triggerFileUpload = () => {
       fileInputRef.current?.click();
   }
+
+  const triggerDocumentUpload = () => {
+      documentInputRef.current?.click();
+  }
+
+  const handleDocumentSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      if (file.size > 8 * 1024 * 1024) { // 8MB warning
+          alert("A fájl túl nagy. Kérlek használj 8MB-nál kisebb fájlt.");
+          return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+          const base64String = (e.target?.result as string).split(',')[1];
+          setUploadedFile({
+              name: file.name,
+              data: base64String,
+              mimeType: file.type || 'application/pdf'
+          });
+          // Auto-fill query if empty
+          if (!query.trim()) {
+            setQuery(file.name.replace(/\.[^/.]+$/, ""));
+          }
+      };
+      reader.readAsDataURL(file);
+      event.target.value = ''; // Reset input
+  };
+
+  const clearUploadedFile = () => {
+      setUploadedFile(null);
+  };
 
   // --- Augment Logic ---
 
@@ -885,7 +925,7 @@ const App: React.FC = () => {
 
   const handleSearch = useCallback(async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!query.trim()) return;
+    if (!query.trim() && !uploadedFile) return;
 
     setLoading(true);
     setError(null);
@@ -895,11 +935,26 @@ const App: React.FC = () => {
     setIsOutlineOpen(false); // Closed by default
 
     try {
-      const graphData = await fetchPhilosophyData(query);
+      let fileInputData: FileInput | undefined = undefined;
+      if (uploadedFile) {
+          fileInputData = {
+              mimeType: uploadedFile.mimeType,
+              data: uploadedFile.data
+          };
+      }
+
+      const graphData = await fetchPhilosophyData(query, fileInputData);
+      
+      // Update query title if user didn't type much but uploaded a file
+      if (uploadedFile && (!query || query === uploadedFile.name)) {
+          const rootNode = graphData.nodes.find(n => n.type === NodeType.ROOT);
+          if (rootNode) setQuery(rootNode.label);
+      }
+
       // Generate initial order
       graphData.customOrder = generateDefaultOrder(graphData.nodes, graphData.links);
       setData(graphData);
-      autoSaveGraph(query, graphData); 
+      autoSaveGraph(query || uploadedFile?.name || "Névtelen dokumentum", graphData); 
     } catch (err: any) {
       console.error(err);
       setError("Hiba történt a generálás során. Kérlek, próbáld újra, vagy pontosítsd a témát.");
@@ -907,7 +962,7 @@ const App: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [query, savedGraphs, folderHandle]);
+  }, [query, uploadedFile, savedGraphs, folderHandle]);
 
   const handleNodeClick = useCallback((node: any) => {
     const pNode = node as PhilosophicalNode;
@@ -1216,24 +1271,55 @@ const App: React.FC = () => {
                             A filozófia <span className="text-accent italic">rendszerei</span>
                         </h2>
                         
-                        <div className="w-full relative group mb-10">
+                        <div className="w-full relative group mb-4">
+                             {uploadedFile && (
+                                 <div className="absolute -top-10 left-0 right-0 flex justify-center animate-in fade-in slide-in-from-bottom-2">
+                                     <div className="bg-stone-100 border border-stone-300 text-ink text-sm px-3 py-1.5 rounded-full flex items-center gap-2">
+                                         <File className="w-4 h-4 text-accent" />
+                                         <span className="font-medium max-w-[200px] truncate">{uploadedFile.name}</span>
+                                         <button onClick={clearUploadedFile} className="hover:text-red-500 transition-colors">
+                                             <X className="w-4 h-4" />
+                                         </button>
+                                     </div>
+                                 </div>
+                             )}
+
                              <form onSubmit={handleSearch}>
                                 <input
                                     type="text"
                                     value={query}
                                     onChange={(e) => setQuery(e.target.value)}
-                                    placeholder="Írj ide egy filozófiai témát, művet vagy filozófust..."
-                                    className="w-full pl-14 pr-14 py-4 bg-white border border-stone-300 rounded-full text-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent font-serif shadow-lg transition-all hover:shadow-xl placeholder:text-stone-400 text-ink"
+                                    placeholder={uploadedFile ? "Opcionális: írj egy fókuszt a dokumentumhoz..." : "Írj ide egy filozófiai témát, vagy tölts fel egy könyvet..."}
+                                    className="w-full pl-14 pr-24 py-4 bg-white border border-stone-300 rounded-full text-lg focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent font-serif shadow-lg transition-all hover:shadow-xl placeholder:text-stone-400 text-ink"
                                     autoFocus
                                 />
                                 <Search className="absolute left-5 top-5 w-6 h-6 text-stone-400 group-hover:text-accent transition-colors" />
-                                <button 
-                                    type="submit" 
-                                    disabled={!query}
-                                    className="absolute right-3 top-3 p-2 bg-ink text-white rounded-full disabled:opacity-50 hover:bg-accent transition-colors shadow-md"
-                                >
-                                    <ArrowRight className="w-5 h-5" />
-                                </button>
+                                
+                                <div className="absolute right-3 top-3 flex items-center gap-2">
+                                    <input 
+                                        type="file" 
+                                        ref={documentInputRef}
+                                        onChange={handleDocumentSelect}
+                                        accept=".pdf,.txt,.md"
+                                        className="hidden" 
+                                    />
+                                    <button 
+                                        type="button"
+                                        onClick={triggerDocumentUpload}
+                                        className="p-2 text-stone-400 hover:text-ink hover:bg-stone-100 rounded-full transition-colors"
+                                        title="Dokumentum csatolása (PDF, TXT)"
+                                    >
+                                        <Paperclip className="w-5 h-5" />
+                                    </button>
+
+                                    <button 
+                                        type="submit" 
+                                        disabled={!query && !uploadedFile}
+                                        className="p-2 bg-ink text-white rounded-full disabled:opacity-50 hover:bg-accent transition-colors shadow-md"
+                                    >
+                                        <ArrowRight className="w-5 h-5" />
+                                    </button>
+                                </div>
                              </form>
                         </div>
 
@@ -1375,8 +1461,12 @@ const App: React.FC = () => {
         {loading && (
              <div className="absolute inset-0 flex flex-col items-center justify-center bg-paper/80 backdrop-blur-sm z-50">
                 <Loader2 className="w-10 h-10 text-accent animate-spin mb-4" />
-                <p className="font-serif text-xl animate-pulse">Kapcsolatok létrehozása...</p>
-                <p className="text-sm text-secondary mt-2 font-sans">Ez körülbelül 1-2 percet vesz igénybe.</p>
+                <p className="font-serif text-xl animate-pulse">
+                    {uploadedFile ? "Dokumentum elemzése..." : "Kapcsolatok létrehozása..."}
+                </p>
+                <p className="text-sm text-secondary mt-2 font-sans">
+                    {uploadedFile ? "Nagyobb fájloknál ez eltarthat egy ideig." : "Ez körülbelül 1-2 percet vesz igénybe."}
+                </p>
              </div>
         )}
 
