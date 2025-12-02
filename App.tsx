@@ -191,13 +191,14 @@ const App: React.FC = () => {
         const key = e.key.toUpperCase();
         
         if (e.key === 'Escape') {
+             // Priority 1: Close Search if open
              if (showGraphSearch) {
                  setShowGraphSearch(false);
                  setGraphSearchQuery('');
                  return;
              }
              
-             // Go Home if graph is open and not searching
+             // Priority 2: Go Home if graph is open (and search wasn't open)
              if (hasSearched) {
                  goHome();
                  return;
@@ -353,12 +354,17 @@ const App: React.FC = () => {
       return current;
   };
 
-  const saveToFolder = async (topic: string, graphData: GraphData, manual = false) => {
+  const saveToFolder = async (topic: string, graphData: GraphData, manual = false, specificPath?: string) => {
     if (!folderHandle) return;
     
-    // Find associated graph to get path, or default to root
-    const existingGraph = savedGraphs.find(g => g.topic.toLowerCase() === topic.toLowerCase());
-    const path = existingGraph ? existingGraph.path : "";
+    // Determine path: use specificPath if provided, otherwise look up in savedGraphs
+    let path = "";
+    if (typeof specificPath === 'string') {
+        path = specificPath;
+    } else {
+        const existingGraph = savedGraphs.find(g => g.topic.toLowerCase() === topic.toLowerCase());
+        path = existingGraph ? existingGraph.path : "";
+    }
 
     if (!manual && lastFileSave && (new Date().getTime() - lastFileSave.getTime() < 2000)) {
         return;
@@ -626,62 +632,65 @@ const App: React.FC = () => {
   }
 
   const renameGraph = async (id: string, newName: string) => {
-       const updated = savedGraphs.map(g => g.id === id ? { ...g, topic: newName } : g);
-       setSavedGraphs(updated);
+       const graph = savedGraphs.find(g => g.id === id);
+       if (!graph) return;
+
+       const updatedData = {
+           ...graph.data,
+           metadata: {
+               ...graph.data.metadata,
+               title: newName
+           }
+       };
+
+       // Update State
+       const updatedGraphs = savedGraphs.map(g => g.id === id ? { ...g, topic: newName, data: updatedData } : g);
+       setSavedGraphs(updatedGraphs);
        
        if (!folderHandle) {
-           localStorage.setItem('sophia_saved_graphs', JSON.stringify(updated));
+           localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
        } else {
-           const graph = savedGraphs.find(g => g.id === id);
-           if(graph) {
-               // Update internal metadata with new name before saving
-               const updatedData = {
-                   ...graph.data,
-                   metadata: {
-                       ...graph.data.metadata,
-                       title: newName
-                   }
-               };
-               // Save with new name (this creates new file)
-               await saveToFolder(newName, updatedData, true);
-               
-               // Remove old file if name changed significantly enough to alter filename
+           try {
+               // 1. Calculate filenames
                const oldName = getCleanFileName(graph.topic);
                const nextName = getCleanFileName(newName);
                
+               // 2. Save new file EXPLICITLY to the same path (avoiding root duplication)
+               await saveToFolder(newName, updatedData, true, graph.path);
+               
+               // 3. Delete old file if name changed
                if (oldName !== nextName) {
-                    try {
-                        const dir = await getDirectoryHandleFromPath(folderHandle, graph.path);
-                        await dir.removeEntry(`${oldName}.json`);
-                    } catch(e) {
-                        console.warn("Could not remove old file after rename", e);
-                    }
+                    const dir = await getDirectoryHandleFromPath(folderHandle, graph.path);
+                    await dir.removeEntry(`${oldName}.json`);
                }
-               // Reload to refresh state
-               await loadGraphsFromFolder(folderHandle);
+           } catch(e) {
+                console.error("Rename filesystem error:", e);
+                // In case of error, reload folders to reflect reality
+                await loadGraphsFromFolder(folderHandle);
            }
        }
   }
 
   const updateGraphIcon = async (id: string, newIcon: string) => {
-      const updated = savedGraphs.map(g => g.id === id ? { ...g, icon: newIcon } : g);
-      setSavedGraphs(updated);
+      const graph = savedGraphs.find(g => g.id === id);
+      if(!graph) return;
+
+      const updatedData = {
+          ...graph.data,
+          metadata: {
+              ...graph.data.metadata,
+              icon: newIcon
+          }
+      };
+
+      const updatedGraphs = savedGraphs.map(g => g.id === id ? { ...g, icon: newIcon, data: updatedData } : g);
+      setSavedGraphs(updatedGraphs);
       
       if (!folderHandle) {
-           localStorage.setItem('sophia_saved_graphs', JSON.stringify(updated));
+           localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
       } else {
-          const graph = savedGraphs.find(g => g.id === id);
-          if (graph) {
-              // Write the icon into the file metadata
-              const updatedData = {
-                  ...graph.data,
-                  metadata: {
-                      ...graph.data.metadata,
-                      icon: newIcon
-                  }
-              };
-              await saveToFolder(graph.topic, updatedData, true);
-          }
+          // Explicitly pass path to ensure we overwrite the file in the correct subfolder
+          await saveToFolder(graph.topic, updatedData, true, graph.path);
       }
   }
 
