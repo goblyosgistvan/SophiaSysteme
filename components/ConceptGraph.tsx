@@ -12,6 +12,7 @@ interface ConceptGraphProps {
   data: GraphData | null;
   onNodeClick: (node: SimulationNode) => void;
   selectedNodeId: string | null;
+  searchTerm: string;
 }
 
 // Extend SimulationLink to support bidirectional flag
@@ -19,7 +20,7 @@ interface EnhancedLink extends SimulationLink {
     bidirectional?: boolean;
 }
 
-const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, onNodeClick, selectedNodeId }, ref) => {
+const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, onNodeClick, selectedNodeId, searchTerm }, ref) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const zoomRef = useRef<d3.ZoomBehavior<SVGSVGElement, unknown>>(null);
@@ -79,10 +80,43 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
     return () => resizeObserver.disconnect();
   }, []);
 
+  // --- Search Highlight Logic ---
+  useEffect(() => {
+      const svg = d3.select(svgRef.current);
+      if (svg.empty()) return;
+
+      if (!searchTerm.trim()) {
+          // Restore opacity if no search or if specific node selection is active
+          if (selectedNodeId) {
+             // Let the selection logic handle it
+             const nodes = simulationRef.current?.nodes() || [];
+             const links = d3.select(svgRef.current).selectAll(".link").data();
+             highlightNode(selectedNodeId, nodes, links);
+          } else {
+             resetHighlight();
+          }
+          return;
+      }
+
+      const lowerTerm = searchTerm.toLowerCase();
+      
+      svg.selectAll(".node").style("opacity", (d: any) => {
+          return d.label.toLowerCase().includes(lowerTerm) ? 1 : 0.1;
+      });
+
+      svg.selectAll(".link").style("opacity", 0.05);
+      svg.selectAll(".link-label").style("opacity", 0);
+
+  }, [searchTerm, selectedNodeId]);
+
   // --- Highlight Logic Helper ---
   const highlightNode = (nodeId: string | null, nodes: any, links: any) => {
     const svg = d3.select(svgRef.current);
     if (!svg.empty() && nodeId) {
+        // If we are searching, don't override the search dimming completely, 
+        // but prioritize the selected node interaction if clicked.
+        // For simplicity: Selection overrides search visual.
+        
         svg.selectAll(".node").style("opacity", 0.2);
         svg.selectAll(".link").style("opacity", 0.1);
         svg.selectAll(".link-label").style("opacity", 0);
@@ -136,14 +170,17 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
   const resetHighlight = () => {
      const svg = d3.select(svgRef.current);
      if (!svg.empty()) {
-        svg.selectAll(".node").style("opacity", 1);
-        svg.selectAll(".link").style("opacity", 0.4).attr("stroke", "#B0B0B0").attr("stroke-width", 1.5);
-        svg.selectAll(".link-label").style("opacity", 0.7).attr("font-weight", "normal");
-        
-        svg.selectAll("circle")
-            .attr("stroke", "#2D2A26")
-            .attr("stroke-width", 1)
-            .attr("r", getRadius);
+        // Only reset if no active search
+        if (!searchTerm) {
+            svg.selectAll(".node").style("opacity", 1);
+            svg.selectAll(".link").style("opacity", 0.4).attr("stroke", "#B0B0B0").attr("stroke-width", 1.5);
+            svg.selectAll(".link-label").style("opacity", 0.7).attr("font-weight", "normal");
+            
+            svg.selectAll("circle")
+                .attr("stroke", "#2D2A26")
+                .attr("stroke-width", 1)
+                .attr("r", getRadius);
+        }
      }
   };
   
@@ -167,7 +204,8 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
           if (selectedNodeId) {
               highlightNode(selectedNodeId, nodes, links);
           } else {
-              resetHighlight();
+              // Only reset if not searching
+              if (!searchTerm) resetHighlight();
           }
       }
   }, [selectedNodeId]);
@@ -494,7 +532,7 @@ const ConceptGraph = forwardRef<ConceptGraphHandle, ConceptGraphProps>(({ data, 
     return () => {
       simulation.stop();
     };
-  }, [data]);
+  }, [data, searchTerm]);
 
   return (
     <div ref={containerRef} className="w-full h-full bg-paper relative overflow-hidden group">
