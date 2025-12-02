@@ -155,17 +155,6 @@ const OutlinePanel: React.FC<OutlinePanelProps> = ({
 
   return (
     <>
-      {/* Toggle Button (Visible when closed) */}
-      {!isOpen && (
-         <button
-            onClick={onToggle}
-            className="absolute top-20 left-6 z-40 p-2 bg-white border border-stone-200 shadow-md rounded-full text-secondary hover:text-ink hover:bg-stone-50 transition-all"
-            title="Vázlat megnyitása (Q)"
-         >
-            <List className="w-5 h-5" />
-         </button>
-      )}
-
       {/* Sidebar Panel */}
       <div 
         className={`fixed top-0 bottom-0 left-0 bg-paper/95 backdrop-blur-sm border-r border-stone-200 shadow-2xl z-[80] transition-all duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col ${widthClass} ${containerClasses}`}
@@ -243,4 +232,3 @@ const OutlinePanel: React.FC<OutlinePanelProps> = ({
 };
 
 export default OutlinePanel;
-    
