@@ -194,6 +194,13 @@ const App: React.FC = () => {
              if (showGraphSearch) {
                  setShowGraphSearch(false);
                  setGraphSearchQuery('');
+                 return;
+             }
+             
+             // Go Home if graph is open and not searching
+             if (hasSearched) {
+                 goHome();
+                 return;
              }
              return;
         }
@@ -394,14 +401,25 @@ const App: React.FC = () => {
     const exists = savedGraphs.find(g => g.topic.toLowerCase() === topic.toLowerCase());
     let updatedGraphs: SavedGraph[];
 
-    const dataToSave = {
+    // Ensure metadata persists if not explicitly provided in new graphData
+    // (e.g., if just updating nodes, we don't want to lose the icon)
+    let dataToSave = {
         ...graphData,
         customOrder: graphData.customOrder || generateDefaultOrder(graphData.nodes, graphData.links)
     };
 
     if (exists) {
+        // Merge metadata: preserve existing icon/title if new data doesn't have it
+        dataToSave = {
+            ...dataToSave,
+            metadata: {
+                ...exists.data.metadata,
+                ...dataToSave.metadata
+            }
+        };
+
         updatedGraphs = savedGraphs.map(g => 
-            g.topic.toLowerCase() === topic.toLowerCase() ? { ...g, data: dataToSave, date: new Date().toLocaleDateString('hu-HU') } : g
+            g.topic.toLowerCase() === topic.toLowerCase() ? { ...g, data: dataToSave, date: new Date().toLocaleDateString('hu-HU'), icon: dataToSave.metadata?.icon || g.icon } : g
         );
     } else {
         const newGraph: SavedGraph = {
@@ -409,7 +427,8 @@ const App: React.FC = () => {
           topic: topic,
           date: new Date().toLocaleDateString('hu-HU'),
           data: dataToSave,
-          path: "" // Default to root
+          path: "", // Default to root
+          icon: dataToSave.metadata?.icon
         };
         updatedGraphs = [newGraph, ...savedGraphs];
     }
@@ -441,9 +460,10 @@ const App: React.FC = () => {
                       
                       if (parsedData.nodes && parsedData.links) {
                           const rootNode = parsedData.nodes.find((n: any) => n.type === 'ROOT');
-                          // Use topic from file name if root missing
-                          const topic = rootNode ? rootNode.label : entry.name.replace('.json', '');
-                          
+                          // Priority: Metadata Title > Root Label > Filename
+                          const topic = parsedData.metadata?.title || rootNode?.label || entry.name.replace('.json', '');
+                          const icon = parsedData.metadata?.icon;
+
                           if (!parsedData.customOrder) {
                               parsedData.customOrder = generateDefaultOrder(parsedData.nodes, parsedData.links);
                           }
@@ -453,7 +473,8 @@ const App: React.FC = () => {
                               topic: topic,
                               date: new Date(file.lastModified).toLocaleDateString('hu-HU'),
                               data: parsedData,
-                              path: path
+                              path: path,
+                              icon: icon
                           });
                       }
                   } catch (e) {
@@ -613,22 +634,54 @@ const App: React.FC = () => {
        } else {
            const graph = savedGraphs.find(g => g.id === id);
            if(graph) {
-               await saveToFolder(newName, graph.data, true);
-               try {
-                   const dir = await getDirectoryHandleFromPath(folderHandle, graph.path);
-                   await dir.removeEntry(`${getCleanFileName(graph.topic)}.json`);
-                   await loadGraphsFromFolder(folderHandle);
-               } catch(e) {}
+               // Update internal metadata with new name before saving
+               const updatedData = {
+                   ...graph.data,
+                   metadata: {
+                       ...graph.data.metadata,
+                       title: newName
+                   }
+               };
+               // Save with new name (this creates new file)
+               await saveToFolder(newName, updatedData, true);
+               
+               // Remove old file if name changed significantly enough to alter filename
+               const oldName = getCleanFileName(graph.topic);
+               const nextName = getCleanFileName(newName);
+               
+               if (oldName !== nextName) {
+                    try {
+                        const dir = await getDirectoryHandleFromPath(folderHandle, graph.path);
+                        await dir.removeEntry(`${oldName}.json`);
+                    } catch(e) {
+                        console.warn("Could not remove old file after rename", e);
+                    }
+               }
+               // Reload to refresh state
+               await loadGraphsFromFolder(folderHandle);
            }
        }
   }
 
-  const updateGraphIcon = (id: string, newIcon: string) => {
+  const updateGraphIcon = async (id: string, newIcon: string) => {
       const updated = savedGraphs.map(g => g.id === id ? { ...g, icon: newIcon } : g);
       setSavedGraphs(updated);
-      // Persist locally
+      
       if (!folderHandle) {
            localStorage.setItem('sophia_saved_graphs', JSON.stringify(updated));
+      } else {
+          const graph = savedGraphs.find(g => g.id === id);
+          if (graph) {
+              // Write the icon into the file metadata
+              const updatedData = {
+                  ...graph.data,
+                  metadata: {
+                      ...graph.data.metadata,
+                      icon: newIcon
+                  }
+              };
+              await saveToFolder(graph.topic, updatedData, true);
+          }
       }
   }
 
