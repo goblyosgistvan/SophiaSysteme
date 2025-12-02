@@ -45,3 +45,12 @@ export interface SimulationLink extends SimulationLinkDatum<SimulationNode> {
     source: string | number | SimulationNode;
     target: string | number | SimulationNode;
 }
+
+export interface SavedGraph {
+  id: string;
+  topic: string;
+  date: string;
+  data: GraphData;
+  path: string; // Directory path, e.g., "" or "Philosophy/German"
+  icon?: string; // e.g. 'book', 'star', 'brain'
+}
