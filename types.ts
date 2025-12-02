@@ -28,6 +28,10 @@ export interface GraphData {
   nodes: PhilosophicalNode[];
   links: PhilosophicalLink[];
   customOrder?: string[]; // Persisted order of node IDs for the Outline view
+  metadata?: {
+      title?: string;
+      icon?: string;
+  };
 }
 
 export interface SimulationNode extends SimulationNodeDatum, PhilosophicalNode {
