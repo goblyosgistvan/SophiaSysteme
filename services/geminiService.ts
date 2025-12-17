@@ -6,6 +6,42 @@ import { loadBookContext } from './contextLoader';
 const apiKey = process.env.API_KEY || '';
 const ai = new GoogleGenAI({ apiKey });
 
+const generateWithRetry = async (modelName: string, config: any, contents: any[], maxRetries = 3) => {
+    let lastError;
+    
+    for (let i = 0; i < maxRetries; i++) {
+        try {
+            const response = await ai.models.generateContent({
+                model: modelName,
+                config: config,
+                contents: contents
+            });
+            return response;
+        } catch (error: any) {
+            lastError = error;
+            
+            // Ellenőrizzük, hogy 503-as vagy "overloaded" hiba-e
+            const isOverloaded = 
+                error?.status === 503 || 
+                error?.code === 503 || 
+                (error?.message && error.message.includes('overloaded')) ||
+                (error?.error && error.error.code === 503);
+
+            if (isOverloaded && i < maxRetries - 1) {
+                // Exponenciális várakozás: 1s, 2s, 4s...
+                const waitTime = 1000 * Math.pow(2, i);
+                console.warn(`Gemini 503 Overloaded. Újrapróbálkozás ${i + 1}/${maxRetries} alkalommal ${waitTime}ms múlva...`);
+                await new Promise(resolve => setTimeout(resolve, waitTime));
+                continue;
+            }
+            
+            // Ha más hiba, vagy elfogytak a próbálkozások, dobjuk tovább
+            throw error;
+        }
+    }
+    throw lastError;
+};
+
 const graphSchema: Schema = {
   type: Type.OBJECT,
   properties: {
