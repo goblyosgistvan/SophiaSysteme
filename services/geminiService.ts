@@ -180,7 +180,7 @@ export const fetchPhilosophyData = async (topic: string, fileData?: FileInput): 
     }
 
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-2.5-flash",
       config: {
         systemInstruction,
         responseMimeType: "application/json",
@@ -222,7 +222,7 @@ export const augmentPhilosophyData = async (originalData: GraphData, request: st
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-2.5-flash",
             config: {
                 systemInstruction,
                 responseMimeType: "application/json",
@@ -260,7 +260,7 @@ export const createConnectedNode = async (sourceNode: PhilosophicalNode, request
 
     try {
         const response = await ai.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-2.5-flash",
             config: {
                 systemInstruction,
                 responseMimeType: "application/json",
@@ -302,7 +302,7 @@ export const enrichNodeData = async (node: PhilosophicalNode, topicContext: stri
 
   try {
       const response = await ai.models.generateContent({
-          model: "gemini-3-flash-preview",
+          model: "gemini-2.5-flash",
           config: {
               systemInstruction,
               responseMimeType: "application/json",
