@@ -188,17 +188,17 @@ const App: React.FC = () => {
     };
     loadLibrary();
 
-    // --- DEEP LINKING LOGIC (URL PATH or ?src=) ---
-    // Safe path extraction: handles case where pathname might lack leading slash in some envs
+    // --- DEEP LINKING LOGIC ---
+    // Handle both clean paths (e.g. /arthur) and query params (e.g. ?src=arthur)
     const rawPath = window.location.pathname;
-    const path = rawPath.startsWith('/') ? rawPath.slice(1) : rawPath;
+    const path = rawPath.startsWith('/') && rawPath.length > 1 ? rawPath.slice(1) : null;
     
     const params = new URLSearchParams(window.location.search);
     const src = params.get('src');
     
-    // Priority: 1. Clean Path, 2. Query Param. 
-    // Filter out common false positives like "index.html" or protocol fragments like "ttps:"
-    if (path && path !== '' && path !== 'index.html' && !path.includes(':')) {
+    // Priority: Clean Path -> Query Param
+    // Filter out common false positives
+    if (path && path !== 'index.html' && !path.includes(':')) {
          handleLoadOnlineGraphByFilename(decodeURIComponent(path));
     } else if (src) {
          handleLoadOnlineGraphByFilename(src);
@@ -738,7 +738,7 @@ const App: React.FC = () => {
 
   const loadOnlineGraphItem = (item: LibraryItem) => {
       handleLoadOnlineGraphByFilename(item.filename);
-      // Generate clean link (without .json) for sharing
+      // Generate shareable link
       const newUrl = generateShareableLink(item.filename);
       window.history.pushState({}, '', newUrl);
   };
