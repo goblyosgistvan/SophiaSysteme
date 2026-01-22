@@ -1,0 +1,856 @@
+{
+  "nodes": [
+    {
+      "id": "nietzsche",
+      "label": "Friedrich Nietzsche",
+      "type": "ROOT",
+      "shortSummary": "Friedrich Nietzsche egy 19. századi német filozófus volt, akinek munkássága mélyrehatóan befolyásolta a modern gondolkodást, különösen az etikát, a vallásfilozófiát és az esztétikát.",
+      "longExplanation": "Nietzsche filozófiája radikális szakítást jelentett a nyugati gondolkodás hagyományos rendszereivel, különösen a szókratészi-platóni örökséggel és a keresztény moralitással. Munkásságának középpontjában az élet igenlése, az emberi potenciál felszabadítása és az értékek kritikai átértékelése állt. Filozófiája nem egy zárt, koherens rendszer, hanem inkább egy dinamikus, aforisztikus gondolkodásmód, amely provokálja és kihívás elé állítja olvasóját.\n\nNietzsche gondolkodása a modernitás válságára adott válaszként értelmezhető, különösen a nihilizmus jelenségére, amelyet a hagyományos értékek és hitek összeomlása idézett elő. Filozófiája az emberi akarat erejét hangsúlyozza, és arra ösztönöz, hogy az egyén teremtsen saját értékeket, ahelyett, hogy passzívan elfogadná a fennálló normákat. Ez a megközelítés mélyen hatott az egzisztencializmusra, a posztmodernizmusra és a pszichoanalízisre is.",
+      "connections": [
+        "filozofia_altalanos_szemlelete",
+        "alapfogalmak",
+        "filozofia_es_muveszet",
+        "kritika_es_szemleletvaltas"
+      ]
+    },
+    {
+      "id": "filozofia_altalanos_szemlelete",
+      "label": "A filozófia általános szemléletének megváltozása",
+      "type": "CATEGORY",
+      "shortSummary": "Nietzsche radikálisan átalakította a filozófia hagyományos megközelítését, elutasítva a rendszerszerűséget és az abszolút igazságok keresését az életigenlés és a perspektivizmus javára.",
+      "longExplanation": "Nietzsche a filozófiát nem egy statikus, abszolút igazságokat feltáró tudományként, hanem sokkal inkább egy dinamikus, értékteremtő és életformáló tevékenységként értelmezte. Elutasította a szisztematikus filozófia igényét, amelyet gyakran a gyengeség és a valóság elől való menekülés jelének tekintett. Ehelyett a filozófiát az élet szolgálatába állította, mint eszközt az emberi potenciál kibontakoztatására és az új értékek megteremtésére.\n\nEz a szemléletváltás magában foglalta a hagyományos metafizikai és morális alapok megkérdőjelezését, és a filozófiai vizsgálódás fókuszát az emberi létezés konkrét, tapasztalati dimenzióira helyezte. Nietzsche szerint a filozófus feladata nem az, hogy megtalálja az „igazságot”, hanem hogy megteremtse azt, ami az életet erősíti és gazdagítja, felismerve, hogy minden tudás és érték emberi perspektívából fakad.",
+      "connections": [
+        "akarat_a_rendszer_elleneben",
+        "eletfilozofia",
+        "perspektivizmus"
+      ],
+      "conceptContext": "Ez a szemlélet éles ellentétben áll a klasszikus görög filozófia (Platón, Arisztotelész) és a felvilágosodás (Kant, Hegel) rendszerszerű, abszolút igazságokra törekvő megközelítésével, és inkább a szofisták, majd később az egzisztencialisták és posztmodern gondolkodók irányába mutat."
+    },
+    {
+      "id": "akarat_a_rendszer_elleneben",
+      "label": "akarat a rendszer ellenében",
+      "type": "CONCEPT",
+      "shortSummary": "Nietzsche elutasította a zárt filozófiai rendszereket, hangsúlyozva az egyéni akarat és az élet dinamikus, rendszertelen természetét.",
+      "longExplanation": "Nietzsche mélyen bizalmatlan volt minden olyan filozófiai rendszerrel szemben, amely abszolút igazságokat vagy végleges magyarázatokat kínált a világra. Úgy vélte, hogy a rendszerek gyakran a gyengeségből fakadnak, a valóság komplexitása és kaotikus természete elől való menekülést jelentik. A rendszerek merevsége korlátozza az életet, megfojtja a kreativitást és az egyéni akarat szabad kibontakozását.\n\nEhelyett az _akarat_ dinamikus, teremtő erejét hangsúlyozta, amely nem illeszthető be merev kategóriákba vagy előre meghatározott struktúrákba. Az életet magát is egy állandóan változó, formálódó akaratként értelmezte, amely ellenáll minden kísérletnek, hogy egyetlen, átfogó rendszerbe zárják. Ez a gondolat a _hatalom akarása_ koncepciójában csúcsosodik ki, mint az élet alapvető mozgatórugója.",
+      "connections": [
+        "nietzsche",
+        "hatalom_akarasa",
+        "filozofia_altalanos_szemlelete"
+      ],
+      "conceptContext": "Ez a gondolat élesen szemben áll a hegeli dialektikával és a felvilágosodás racionalista rendszereivel, amelyek az ész által felépített koherens világképet célozták. Inkább a Schopenhaueri _akarat_ koncepciójára épít, de azt egy életigenlő, teremtő erővé alakítja át."
+    },
+    {
+      "id": "eletfilozofia",
+      "label": "életfilozófia",
+      "type": "CONCEPT",
+      "shortSummary": "Nietzsche filozófiája az életet, annak biológiai és pszichológiai aspektusait helyezi a középpontba, elutasítva a transzcendens vagy absztrakt elveket.",
+      "longExplanation": "Az életfilozófia Nietzsche gondolkodásának egyik alapvető jellemzője, amely az életet, annak teljességében és sokféleségében, a filozófiai vizsgálódás elsődleges tárgyává teszi. Ez azt jelenti, hogy a filozófia nem az absztrakt igazságok vagy a transzcendens valóságok keresésével foglalkozik, hanem az emberi létezés konkrét tapasztalataival, az ösztönökkel, az érzelmekkel és az akarattal. Az életet nem egy magasabb cél eszközeként, hanem önmagában vett értékként kezeli, amelyet igenelni és erősíteni kell.\n\nNietzsche számára az élet nem csupán biológiai jelenség, hanem egy dinamikus, teremtő erő, amely állandóan túllépi önmagát. Az életfilozófia arra ösztönöz, hogy az ember ne meneküljön a valóság elől, hanem nézzen szembe annak tragikus és kaotikus aspektusaival is, és találjon benne erőt és szépséget. Ez a megközelítés alapvetően különbözik a hagyományos metafizikától, amely gyakran az életet egy magasabb, ideális valóság árnyékaként értelmezte.",
+      "connections": [
+        "nietzsche",
+        "filozofia_altalanos_szemlelete",
+        "hatalom_akarasa",
+        "dionuszoszi_es_apolloni"
+      ],
+      "conceptContext": "Az életfilozófia irányzata a 19. század végén és a 20. század elején bontakozott ki, olyan gondolkodók munkásságában, mint Bergson vagy Dilthey, akik szintén az életet, az intuíciót és a tapasztalatot helyezték a racionalista rendszerek fölé. Nietzsche ezen irányzat egyik legjelentősebb előfutára."
+    },
+    {
+      "id": "perspektivizmus",
+      "label": "perspektivizmus",
+      "type": "CONCEPT",
+      "shortSummary": "A perspektivizmus Nietzsche azon tana, miszerint nincs abszolút, objektív igazság, hanem minden tudás és érték egy adott perspektívából, egy bizonyos értelmezésből fakad.",
+      "longExplanation": "Nietzsche perspektivizmusa azt állítja, hogy minden megismerés, minden értékítélet és minden valóságértelmezés egy adott szubjektív nézőpontból, egy bizonyos _hatalom akarásából_ fakad. Nincs „tény” önmagában, csak értelmezés. Ez azt jelenti, hogy nincs egyetlen, univerzális igazság, amely mindenki számára érvényes lenne, hanem sokféle, egymással versengő perspektíva létezik, amelyek mindegyike a saját érvényességét igyekszik érvényesíteni.\n\nEz a gondolat mélyen aláássa a hagyományos filozófia abszolút igazságra vonatkozó igényét, és arra ösztönöz, hogy kritikusan vizsgáljuk meg saját és mások nézőpontjait. A perspektivizmus nem relativizmust jelent abban az értelemben, hogy „minden mindegy”, hanem inkább azt, hogy fel kell ismernünk a nézőpontok sokféleségét és az értelmezés elkerülhetetlenségét. A cél nem az, hogy megtaláljuk az egyetlen igaz perspektívát, hanem hogy tudatosan válasszunk és teremtsünk perspektívákat, amelyek az életet erősítik.",
+      "connections": [
+        "nietzsche",
+        "filozofia_altalanos_szemlelete",
+        "hatalom_akarasa",
+        "umwertung_aller_werte"
+      ],
+      "conceptContext": "A perspektivizmus éles ellentétben áll a felvilágosodás objektív racionalitásba vetett hitével és a platóni ideatan abszolút igazságfogalmával. Előrevetíti a 20. századi hermeneutika és a posztmodern filozófia számos gondolatát, amelyek szintén az értelmezés és a nézőpontok központi szerepét hangsúlyozzák."
+    },
+    {
+      "id": "alapfogalmak",
+      "label": "Nietzschei filozófia alapfogalmai",
+      "type": "CATEGORY",
+      "shortSummary": "Nietzsche gondolkodásának központi elemei, amelyek radikálisan új értelmezést adnak az emberi létezésnek, az értékeknek és a történelemnek.",
+      "longExplanation": "Nietzsche filozófiája számos ikonikus és provokatív fogalmat vezetett be, amelyek mind a hagyományos gondolkodás megkérdőjelezését és az emberi potenciál újrafogalmazását célozzák. Ezek a fogalmak nem elszigetelten állnak, hanem szorosan összefonódnak, egy komplex és dinamikus világképet alkotva. Az _Übermensch_, az _örök visszatérés_, az _értékek átértékelése_ és a _hatalom akarása_ mind az élet igenlését, a gyengeség meghaladását és az emberi létezés új horizontjainak megnyitását szolgálják.\n\nEzek a fogalmak gyakran félreértések tárgyai voltak, de Nietzsche eredeti szándéka az volt, hogy felszabadítsa az embert a hagyományos morális és metafizikai béklyók alól, és arra ösztönözze, hogy váljon saját sorsának teremtőjévé. Az alapfogalmak együttesen egy olyan filozófiai programot alkotnak, amely az emberi nagyság és az élet teljességének elérésére törekszik, még a nihilizmus árnyékában is.",
+      "connections": [
+        "ubermensch",
+        "ewige_wiederkehr",
+        "umwertung_aller_werte",
+        "hatalom_akarasa",
+        "ressentiment"
+      ],
+      "conceptContext": "Ezek a fogalmak egyedülállóak Nietzsche gondolkodásában, bár egyes elemeik visszavezethetők Schopenhauer, Herakleitosz vagy a sztoikusok bizonyos gondolataira, Nietzsche radikálisan új kontextusba helyezi és átértelmezi őket."
+    },
+    {
+      "id": "ubermensch",
+      "label": "Übermensch (ember feletti ember)",
+      "type": "CONCEPT",
+      "shortSummary": "Az _Übermensch_ az az emberi típus, aki meghaladja a hagyományos morális és társadalmi normákat, saját értékeket teremt, és teljes mértékben igenli az életet.",
+      "longExplanation": "Az _Übermensch_ (gyakran „ember feletti embernek” fordítják) Nietzsche filozófiájának egyik legismertebb és leginkább félreértett fogalma. Nem egy biológiai evolúció következő lépcsőfoka, hanem egy ideális emberi típus, aki képes túllépni a hagyományos, „rabszolgamorál” által diktált értékeken, és saját, életigenlő értékeket teremteni. Az _Übermensch_ az, aki képes a _hatalom akarását_ önmaga tökéletesítésére és az élet művészi formálására fordítani, ahelyett, hogy a gyengeségből fakadó _ressentiment_ rabja lenne.\n\nAz _Übermensch_ az emberiség célja, egy olyan lény, aki képes elviselni az _örök visszatérés_ gondolatának súlyát, és igenelni tudja az életet minden tragikus és kaotikus aspektusával együtt. Ő az, aki „Isten halála” után képes új értelmet és célt adni a létezésnek, és nem menekül a nihilizmusba. Zarathustra alakja az _Így szólott Zarathustra_ című műben az _Übermensch_ hírnöke és példája.",
+      "connections": [
+        "nietzsche",
+        "alapfogalmak",
+        "hatalom_akarasa",
+        "umwertung_aller_werte",
+        "igy_szolott_zarathustra"
+      ],
+      "conceptContext": "Az _Übermensch_ koncepciója éles ellentétben áll a keresztény alázat és a szociális egyenlőség eszményével. Bár vannak párhuzamok a reneszánsz embereszményével vagy a görög héroszokkal, Nietzsche radikálisan új értelmet ad neki, a modern nihilizmus kontextusában.",
+      "index": 6,
+      "x": 1351.1891819182667,
+      "y": 735.8081678281625,
+      "vy": -0.01047015963022307,
+      "vx": -0.004378387927211544,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "ewige_wiederkehr",
+      "label": "ewige Wiederkehr des Gleichen (örök visszatérés)",
+      "type": "CONCEPT",
+      "shortSummary": "Az „örök visszatérés” (ewige Wiederkehr des Gleichen) Friedrich Nietzsche egyik legprovokatívabb gondolatkísérlete, mely szerint minden esemény, pillanat és létező végtelen sokszor megismétlődik pontosan ugyanúgy. Ez a kozmikus-metafizikai elképzelés nem pusztán elmélet, hanem az emberi élet radikális igenlésének próbája, amely arra kényszerít, hogy minden pillanatot úgy éljünk, mintha örökké visszatérne.",
+      "longExplanation": "Nietzsche az „örök visszatérés” gondolatát az *Így szólott Zarathustra* című művében vezeti be mint a „legnagyobb súlyt” vagy „legszörnyűbb gondolatot”. Ez nem egy tudományos vagy kozmológiai állítás a ciklikus időről, hanem sokkal inkább egy etikai kihívás, egy gondolatkísérlet, amely az emberi élet igenlésének mélységét teszteli. A felvetés, miszerint minden egyes tettünk, gondolatunk és érzésünk – a legapróbbtól a legnagyobbig – végtelen sokszor megismétlődik pontosan ugyanúgy, arra kényszeríti az egyént, hogy mérlegelje, vajon képes-e minden pillanatot úgy élni, hogy azt kívánja, ismétlődjön meg örökké. Ez a gondolat radikális felelősségvállalásra szólít fel a jelen pillanatért.\n\nAz „örök visszatérés” elgondolása szorosan kapcsolódik az *amor fati* (a sors szeretete) nietzschei eszméjéhez, amely az élet feltétel nélküli elfogadását és igenlését jelenti, beleértve annak minden szenvedését és nehézségét is. Az *Übermensch* számára ez a gondolat nem a fatalizmus passzív elfogadása, hanem egy aktív, teremtő erő, amely a nihilista elmenekülés helyett a földi élet teljes és intenzív megélésére ösztönöz. Azáltal, hogy nincsen menekvés egy transzcendens túlvilágba vagy egy lineáris időbeli végpontba, az ember kénytelen a jelenben megtalálni az értelmet és a boldogságot, minden pillanatot a legmagasabb rendű műalkotásként megélve.",
+      "connections": [
+        "nietzsche",
+        "alapfogalmak",
+        "igy_szolott_zarathustra",
+        "ubermensch"
+      ],
+      "conceptContext": "Az „örök visszatérés” gondolata élesen szemben áll a nyugati filozófia és vallás hagyományos, lineáris időfelfogásával, különösen a keresztény üdvtörténeti modellel, amely egy kezdőpontból (teremtés) egy végpont (végítélet, megváltás) felé halad. Nietzsche ezzel a koncepcióval a nihilista értékvesztésre ad választ, azáltal, hogy a jövőbe vetett remény vagy a túlvilági jutalom helyett a jelen pillanat abszolút értékét hangsúlyozza. Nem egy antik ciklikus időfelfogás egyszerű megismétlése, hanem egy etikai imperatívusz, amely az *Umwertung aller Werte* (az értékek átértékelése) tágabb projektjébe illeszkedik, az élet igenlését állítva a középpontba a tagadás helyett, és az *Übermensch* ideáljának megvalósításához szükséges próbakőként szolgál.",
+      "index": 7,
+      "x": 1617.89096696134,
+      "y": 763.2920065112071,
+      "vy": -0.0016211592692732546,
+      "vx": -0.0033322918706069197,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "umwertung_aller_werte",
+      "label": "Umwertung aller Werte (értékek átértékelése)",
+      "type": "CONCEPT",
+      "shortSummary": "Az „értékek átértékelése” (Umwertung aller Werte) Friedrich Nietzsche filozófiájának központi programja, amely a nyugati, különösen a keresztény-platóni morál genealógiai vizsgálatával tárja fel annak gyökereit és életellenes tendenciáit, radikális megkérdőjelezésével új, az életet igenlő értékek teremtésére szólítva fel.",
+      "longExplanation": "Az „értékek átértékelése” (Umwertung aller Werte) Friedrich Nietzsche filozófiájának egyik legmeghatározóbb és legprovokatívabb fogalma, mely a nyugati gondolkodás morális alapjainak radikális kritikáját és újraértelmezését jelenti. Nietzsche a hagyományos, különösen a keresztény és platóni értékrendet a gyengeség, a *ressentiment* és az élet tagadásának megnyilvánulásaként azonosítja. Művében, *A morál genealógiájá*-ban részletesen kifejti, hogy az olyan erények, mint az alázat, az együttérzés vagy az egyenlőség, valójában a rabszolgamorál termékei, melyek a nemes, erős egyének eredeti, életigenlő értékeinek (a „jó” mint „nemes” és „erős”) megfordításával jöttek létre, hogy a gyengék hatalmat gyakorolhassanak az erősek felett. Ez az inverzió egy mélyen gyökerező életellenes tendenciát tükröz, amely a testet, az ösztönöket és a földi létet aláveti egy transzcendens, feltételezett „igaz világnak”, ezzel megfosztva az emberi létezést eredeti erejétől és autenticitásától. A hagyományos értékek tehát nem objektívek vagy örökérvényűek, hanem történelmi és pszichológiai folyamatok termékei, melyek a gyengék önvédelmi mechanizmusából fakadnak.\n\nAz átértékelés célja azonban nem csupán a rombolás, hanem egy új, teremtő folyamat, amely az életigenlő értékek megalkotására irányul. Nietzsche szerint az „Isten halála” utáni korszakban, amikor a transzcendens értékalapok érvényüket vesztették, az emberiségnek magának kell új értékeket teremtenie, amelyek a *hatalom akarásából* fakadnak, mint az élet alapvető mozgatórugójából. Ez az új értékrend az egyéni kiválóságot, az erőt, a kreativitást, a bátorságot és az önfelülmúlást helyezi előtérbe, szemben a tömegkonformitással és a gyengeséggel. Az *Übermensch* ideálja éppen az az ember, aki képes ezen új értékek megalkotására és megélésére, felszabadítva magát a hagyományos morál béklyói alól, és saját sorsának, értelmének aktív alkotójává válva. Az „értékek átértékelése” tehát egy felszabadító, önteremtő aktus, amely az emberi létezés mélyebb, autentikusabb formáját célozza, egy olyan jövőt vizionálva, ahol az ember túllép önmagán és új horizontokat nyit meg.",
+      "connections": [
+        "nietzsche",
+        "alapfogalmak",
+        "moralitas_kritikaja",
+        "ressentiment",
+        "hatalom_akarasa",
+        "ubermensch",
+        "tul_jon_es_rosszon",
+        "a_moral_genealogiaja"
+      ],
+      "conceptContext": "Nietzsche „értékek átértékelése” koncepciója számos filozófiai előzményhez és kortárs irányzathoz kapcsolódik, miközben radikálisan szembefordul velük. Közvetlen kritikája elsősorban a platóni metafizikára és az ebből fakadó keresztény morálra irányul, melyek szerinte egy transzcendens „igaz világ” illúziójával tagadják a földi létet és az ösztönöket. Ezzel szemben áll például Platón értékhierarchiája, ahol az ideák világa és az ész uralma a legfőbb jó. Schopenhauer pesszimista „akarat” fogalmát Nietzsche a „hatalom akarása” koncepciójával fordítja át egy életigenlő, teremtő erővé. Későbbi párhuzamok vonhatók az egzisztencialista gondolkodókkal, mint Jean-Paul Sartre, akik szintén az emberi szabadság és felelősség hangsúlyozásával, a létezés értelmének egyéni megteremtésével érvelnek egy „Isten halála” utáni, értékmentesnek tűnő világban.\nInterdiszciplináris analógiaként a biológiai evolúció hozható fel. Ahogyan a fajoknak folyamatosan újra kell értékelniük és adaptálniuk kell túlélési stratégiáikat és „értékeiket” a változó környezeti feltételekhez, hogy fennmaradjanak és fejlődjenek, úgy Nietzsche szerint az emberiségnek is túl kell lépnie a megkövesedett morális rendszereken. Egy művészeti példa lehet a modernizmus megjelenése, amely radikálisan átértékelte a klasszikus esztétikai normákat, elvetve a hagyományos szépségideálokat és új kifejezési formákat teremtve, mint például a kubizmus vagy az absztrakt művészet, amelyek merőben új „értékeket” hoztak létre a művészetben.",
+      "index": 8,
+      "x": 850.4768107609991,
+      "y": 83.66016825316679,
+      "vy": -0.007278503645631993,
+      "vx": 0.0007779683211472073,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "hatalom_akarasa",
+      "label": "hatalom akarása",
+      "type": "CONCEPT",
+      "shortSummary": "A _hatalom akarása_ Nietzsche szerint az élet alapvető mozgatórugója, egy kozmikus erő, amely minden létezőben megnyilvánul, és a növekedésre, az önmagunk meghaladására irányul.",
+      "longExplanation": "A _hatalom akarása_ Nietzsche filozófiájának központi metafizikai és pszichológiai fogalma, amelyet gyakran félreértelmeztek mint puszta dominanciára vagy elnyomásra való törekvést. Nietzsche számára ez nem csupán a fizikai erő vagy a politikai hatalom, hanem sokkal inkább az élet alapvető, teremtő és önmagát meghaladó impulzusa. Minden élőlényben, sőt, minden jelenségben megnyilvánul, mint a növekedés, a formálódás, az ellenállás és az önmagunk kifejezésének vágya.\n\nEz az akarat nem a puszta fennmaradásra irányul, hanem a túllépésre, a tökéletesedésre, az új értékek teremtésére. A _hatalom akarása_ az, ami az embert arra ösztönzi, hogy meghaladja önmagát, és _Übermensch_-sé váljon. Ez az erő az, ami a művészetet, a filozófiát és minden emberi alkotást is mozgatja. A _hatalom akarása_ tehát nem destruktív, hanem alapvetően konstruktív és életigenlő, amennyiben az egyén képes azt tudatosan és kreatívan irányítani.",
+      "connections": [
+        "nietzsche",
+        "alapfogalmak",
+        "ubermensch",
+        "eletfilozofia",
+        "perspektivizmus",
+        "a_hatalom_akarasa"
+      ],
+      "conceptContext": "Ez a fogalom Schopenhauer _akarat_ koncepciójából indul ki, de azt egy pesszimista, vak erőtől egy életigenlő, teremtő és tudatosítható erővé alakítja át. Szemben áll a hagyományos teleologikus (célorientált) világképekkel, amelyek egy külső cél felé irányuló akaratot feltételeznek."
+    },
+    {
+      "id": "ressentiment",
+      "label": "ressentiment",
+      "type": "CONCEPT",
+      "shortSummary": "A „ressentiment” Nietzsche filozófiájában a gyenge, tehetetlen egyénekből fakadó, elfojtott bosszúvágy és gyűlölet, mely nem közvetlenül nyilvánul meg, hanem az értékek átfordításával, a „rabszolgamorál” alapját képezi. Ez az életet tagadó, reaktív érzés a keresztény etika és a modern nihilizmus gyökerét adja.",
+      "longExplanation": "A „ressentiment” (francia eredetű szó, jelentése: „neheztelés”, „bosszúvágy”) Friedrich Nietzsche filozófiájának egyik kulcsfogalma, amelyet elsősorban az _A morál genealógiája_ című művében fejt ki részletesen. Ez az állapot a gyenge, tehetetlen egyénekben keletkezik, akik nem képesek közvetlenül kifejezni haragjukat és bosszúvágyukat az erősebbekkel, az „úri morál” képviselőivel szemben. Ehelyett belsővé fordítják ezt az érzést, és egy olyan reaktív értékrendszert hoznak létre, amelyben a saját gyengeségeiket, mint például az alázatot, a szelídséget és az együttérzést erényekké, az erősek tulajdonságait – a büszkeséget, az erőt és az életigenlést – pedig bűnökké nyilvánítják. Ez a pszichológiai mechanizmus teremti meg a „rabszolgamorált”, mely a nyugati civilizáció, különösen a keresztény etika alapjává vált.\n\nA „ressentiment” tehát egyfajta „erkölcsi bosszú”, amely a gyengeségből fakadóan tagadja az életet és az erőt, és „nem”-et mond az életre. Ez az érzés mérgezi az emberi lelket, megakadályozza az egyént abban, hogy saját, életigenlő értékeket teremtsen, és az aktív, teremtő akarat helyett a reaktív, tagadó akaratot erősíti. Nietzsche szerint a modern ember nagy része a „ressentiment” rabja, ami a nihilizmushoz és az élet tagadásához vezet. Az „értékek átértékelése” (Umwertung aller Werte) éppen a „ressentiment” meghaladását célozza, egy olyan új morál megteremtését, amely az életigenlésen, az erőn és az egyéni önmeghaladáson alapul, és amely az _Übermensch_ felé vezető utat nyitja meg.",
+      "connections": [
+        "nietzsche",
+        "alapfogalmak",
+        "umwertung_aller_werte",
+        "moralitas_kritikaja",
+        "a_moral_genealogiaja"
+      ],
+      "conceptContext": "A „ressentiment” fogalma központi szerepet játszik Nietzsche morálfilozófiájában, különösen az _A genealógia erkölcséről_ című művében, ahol az úri és a rabszolgamorál eredetét és fejlődését vizsgálja. Nietzsche szerint a rabszolgamorál, amely a kereszténység és a modern demokrácia alapját képezi, a „ressentiment” talaján jött létre, szemben az ókori arisztokratikus kultúrák életigenlő, „úri moráljával”. Míg az úri morál az erőt, a büszkeséget és az önmeghatározást dicsőíti, a rabszolgamorál a gyengeségből fakadóan a szenvedést, az alázatot és az együttérzést emeli erénnyé, tagadva ezzel az élet természetes hierarchiáját és erejét. A „ressentiment” meghaladása Nietzsche filozófiai projektjének, az „értékek átértékelésének” elengedhetetlen része, amely az _Übermensch_ ideáljához és az emberi potenciál felszabadításához vezet.",
+      "index": 10,
+      "x": 1387.8596998722237,
+      "y": -80.43317500628231,
+      "vy": -0.004586477523460592,
+      "vx": 0.007652834554433471,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "filozofia_es_muveszet",
+      "label": "Filozófia és művészet: művészetfilozófia",
+      "type": "CATEGORY",
+      "shortSummary": "Nietzsche számára a művészet nem csupán esztétikai jelenség, hanem az élet igenlésének és az emberi létezés értelmének alapvető kifejeződése, amely a filozófiával szorosan összefonódik.",
+      "longExplanation": "Nietzsche filozófiájában a művészet kiemelkedő szerepet játszik, különösen korai munkásságában, mint _A tragédia születése_. Számára a művészet nem csupán a valóság utánzása vagy szórakoztatás, hanem az élet legmélyebb igazságainak feltárása és igenlése. A művészet az, ami képes elviselhetővé tenni az élet tragikus és kaotikus aspektusait, és értelmet adni a szenvedésnek. A művész az, aki képes új perspektívákat teremteni és az életet művészi alkotássá formálni.\n\nNietzsche a művészetet a metafizika és a morál fölé helyezi, mint az élet legfőbb értékét. A művészet az, ami képes a _hatalom akarását_ a legmagasabb fokon kifejezni, és az _Übermensch_ teremtő erejét megnyilvánítani. A művészetfilozófiája nem csupán az esztétikai elméletről szól, hanem az emberi létezés alapvető kérdéseiről, az élet értelméről és az emberi potenciál kibontakoztatásáról.",
+      "connections": [
+        "dionuszoszi_es_apolloni",
+        "tragikus_eletigenles",
+        "muveszet_mint_eletigenles",
+        "a_tragedia_szuletese"
+      ],
+      "conceptContext": "Nietzsche művészetfilozófiája eltér a klasszikus esztétikától (pl. Platón, Kant), amelyek gyakran a szépséget az igazsággal vagy a morállal kapcsolják össze. Inkább Schopenhauer zeneesztétikájára épít, de azt egy életigenlő, dionüszoszi perspektívába helyezi, szemben Schopenhauer pesszimizmusával."
+    },
+    {
+      "id": "dionuszoszi_es_apolloni",
+      "label": "dionüszoszi és apollóni",
+      "type": "CONCEPT",
+      "shortSummary": "A _dionüszoszi_ az élet kaotikus, ösztönös, szenvedélyes és egységre törekvő erejét, míg az _apollóni_ a rendet, a formát, az individualitást és a szépséget képviseli Nietzsche művészetfilozófiájában.",
+      "longExplanation": "Nietzsche _A tragédia születése_ című művében vezette be a _dionüszoszi_ és _apollóni_ ellentétpárját, mint az emberi létezés és a művészet két alapvető princípiumát. Az _apollóni_ a rend, a forma, a mérték, az individualitás és a szépség elve, amely az álomvilágban és a szobrászatban nyilvánul meg. Ez az elv adja az életnek a felismerhető, strukturált keretét, és védelmet nyújt a kaotikus valóság ellen.\n\nA _dionüszoszi_ ezzel szemben az ösztönös, kaotikus, szenvedélyes, mámoros és egységre törekvő erő, amely a zene és a tánc révén fejeződik ki. Ez az elv feloldja az individualitást, és az emberi létezés alapvető, fájdalmas egységét tárja fel a természettel. Nietzsche szerint az ókori görög tragédia nagysága abban rejlett, hogy képes volt e két princípiumot harmonikusan egyesíteni, megteremtve egy olyan művészeti formát, amely egyszerre igenelte az élet szépségét és annak tragikus mélységeit.",
+      "connections": [
+        "nietzsche",
+        "filozofia_es_muveszet",
+        "a_tragedia_szuletese",
+        "tragikus_eletigenles"
+      ],
+      "conceptContext": "Ez a kettősség a görög kultúra mélyebb megértését kínálja, eltérve a klasszikus filológia racionálisabb megközelítésétől. Párhuzamba állítható a romantika irracionális és racionális erőinek kettősségével, de Nietzsche egyedülálló módon az élet igenlésének alapjává teszi."
+    },
+    {
+      "id": "tragikus_eletigenles",
+      "label": "tragikus életigenlés",
+      "type": "CONCEPT",
+      "shortSummary": "A _tragikus életigenlés_ az a képesség, hogy az életet minden szenvedésével, fájdalmával és kaotikus természetével együtt is teljes mértékben igeneljük és szeressük.",
+      "longExplanation": "A _tragikus életigenlés_ Nietzsche filozófiájának egyik legfontosabb eleme, amely szorosan kapcsolódik a _dionüszoszi_ princípiumhoz és az _örök visszatérés_ gondolatához. Ez nem a naiv optimizmus, hanem egy mélyebb, tudatos döntés az élet mellett, még akkor is, ha felismerjük annak alapvető tragikus és értelmetlennek tűnő aspektusait. Ahelyett, hogy elmenekülnénk a szenvedés elől, vagy egy transzcendens túlvilágban keresnénk vigaszt, a tragikus életigenlés azt jelenti, hogy szembenézünk a valósággal, és erőt merítünk belőle.\n\nEz a hozzáállás az _amor fati_ (a sors szeretete) kifejezésben csúcsosodik ki, ami azt jelenti, hogy nem csupán elfogadjuk a sorsunkat, hanem aktívan szeretjük is azt, minden nehézségével együtt. A tragikus életigenlés az _Übermensch_ egyik jellemzője, aki képes a szenvedést és a kihívásokat az önmaga meghaladásának és az új értékek teremtésének eszközévé tenni. Ez a művészet, különösen a görög tragédia legfőbb tanulsága Nietzsche számára.",
+      "connections": [
+        "nietzsche",
+        "filozofia_es_muveszet",
+        "dionuszoszi_es_apolloni",
+        "ewige_wiederkehr",
+        "ubermensch",
+        "a_tragedia_szuletese"
+      ],
+      "conceptContext": "Ez a koncepció élesen szemben áll a keresztény szenvedésfelfogással, amely a szenvedést a bűnhődés vagy a megváltás eszközének tekinti, és egy túlvilági jutalmat ígér. Nietzsche szerint a tragikus életigenlés az emberi méltóság és az élet teljességének kifejeződése."
+    },
+    {
+      "id": "muveszet_mint_eletigenles",
+      "label": "művészet mint életigenlés",
+      "type": "CONCEPT",
+      "shortSummary": "Nietzsche szerint a művészet az élet legfőbb igenlése, amely képes a valóság tragikus és kaotikus aspektusait is szépséggé és értelmessé transzformálni.",
+      "longExplanation": "A _művészet mint életigenlés_ Nietzsche esztétikájának alapvető tézise. Ahelyett, hogy a művészet a valóság puszta tükrözése vagy a morális tanítás eszköze lenne, Nietzsche szerint a művészet az élet legmélyebb és legigazabb kifejeződése. Képes arra, hogy a szenvedést, a káoszt és az értelmetlenséget is esztétikai formába öntse, és ezáltal elviselhetővé, sőt, igenelhetővé tegye az ember számára.\n\nEz az igenlés nem a valóság elől való menekülés, hanem egy aktív, teremtő cselekedet, amely a _hatalom akarásából_ fakad. A művész az, aki képes a _dionüszoszi_ és _apollóni_ erőket egyesíteni, és ezáltal az életet egy magasabb szintre emelni. A művészet tehát nem csupán szórakoztatás, hanem az emberi létezés értelmének és céljának megteremtése, a nihilizmus elleni végső fegyver.",
+      "connections": [
+        "nietzsche",
+        "filozofia_es_muveszet",
+        "dionuszoszi_es_apolloni",
+        "tragikus_eletigenles",
+        "hatalom_akarasa",
+        "a_tragedia_szuletese"
+      ],
+      "conceptContext": "Ez a felfogás élesen szemben áll a platóni művészetkritikával, amely a művészetet a valóság gyenge utánzatának tekinti, és a kanti esztétikával, amely a szépséget a morális jóval kapcsolja össze. Nietzsche szerint a művészet önmagában vett érték, amely az életet erősíti, nem pedig egy magasabb cél eszköze."
+    },
+    {
+      "id": "kritika_es_szemleletvaltas",
+      "label": "Kritika és szemléletváltás",
+      "type": "CATEGORY",
+      "shortSummary": "Nietzsche filozófiája a nyugati civilizáció alapjait képező metafizikai, morális és vallási rendszerek radikális kritikájára épül, amely egy új szemléletmódhoz vezet.",
+      "longExplanation": "Nietzsche gondolkodásának egyik legfontosabb aspektusa a nyugati kultúra alapjainak, különösen a szókratészi-platóni filozófia és a keresztény moralitás kritikai vizsgálata. Úgy vélte, hogy ezek a rendszerek az élet tagadására épülnek, és a gyengeségből, a _ressentiment_-ből fakadnak. A kritika célja nem a puszta rombolás, hanem az, hogy feltárja ezeknek a rendszereknek a pszichológiai és történelmi eredetét, és ezáltal utat nyisson egy új, életigenlő szemléletmódnak.\n\nEz a szemléletváltás magában foglalja az „Isten halála” gondolatát, a nihilizmus felismerését és az _értékek átértékelésének_ szükségességét. Nietzsche kritikája nem csupán intellektuális, hanem egzisztenciális is: arra ösztönzi az embert, hogy nézzen szembe a valóság kegyetlen igazságaival, és teremtsen saját értelmet egy olyan világban, ahol a hagyományos alapok összeomlottak. Ez a radikális kritika a modern filozófia egyik legfontosabb kiindulópontja lett.",
+      "connections": [
+        "nyugati_metafizika_kritikaja",
+        "moralitas_kritikaja",
+        "nihilizmus",
+        "isten_halala"
+      ],
+      "conceptContext": "Nietzsche kritikája a felvilágosodás kritikai hagyományára épül, de azt radikálisan kiterjeszti a morálra és a vallásra, túllépve Kant és Hegel rendszerein. Előrevetíti a 20. századi dekonstrukció és a posztstrukturalizmus számos gondolatát."
+    },
+    {
+      "id": "nyugati_metafizika_kritikaja",
+      "label": "nyugati metafizika kritikája",
+      "type": "CONCEPT",
+      "shortSummary": "Nietzsche kritizálta a nyugati metafizikát, különösen a platóni ideatan és a keresztény túlvilág-hit dualizmusát, mint az élet tagadását és a valóság elől való menekülést.",
+      "longExplanation": "Nietzsche a nyugati metafizikát, amely Platónnal kezdődött és a kereszténységben teljesedett ki, az élet tagadásának és a valóság elől való menekülésnek tekintette. A platóni ideatan, amely egy magasabb, tökéletesebb ideavilágot feltételez a tapasztalati világ fölött, Nietzsche szerint elértékteleníti a földi, érzéki létezést. Hasonlóképpen, a keresztény túlvilág-hit is a jelen élet szenvedései elől való menekülést kínálja, egy ígéretet egy jobb, transzcendens valóságra.\n\nNietzsche szerint ez a dualizmus, amely a testet a lélekkel, az érzéki világot az ideális világgal állítja szembe, a gyengeségből és a _ressentiment_-ből fakad. A metafizika célja nem az igazság feltárása, hanem az, hogy vigaszt nyújtson a halandóság és a szenvedés ellen, és ezáltal megakadályozza az embert abban, hogy teljes mértékben igenelje az életet. Nietzsche a metafizika helyett a _perspektivizmust_ és az _életfilozófiát_ állította, amelyek a földi létezés sokféleségét és dinamizmusát ünneplik.",
+      "connections": [
+        "nietzsche",
+        "kritika_es_szemleletvaltas",
+        "moralitas_kritikaja",
+        "perspektivizmus"
+      ],
+      "conceptContext": "Ez a kritika a metafizika történetének egyik legfontosabb fordulópontja, amely a Heideggeri létfilozófia és a posztmodern gondolkodás előfutára. Élesen szemben áll a platóni, arisztotelészi és kanti metafizikai rendszerekkel."
+    },
+    {
+      "id": "moralitas_kritikaja",
+      "label": "moralitás kritikája",
+      "type": "CONCEPT",
+      "shortSummary": "Nietzsche radikálisan kritizálta a hagyományos, különösen a keresztény moralitást, mint a gyengeségből és a _ressentiment_-ből fakadó, életellenes értékrendszert.",
+      "longExplanation": "Nietzsche _A morál genealógiája_ című művében fejtette ki legmélyebben a moralitás kritikáját. Szerinte a hagyományos morál, különösen a keresztény etika, nem egy objektív vagy isteni eredetű értékrend, hanem egy történelmileg kialakult, pszichológiai jelenség, amely a gyenge, elnyomott egyének _ressentiment_-jéből fakad. Ez a „rabszolgamorál” az erősebbek, a „nemesek” értékeit (pl. büszkeség, erő, önállóság) rossznak, míg a saját gyengeségeit (pl. alázat, együttérzés, szelídség) jónak nyilvánítja.\n\nEz a morál az élet tagadására épül, és megakadályozza az embert abban, hogy kibontakoztassa teljes potenciálját. Nietzsche szerint a moralitás kritikája elengedhetetlen az _értékek átértékeléséhez_ és az _Übermensch_ megjelenéséhez. A cél nem a morál teljes elvetése, hanem egy új, életigenlő morál megteremtése, amely az erőből, a kreativitásból és az önmagunk meghaladásának vágyából fakad.",
+      "connections": [
+        "nietzsche",
+        "kritika_es_szemleletvaltas",
+        "ressentiment",
+        "umwertung_aller_werte",
+        "a_moral_genealogiaja",
+        "tul_jon_es_rosszon"
+      ],
+      "conceptContext": "Ez a kritika élesen szemben áll a kanti kategorikus imperatívussal, a keresztény etikával és a utilitarizmussal, amelyek abszolút és univerzális morális elveket hirdetnek. Nietzsche a morál pszichológiai és genealógiai eredetét vizsgálja, előrevetítve Foucault hatalom-elemzéseit."
+    },
+    {
+      "id": "nihilizmus",
+      "label": "nihilizmus",
+      "type": "CONCEPT",
+      "shortSummary": "A _nihilizmus_ Nietzsche szerint a nyugati civilizáció elkerülhetetlen következménye, amely a hagyományos értékek és hitek összeomlását, az élet értelmetlenségének felismerését jelenti.",
+      "longExplanation": "Nietzsche a _nihilizmust_ a nyugati kultúra legmélyebb válságának tekintette, amely az „Isten halála” következtében, a hagyományos vallási és morális értékek érvénytelenné válásával jön létre. Ez nem csupán egy filozófiai álláspont, hanem egy történelmi folyamat, amelyben az ember elveszíti a hitét a transzcendens célokban és az abszolút igazságokban. A nihilizmus a „legmagasabb értékek elértéktelenedését” jelenti, amikor az élet elveszíti minden értelmét és célját.\n\nNietzsche megkülönböztetett _passzív_ és _aktív_ nihilizmust. A passzív nihilizmus a beletörődés, a fáradtság és a lemondás állapota, míg az aktív nihilizmus a romboló erő, amely a régi értékek lerombolásával utat nyit az új értékek teremtésének. Nietzsche célja nem a nihilizmus elkerülése, hanem annak tudatos átélése és meghaladása az _értékek átértékelése_ és az _Übermensch_ által, egy új, életigenlő perspektíva megteremtésével.",
+      "connections": [
+        "nietzsche",
+        "kritika_es_szemleletvaltas",
+        "isten_halala",
+        "umwertung_aller_werte",
+        "hatalom_akarasa"
+      ],
+      "conceptContext": "A nihilizmus fogalma már a 19. században megjelent (pl. Turgenyev _Apák és fiúk_ című regényében), de Nietzsche adta neki a legmélyebb filozófiai értelmezést, mint a modernitás alapvető problémáját. Szemben áll a felvilágosodás optimista hitvilágával és a vallásos világképekkel."
+    },
+    {
+      "id": "isten_halala",
+      "label": "Isten halála",
+      "type": "CONCEPT",
+      "shortSummary": "Az „Isten halála” Nietzsche metaforája arra, hogy a modern ember elvesztette hitét a transzcendens, abszolút értékekben és a vallásos világképben, ami a nihilizmushoz vezet.",
+      "longExplanation": "Az „Isten halála” Nietzsche egyik leghíresebb és legprovokatívabb kijelentése, amelyet _A vidám tudomány_ című művében vezetett be. Ez nem egy ateista állítás Isten létezésének tagadásáról, hanem egy kulturális és történelmi diagnózis: a modern ember elvesztette a hitét a transzcendens, abszolút értékekben, a vallásos világképben és a morális alapokban, amelyek évszázadokon át tartást adtak a nyugati civilizációnak. Az emberiség „ölte meg” Istent azzal, hogy a tudomány, a racionalitás és a szekularizáció révén aláásta a vallásos hitek alapjait.\n\nEz a felismerés óriási következményekkel jár: az „Isten halála” a _nihilizmus_ elkerülhetetlen beköszöntét jelenti, amikor a hagyományos értékek érvénytelenné válnak, és az élet elveszíti minden előre meghatározott értelmét. Nietzsche szerint ez egy egyszerre tragikus és felszabadító esemény, amely lehetőséget teremt az ember számára, hogy saját értékeket teremtsen, és _Übermensch_-sé váljon, ahelyett, hogy passzívan elfogadná a régi dogmákat.",
+      "connections": [
+        "nietzsche",
+        "kritika_es_szemleletvaltas",
+        "nihilizmus",
+        "umwertung_aller_werte",
+        "a_vidam_tudomany"
+      ],
+      "conceptContext": "Ez a metafora a modernitás egyik legfontosabb diagnózisa, amely a szekularizáció és a felvilágosodás következményeit elemzi. Élesen szemben áll a teista világképekkel és a vallásos értékrendszerekkel, és előrevetíti az egzisztencializmus és a posztmodern gondolkodás számos témáját."
+    },
+    {
+      "id": "a_tragedia_szuletese",
+      "label": "_A tragédia születése_",
+      "type": "WORK",
+      "shortSummary": "Nietzsche első jelentős műve, amelyben a görög tragédia elemzésén keresztül fejti ki a _dionüszoszi_ és _apollóni_ princípiumok kettősségét, és kritizálja a szókratészi racionalizmust.",
+      "longExplanation": "_A tragédia születése a zene szelleméből_ (1872) Nietzsche első nagy műve, amelyben a klasszikus filológia kereteit túllépve egy radikálisan új értelmezést ad az ókori görög kultúrának. A könyv központi gondolata a _dionüszoszi_ és _apollóni_ princípiumok kettőssége, amelyek az emberi létezés és a művészet alapvető erőit képviselik. Nietzsche szerint az athéni tragédia nagysága abban rejlett, hogy képes volt e két ellentétes erőt harmonikusan egyesíteni, megteremtve egy olyan művészeti formát, amely egyszerre igenelte az élet szépségét és annak tragikus mélységeit.\n\nNietzsche ebben a műben kritizálja a szókratészi racionalizmust, amelyet a tragédia hanyatlásának és a nyugati kultúra dekadenciájának kezdeteként azonosít. A szókratészi gondolkodás, az értelem túlzott hangsúlyozásával, elfojtotta a _dionüszoszi_ ösztönöket, és egy olyan kultúrát hozott létre, amely az életet tagadja. A mű a művészetet, különösen a zenét, az élet legfőbb igenlésének tekinti, és előrevetíti Nietzsche későbbi filozófiájának számos alapgondolatát.",
+      "connections": [
+        "nietzsche",
+        "filozofia_es_muveszet",
+        "dionuszoszi_es_apolloni",
+        "tragikus_eletigenles",
+        "muveszet_mint_eletigenles"
+      ]
+    },
+    {
+      "id": "igy_szolott_zarathustra",
+      "label": "_Így szólott Zarathustra_",
+      "type": "WORK",
+      "shortSummary": "Nietzsche egyik legjelentősebb és leginkább irodalmi formájú filozófiai műve, amelyben a perzsa próféta, Zarathustra allegorikus alakján keresztül fejti ki az _Übermensch_, az _örök visszatérés_ és az _értékek átértékelése_ kulcsfontosságú gondolatait, radikálisan új perspektívát kínálva az emberi létezésre.",
+      "longExplanation": "Az _Így szólott Zarathustra. Könyv mindenkinek és senkinek_ (1883-1885) Friedrich Nietzsche filozófiájának talán legismertebb és leginkább emblematikus alkotása, amely nem hagyományos értekezés, hanem egyfajta filozófiai regény vagy költemény. A mű Zarathustra, a hegyekből leereszkedő próféta alakján keresztül mutatja be Nietzsche központi gondolatait, mint az _Übermensch_ (fölöttes ember) eszméjét, az _ewige Wiederkehr_ (örök visszatérés) kozmikus koncepcióját és az _Umwertung aller Werte_ (minden érték átértékelése) morális imperatívuszát. A szöveg tele van metaforákkal, allegóriákkal és aforizmákkal, amelyek a hagyományos filozófiai rendszerekkel szemben egy új, életszembesítő és provokatív gondolkodásmódot közvetítenek.\n\nA mű az „Isten halála” utáni nihilista válságra reflektál, és arra szólítja fel az embert, hogy ne passzív befogadója, hanem aktív teremtője legyen saját értékeinek és sorsának. Zarathustra tanításai az élet igenlését, a szenvedélyek és az akarat erejének felszabadítását, valamint a gyengeség és a ressentiment meghaladását hirdetik. Az _Így szólott Zarathustra_ nem csupán filozófiai téziseket sorakoztat fel, hanem egy újfajta emberi ideált vázol fel, amely képes túllépni a hagyományos erkölcsi korlátokon, és saját magát mint műalkotást megformálni. Hatása felmérhetetlen volt a 20. századi egzisztencialista gondolkodásra és irodalomra egyaránt.",
+      "connections": [
+        "nietzsche",
+        "ubermensch",
+        "ewige_wiederkehr",
+        "umwertung_aller_werte",
+        "isten_halala"
+      ],
+      "index": 21,
+      "x": 1892.7735772192257,
+      "y": 1089.7468100028525,
+      "vy": -0.006857060455921094,
+      "vx": 0.009690196968149763,
+      "fx": null,
+      "fy": null,
+      "conceptContext": "Az _Így szólott Zarathustra_ Nietzsche filozófiai fejlődésének kulcsfontosságú szakaszát jelöli, ahol a korábbi műveiben megfogalmazott kritikák – mint a keresztény morál, a metafizika és a tudomány korlátainak bírálata – egy pozitív, jövőbe mutató vízióvá állnak össze. A mű szakít a szisztematikus filozófia hagyományával, és egy művészi, prófétai hangnemet ölt, amely a gondolatok közvetlen átadására törekszik, nem pedig racionális érvelésre. Ezzel Nietzsche nemcsak a filozófia tartalmát, hanem annak formáját is megújítja, szembemenve a kanti és hegeli rendszerekkel. A Zarathustra által hirdetett „értékek átértékelése” a nyugati kultúra alapjait kérdőjelezi meg, és az emberi akaratot állítja a középpontba, mint az értékteremtés forrását, előkészítve ezzel a „hatalom akarása” koncepcióját. A mű így a modern filozófia egyik sarokkövévé vált, amely mélyen befolyásolta az egzisztencializmust, a posztmodern gondolkodást és a művészetfilozófiát, különösen az élet mint műalkotás eszméjét."
+    },
+    {
+      "id": "tul_jon_es_rosszon",
+      "label": "_Túl jón és rosszon_",
+      "type": "WORK",
+      "shortSummary": "Ebben a műben Nietzsche radikálisan kritizálja a hagyományos morált és metafizikát, feltárva azok pszichológiai eredetét, és előkészítve az _értékek átértékelését_.",
+      "longExplanation": "_Túl jón és rosszon. Egy jövőbeli filozófia előjátéka_ (1886) Nietzsche egyik legfontosabb rendszerező műve, amelyben szisztematikusan kritizálja a nyugati filozófia és morál alapjait. A könyv alcíme is jelzi, hogy Nietzsche egy újfajta filozófia alapjait kívánja lefektetni, amely túllép a hagyományos „jó” és „rossz” kategóriáin. Nietzsche ebben a műben elemzi a filozófusok előítéleteit, a morál pszichológiai eredetét és a _hatalom akarásának_ szerepét az emberi gondolkodásban.\n\nA műben Nietzsche élesen bírálja a keresztény moralitást, a demokráciát és az egyenlőség eszményét, mint a gyengeségből és a _ressentiment_-ből fakadó jelenségeket. A cél az _értékek átértékelésének_ előkészítése, és az _Übermensch_ számára egy olyan szellemi tér megteremtése, ahol a régi dogmák már nem érvényesek. A könyv aforisztikus stílusa és provokatív gondolatai mélyen befolyásolták a 20. századi filozófiát.",
+      "connections": [
+        "nietzsche",
+        "moralitas_kritikaja",
+        "umwertung_aller_werte",
+        "hatalom_akarasa",
+        "nyugati_metafizika_kritikaja"
+      ]
+    },
+    {
+      "id": "a_moral_genealogiaja",
+      "label": "_A morál genealógiája_",
+      "type": "WORK",
+      "shortSummary": "Nietzsche ebben a művében a morális fogalmak (jó, rossz, bűn, lelkiismeret) eredetét vizsgálja, feltárva azok pszichológiai és történelmi gyökereit, különös tekintettel a _ressentiment_ szerepére.",
+      "longExplanation": "_A morál genealógiájához. Egy vitairat_ (1887) Nietzsche egyik legszisztematikusabb és leginkább hatásos műve, amelyben a morális fogalmak eredetét és fejlődését vizsgálja. A könyv három értekezésből áll, amelyek mindegyike egy-egy morális fogalom (jó és rossz, bűn és rossz lelkiismeret, aszkéta ideál) genealógiai elemzését végzi el. Nietzsche nem a morál érvényességét, hanem annak eredetét kérdezi, feltárva, hogy a morális értékek nem abszolútak, hanem történelmileg és pszichológiailag alakultak ki.\n\nA mű központi gondolata a _ressentiment_ szerepe a rabszolgamorál kialakulásában, szemben az eredeti „nemes” morállal. Nietzsche szerint a keresztény morál a gyenge, elnyomott egyének bosszúvágyából fakad, akik a saját gyengeségeiket erényekké, az erősebbek tulajdonságait pedig bűnökké nyilvánítják. A könyv a _moralitás kritikájának_ csúcspontja, és alapvető fontosságú az _értékek átértékelésének_ megértéséhez.",
+      "connections": [
+        "nietzsche",
+        "moralitas_kritikaja",
+        "ressentiment",
+        "umwertung_aller_werte"
+      ]
+    },
+    {
+      "id": "a_hatalom_akarasa",
+      "label": "_A hatalom akarása_",
+      "type": "WORK",
+      "shortSummary": "Nietzsche posztumusz kiadott jegyzeteinek gyűjteménye, amely a _hatalom akarása_ koncepcióját fejti ki, mint az élet és a világ alapvető princípiumát.",
+      "longExplanation": "_A hatalom akarása_ (posztumusz kiadás, 1901) Nietzsche halála után, nővére, Elisabeth Förster-Nietzsche által összeállított jegyzetgyűjtemény, amely a filozófus utolsó éveinek gondolatait tartalmazza. Bár a mű szerkezete és hitelessége vitatott, mivel a nővére jelentősen szerkesztette és manipulálta a szövegeket, mégis kulcsfontosságú a _hatalom akarása_ fogalmának megértéséhez, mint Nietzsche metafizikai és kozmológiai elvéhez.\n\nEbben a gyűjteményben a _hatalom akarása_ nem csupán pszichológiai, hanem egy univerzális princípiumként jelenik meg, amely minden létezőben megnyilvánul, mint a növekedés, a formálódás és az önmagunk meghaladásának vágya. A mű a _nihilizmus_ diagnózisát és az _értékek átértékelésének_ programját is részletezi, mint a modern ember válaszát az „Isten halálára”. Bár nem egy befejezett mű, _A hatalom akarása_ mély betekintést nyújt Nietzsche gondolkodásának utolsó fázisába.",
+      "connections": [
+        "nietzsche",
+        "hatalom_akarasa",
+        "nihilizmus",
+        "umwertung_aller_werte",
+        "isten_halala"
+      ]
+    },
+    {
+      "id": "a_vidam_tudomany",
+      "label": "_A vidám tudomány_",
+      "type": "WORK",
+      "shortSummary": "Nietzsche aforisztikus műve, amelyben először jelenik meg az „Isten halála” gondolata, és a filozófus a tudás és az élet igenlésének új formáit keresi.",
+      "longExplanation": "_A vidám tudomány_ (1882) Nietzsche egyik legszemélyesebb és leginkább kísérletező műve, amely aforisztikus formában tárgyalja a filozófia, a művészet, a morál és a tudomány kérdéseit. Ebben a könyvben jelenik meg először az „Isten halála” híres kijelentése, amelyet a „bolond ember” szájába ad, jelezve a modern ember számára a transzcendens értékek elvesztésének súlyos következményeit.\n\nNietzsche ebben a műben a „vidám tudomány” eszményét hirdeti, amely a tudás és a kritikai gondolkodás örömteli, életigenlő formáját jelenti. A cél nem a puszta tények gyűjtése, hanem az élet igenlése, a _perspektivizmus_ elfogadása és az új értékek teremtése. A könyv a _nihilizmus_ diagnózisát is tartalmazza, de egyben utat mutat annak meghaladására is, az _amor fati_ és az _Übermensch_ gondolatainak előkészítésével.",
+      "connections": [
+        "nietzsche",
+        "isten_halala",
+        "nihilizmus",
+        "perspektivizmus",
+        "eletfilozofia"
+      ]
+    },
+    {
+      "id": "amor_fati",
+      "label": "amor fati (a sors szeretete)",
+      "type": "CONCEPT",
+      "shortSummary": "Az _amor fati_ Nietzsche filozófiájának központi fogalma, amely az élet feltétel nélküli, aktív igenlését jelenti, beleértve annak minden szenvedését, nehézségét és szükségszerűségét.",
+      "longExplanation": "Az _amor fati_ kifejezés, melyet Nietzsche a sztoikusoktól vett át, de sajátos értelmet adott neki, azt a radikális életigenlést írja le, amely nem csupán elfogadja, hanem aktívan szereti és akarja a sorsát, annak minden aspektusával együtt. Ez a hozzáállás túlmutat a passzív beletörődésen; egyfajta alkotó igenlés, amely a létezés minden pillanatát, még a legfájdalmasabbat is, a saját akaratunk részévé teszi, és a „szükségszerűség szépségét” látja benne. Nietzsche számára az _amor fati_ az emberi nagyság és az _Übermensch_ egyik legfőbb jellemzője, amely lehetővé teszi az egyén számára, hogy a nihilizmus kihívásaira egy teremtő és megerősítő választ adjon.\n\nEz a fogalom szorosan kapcsolódik az _ewige Wiederkehr des Gleichen_ (örök visszatérés) gondolatához is. Ha valaki képes az _amor fati_ szellemében élni, akkor minden egyes pillanatot úgy él meg, mintha azt örökké újra és újra át akarná élni, ezzel a legnagyobb súlyt helyezve a jelenre és annak minőségére. Az _amor fati_ tehát nem csupán egy attitűd, hanem egyfajta életművészet, amely a létezés tragikus dimenzióit is képes művészi alkotássá, igenléssé transzformálni, szemben a _ressentiment_ és a gyengeség moráljával, amely elítéli és elutasítja a szenvedést.",
+      "connections": [
+        "nietzsche",
+        "alapfogalmak",
+        "tragikus_eletigenles",
+        "ewige_wiederkehr",
+        "ubermensch",
+        "hatalom_akarasa",
+        "umwertung_aller_werte",
+        "az_elet_teljes_igenlese",
+        "szuksegszeruseg_es_veletlen_igenlese",
+        "szenvedes_es_nehezsegek_elfogadasa"
+      ],
+      "conceptContext": "Az _amor fati_ a sztoikusok _fatum_ (végzet) elfogadásának aktívabb, dinamikusabb változata, ahol a passzív beletörődés helyett aktív szeretet és akarat jelenik meg. Hasonlóan a buddhizmusban a _karma_ elfogadásához, de Nietzsche hangsúlyozza az egyéni akarat és teremtés szerepét.\n\nZenei analógiával élve, az _amor fati_ olyan, mint egy zenész, aki nem csupán eljátssza a kottát, hanem teljes szívvel, szenvedéllyel és a mű iránti szeretettel adja elő, még a disszonáns vagy nehéz részeket is, mert tudja, hogy azok is hozzátartoznak a mű egészéhez és szépségéhez. Egy építész, aki a rendelkezésre álló anyagok és a helyszín adottságai ellenére is a lehető legszebb és legfunkcionálisabb épületet hozza létre, nem pedig panaszkodik a korlátok miatt."
+    },
+    {
+      "id": "szuksegszeruseg_es_veletlen_igenlese",
+      "label": "a szükségszerűség és a véletlen igenlése",
+      "type": "CONCEPT",
+      "shortSummary": "Ez a fogalom az _amor fati_ azon aspektusát írja le, amely az életben felmerülő elkerülhetetlen eseményeket és a kiszámíthatatlan véletleneket egyaránt aktívan elfogadja és szereti.",
+      "longExplanation": "Az _amor fati_ nem csupán a sorsunk előre elrendelt, szükségszerű elemeinek elfogadását jelenti, hanem kiterjed az életben felmerülő véletlenekre és a kiszámíthatatlan fordulatokra is. Nietzsche szerint az emberi nagyság abban rejlik, hogy képesek vagyunk minden történést, legyen az előre látható vagy váratlan, a saját akaratunk részévé tenni, és azt mondani rá: „így akartam”. Ez a hozzáállás felszabadít a múlton való rágódás és a jövő miatti aggódás terhe alól, lehetővé téve a teljes jelenlétet és az élet egészének igenlését.\n\nEz a fajta igenlés alapvetően különbözik a fatalizmustól, amely passzív beletörődést jelent. Az _amor fati_ aktív, teremtő hozzáállás, amely a szükségszerűséget és a véletlent nem korlátként, hanem az önmegvalósítás és az értékteremtés alapanyagaként fogja fel. Az egyén nem áldozata a körülményeknek, hanem művésze a saját életének, aki a rendelkezésre álló „anyagból” – a sors adta lehetőségekből és korlátokból – a lehető legmagasabb rendű alkotást hozza létre.",
+      "connections": [
+        "amor_fati",
+        "ewige_wiederkehr",
+        "hatalom_akarasa"
+      ],
+      "conceptContext": "Ez a gondolat párhuzamba állítható a sztoikusok _apatheia_ (szenvedélymentesség) fogalmával, de Nietzsche aktívabb, érzelmileg telítettebb elfogadást hirdet. A keleti filozófiákban, például a taoizmusban is megjelenik a természetes áramlás és a változás elfogadása, de Nietzsche az egyéni akarat és az értékteremtés hangsúlyozásával ad neki egyedi ízt.\n\nEgy improvizációs zenész, aki a váratlan hangokat vagy a közönség reakcióit is beépíti előadásába, nem pedig kizárja azokat, jól illusztrálja ezt a fogalmat. Vagy egy tudós, aki egy kísérlet során váratlan eredményre bukkan, és ahelyett, hogy hibának tekinti, új kutatási irányt nyit meg általa, aktívan igenli a véletlent."
+    },
+    {
+      "id": "szenvedes_es_nehezsegek_elfogadasa",
+      "label": "a szenvedés és a nehézségek elfogadása",
+      "type": "CONCEPT",
+      "shortSummary": "Az _amor fati_ lényegi eleme a szenvedés és a nehézségek aktív elfogadása, sőt, igenlése, mint az élet elkerülhetetlen és értékteremtő részei.",
+      "longExplanation": "Nietzsche számára az élet nem csupán örömökből áll, hanem elválaszthatatlanul hozzátartozik a szenvedés, a fájdalom és a nehézségek is. Az _amor fati_ nem azt jelenti, hogy passzívan tűrjük a fájdalmat, hanem azt, hogy aktívan igeneljük, sőt, akarjuk azt, mint az emberi fejlődés és a mélység elengedhetetlen feltételét. A szenvedés nem elkerülendő rossz, hanem egyfajta „nagy felszabadító”, amely képes az embert a felszínes örömökön túlmutató, mélyebb tapasztalatokhoz és önismerethez vezetni. Ez a hozzáállás éles ellentétben áll a keresztény morállal, amely a szenvedést bűntetésként vagy megváltás eszközeként értelmezi, és a fájdalom elkerülésére törekszik.\n\nAz _amor fati_ szellemében a szenvedés nem gyengít, hanem erősít, nem rombol, hanem épít, amennyiben az egyén képes azt a saját akaratának részévé tenni és értelmet adni neki. Ez a tragikus életigenlés alapja, amely a görög tragédiákban is megfigyelhető: a hősök sorsa tele van fájdalommal és bukással, mégis nagyságuk éppen abban rejlik, hogy szembeszállnak vele, és a szenvedésükön keresztül válnak halhatatlanná. Az _amor fati_ tehát a szenvedést az élet teljességének és gazdagságának részeként fogja fel, amely nélkül az emberi tapasztalat hiányos és sekélyes maradna.",
+      "connections": [
+        "amor_fati",
+        "tragikus_eletigenles",
+        "moralitas_kritikaja",
+        "ressentiment"
+      ],
+      "conceptContext": "Ez a gondolat eltér a keresztény szenvedésfelfogástól, amely a bűnhődésre vagy a megváltásra fókuszál. Hasonlóan a buddhizmushoz, amely a szenvedés okait kutatja és a tőle való megszabadulást célozza, de Nietzsche nem a szenvedés megszüntetését, hanem annak aktív igenlését hirdeti. A sztoikusok is elfogadták a szenvedést, de inkább közömbösen, míg Nietzsche szenvedélyes igenlést vár el.\n\nEgy sportoló, aki a kemény edzések és a fájdalom ellenére is folytatja a felkészülést, mert tudja, hogy ez az út vezet a teljesítmény növeléséhez és a győzelemhez, jól példázza ezt. Vagy egy művész, aki a személyes tragédiáit és fájdalmait művészi alkotássá transzformálja, ezzel értelmet és szépséget teremtve a szenvedésből."
+    },
+    {
+      "id": "az_elet_teljes_igenlese",
+      "label": "az élet teljes igenlése",
+      "type": "CONCEPT",
+      "shortSummary": "Ez a kategória azokat a filozófiai attitűdöket foglalja magába, amelyek az életet, annak minden aspektusával együtt, feltétel nélkül megerősítik és elfogadják.",
+      "longExplanation": "Az élet teljes igenlése egy átfogó filozófiai kategória, amely magában foglalja azokat a gondolkodásmódokat, amelyek az emberi létezést, annak örömeivel és fájdalmaival, szépségeivel és borzalmaival, szükségszerűségeivel és véletleneivel együtt, alapvetően pozitívnak és megerősítendőnek tartják. Ez az attitűd szemben áll minden olyan filozófiával, amely az életet alapvetően rossznak, hiányosnak, vagy egy magasabb, transzcendens valóság árnyékának tekinti. Az élet teljes igenlése nem naiv optimizmus, hanem egy mély, tudatos döntés, amely a létezés tragikus dimenzióit is képes integrálni és értelmet adni nekik.\n\nNietzsche filozófiája az élet teljes igenlésének egyik legmarkánsabb képviselője, különösen az _amor fati_ és a _tragikus életigenlés_ fogalmain keresztül. Ez az igenlés nem csupán a létezés elfogadását jelenti, hanem annak aktív, teremtő megerősítését, amely az egyént arra ösztönzi, hogy a saját életét műalkotássá formálja. Az élet teljes igenlése a _hatalom akarásának_ legmagasabb rendű kifejeződése, amely az emberi szellem erejét és képességét ünnepli, hogy a kihívásokkal szemben is képes legyen értéket teremteni és a létezést megerősíteni.",
+      "connections": [
+        "nietzsche",
+        "eletfilozofia",
+        "tragikus_eletigenles",
+        "amor_fati",
+        "hatalom_akarasa"
+      ],
+      "conceptContext": "Az élet teljes igenlése a sztoikusok _eudaimonia_ (virágzó élet) fogalmával rokonítható, de Nietzsche hangsúlyozza a szenvedés és a tragikum aktív igenlését. Spinoza _Deus sive Natura_ (Isten, azaz a Természet) gondolata is egyfajta igenlést sugall a létezés szükségszerűségére, de Nietzsche az egyéni akaratot és az értékteremtést helyezi előtérbe. A reneszánsz humanizmus is az emberi élet és képességek igenlését hirdette, de Nietzsche radikálisabb és mélyebb dimenziókat nyit meg.\n\nBiológiai értelemben az élet teljes igenlése analóg az evolúcióval, amely a kihívások és a szelekció ellenére is folyamatosan új formákat és komplexitást hoz létre, megerősítve ezzel a létezés alapvető dinamikáját. Egy ökológiai rendszer, amely a zavarok (tűz, árvíz) után is képes regenerálódni és új egyensúlyt találni, szintén az élet igenlésének egy formája."
+    }
+  ],
+  "links": [
+    {
+      "source": "nietzsche",
+      "target": "filozofia_altalanos_szemlelete",
+      "relationLabel": "filozófiája magába foglalja"
+    },
+    {
+      "source": "nietzsche",
+      "target": "alapfogalmak",
+      "relationLabel": "filozófiájának alapjai"
+    },
+    {
+      "source": "nietzsche",
+      "target": "filozofia_es_muveszet",
+      "relationLabel": "kiemelten foglalkozik"
+    },
+    {
+      "source": "nietzsche",
+      "target": "kritika_es_szemleletvaltas",
+      "relationLabel": "központi eleme"
+    },
+    {
+      "source": "filozofia_altalanos_szemlelete",
+      "target": "akarat_a_rendszer_elleneben",
+      "relationLabel": "jellemzője"
+    },
+    {
+      "source": "filozofia_altalanos_szemlelete",
+      "target": "eletfilozofia",
+      "relationLabel": "jellemzője"
+    },
+    {
+      "source": "filozofia_altalanos_szemlelete",
+      "target": "perspektivizmus",
+      "relationLabel": "jellemzője"
+    },
+    {
+      "source": "akarat_a_rendszer_elleneben",
+      "target": "hatalom_akarasa",
+      "relationLabel": "kapcsolódik"
+    },
+    {
+      "source": "eletfilozofia",
+      "target": "hatalom_akarasa",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "eletfilozofia",
+      "target": "dionuszoszi_es_apolloni",
+      "relationLabel": "megnyilvánul"
+    },
+    {
+      "source": "perspektivizmus",
+      "target": "hatalom_akarasa",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "perspektivizmus",
+      "target": "umwertung_aller_werte",
+      "relationLabel": "szükséges hozzá"
+    },
+    {
+      "source": "alapfogalmak",
+      "target": "ubermensch",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "alapfogalmak",
+      "target": "ewige_wiederkehr",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "alapfogalmak",
+      "target": "umwertung_aller_werte",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "alapfogalmak",
+      "target": "hatalom_akarasa",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "alapfogalmak",
+      "target": "ressentiment",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "ubermensch",
+      "target": "hatalom_akarasa",
+      "relationLabel": "kifejeződése"
+    },
+    {
+      "source": "ubermensch",
+      "target": "umwertung_aller_werte",
+      "relationLabel": "megvalósítja"
+    },
+    {
+      "source": "ubermensch",
+      "target": "igy_szolott_zarathustra",
+      "relationLabel": "központi alakja"
+    },
+    {
+      "source": "ewige_wiederkehr",
+      "target": "igy_szolott_zarathustra",
+      "relationLabel": "központi gondolata"
+    },
+    {
+      "source": "ewige_wiederkehr",
+      "target": "ubermensch",
+      "relationLabel": "próbája"
+    },
+    {
+      "source": "umwertung_aller_werte",
+      "target": "moralitas_kritikaja",
+      "relationLabel": "következménye"
+    },
+    {
+      "source": "umwertung_aller_werte",
+      "target": "ressentiment",
+      "relationLabel": "meghaladja"
+    },
+    {
+      "source": "umwertung_aller_werte",
+      "target": "hatalom_akarasa",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "umwertung_aller_werte",
+      "target": "tul_jon_es_rosszon",
+      "relationLabel": "tárgyalja"
+    },
+    {
+      "source": "umwertung_aller_werte",
+      "target": "a_moral_genealogiaja",
+      "relationLabel": "tárgyalja"
+    },
+    {
+      "source": "hatalom_akarasa",
+      "target": "a_hatalom_akarasa",
+      "relationLabel": "központi témája"
+    },
+    {
+      "source": "ressentiment",
+      "target": "moralitas_kritikaja",
+      "relationLabel": "eredete"
+    },
+    {
+      "source": "ressentiment",
+      "target": "a_moral_genealogiaja",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "filozofia_es_muveszet",
+      "target": "dionuszoszi_es_apolloni",
+      "relationLabel": "alapfogalma"
+    },
+    {
+      "source": "filozofia_es_muveszet",
+      "target": "tragikus_eletigenles",
+      "relationLabel": "célja"
+    },
+    {
+      "source": "filozofia_es_muveszet",
+      "target": "muveszet_mint_eletigenles",
+      "relationLabel": "fő tézise"
+    },
+    {
+      "source": "filozofia_es_muveszet",
+      "target": "a_tragedia_szuletese",
+      "relationLabel": "központi műve"
+    },
+    {
+      "source": "dionuszoszi_es_apolloni",
+      "target": "a_tragedia_szuletese",
+      "relationLabel": "központi témája"
+    },
+    {
+      "source": "dionuszoszi_es_apolloni",
+      "target": "tragikus_eletigenles",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "tragikus_eletigenles",
+      "target": "ewige_wiederkehr",
+      "relationLabel": "kapcsolódik"
+    },
+    {
+      "source": "tragikus_eletigenles",
+      "target": "ubermensch",
+      "relationLabel": "jellemzője"
+    },
+    {
+      "source": "muveszet_mint_eletigenles",
+      "target": "hatalom_akarasa",
+      "relationLabel": "kifejeződése"
+    },
+    {
+      "source": "kritika_es_szemleletvaltas",
+      "target": "nyugati_metafizika_kritikaja",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "kritika_es_szemleletvaltas",
+      "target": "moralitas_kritikaja",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "kritika_es_szemleletvaltas",
+      "target": "nihilizmus",
+      "relationLabel": "diagnosztizálja"
+    },
+    {
+      "source": "kritika_es_szemleletvaltas",
+      "target": "isten_halala",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "nyugati_metafizika_kritikaja",
+      "target": "perspektivizmus",
+      "relationLabel": "ellentéte"
+    },
+    {
+      "source": "moralitas_kritikaja",
+      "target": "tul_jon_es_rosszon",
+      "relationLabel": "tárgyalja"
+    },
+    {
+      "source": "moralitas_kritikaja",
+      "target": "a_moral_genealogiaja",
+      "relationLabel": "tárgyalja"
+    },
+    {
+      "source": "nihilizmus",
+      "target": "isten_halala",
+      "relationLabel": "következménye"
+    },
+    {
+      "source": "nihilizmus",
+      "target": "umwertung_aller_werte",
+      "relationLabel": "meghaladása"
+    },
+    {
+      "source": "isten_halala",
+      "target": "a_vidam_tudomany",
+      "relationLabel": "először jelenik meg"
+    },
+    {
+      "source": "nietzsche",
+      "target": "amor_fati",
+      "relationLabel": "kulcsfogalma"
+    },
+    {
+      "source": "alapfogalmak",
+      "target": "amor_fati",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "amor_fati",
+      "target": "tragikus_eletigenles",
+      "relationLabel": "megnyilvánulása"
+    },
+    {
+      "source": "amor_fati",
+      "target": "ewige_wiederkehr",
+      "relationLabel": "hozzáállás az"
+    },
+    {
+      "source": "amor_fati",
+      "target": "ubermensch",
+      "relationLabel": "jellemzője"
+    },
+    {
+      "source": "amor_fati",
+      "target": "hatalom_akarasa",
+      "relationLabel": "kifejeződése"
+    },
+    {
+      "source": "amor_fati",
+      "target": "umwertung_aller_werte",
+      "relationLabel": "eredménye/célja"
+    },
+    {
+      "source": "amor_fati",
+      "target": "szuksegszeruseg_es_veletlen_igenlese",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "amor_fati",
+      "target": "szenvedes_es_nehezsegek_elfogadasa",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "az_elet_teljes_igenlese",
+      "target": "amor_fati",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "tragikus_eletigenles",
+      "target": "szenvedes_es_nehezsegek_elfogadasa",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "ewige_wiederkehr",
+      "target": "szuksegszeruseg_es_veletlen_igenlese",
+      "relationLabel": "szükséges hozzá"
+    },
+    {
+      "source": "hatalom_akarasa",
+      "target": "szuksegszeruseg_es_veletlen_igenlese",
+      "relationLabel": "kifejeződése"
+    },
+    {
+      "source": "moralitas_kritikaja",
+      "target": "szenvedes_es_nehezsegek_elfogadasa",
+      "relationLabel": "ellentéte"
+    },
+    {
+      "source": "ressentiment",
+      "target": "szenvedes_es_nehezsegek_elfogadasa",
+      "relationLabel": "ellentéte"
+    },
+    {
+      "source": "nietzsche",
+      "target": "az_elet_teljes_igenlese",
+      "relationLabel": "filozófiája az"
+    },
+    {
+      "source": "eletfilozofia",
+      "target": "az_elet_teljes_igenlese",
+      "relationLabel": "kategóriája"
+    },
+    {
+      "source": "tragikus_eletigenles",
+      "target": "az_elet_teljes_igenlese",
+      "relationLabel": "formája"
+    },
+    {
+      "source": "hatalom_akarasa",
+      "target": "az_elet_teljes_igenlese",
+      "relationLabel": "kifejeződése"
+    }
+  ],
+  "customOrder": [
+    "nietzsche",
+    "filozofia_altalanos_szemlelete",
+    "akarat_a_rendszer_elleneben",
+    "eletfilozofia",
+    "perspektivizmus",
+    "alapfogalmak",
+    "hatalom_akarasa",
+    "ubermensch",
+    "ressentiment",
+    "umwertung_aller_werte",
+    "ewige_wiederkehr",
+    "a_hatalom_akarasa",
+    "a_moral_genealogiaja",
+    "igy_szolott_zarathustra",
+    "tul_jon_es_rosszon",
+    "filozofia_es_muveszet",
+    "a_tragedia_szuletese",
+    "dionuszoszi_es_apolloni",
+    "muveszet_mint_eletigenles",
+    "tragikus_eletigenles",
+    "kritika_es_szemleletvaltas",
+    "isten_halala",
+    "moralitas_kritikaja",
+    "nihilizmus",
+    "nyugati_metafizika_kritikaja",
+    "a_vidam_tudomany",
+    "amor_fati",
+    "szuksegszeruseg_es_veletlen_igenlese",
+    "szenvedes_es_nehezsegek_elfogadasa",
+    "az_elet_teljes_igenlese"
+  ],
+  "metadata": {
+    "icon": "gavel"
+  }
+}

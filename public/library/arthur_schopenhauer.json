@@ -1,0 +1,1137 @@
+{
+  "nodes": [
+    {
+      "id": "schopenhauer",
+      "label": "Arthur Schopenhauer",
+      "type": "ROOT",
+      "shortSummary": "Arthur Schopenhauer (1788–1860) német filozófus, akinek rendszere a kanti ismeretelméletre épül, de azt egy pesszimista, voluntarista metafizikával egészíti ki, melynek középpontjában az _akarat_ áll.",
+      "longExplanation": "Arthur Schopenhauer a 19. század egyik legjelentősebb gondolkodója, aki élesen szembefordult kora domináns filozófiai áramlatával, a német idealizmussal, különösen Hegel rendszerével. Filozófiája a kanti _Ding an sich_ fogalmát értelmezi újra, azonosítva azt egy vak, irracionális, örökös törekvéssel, az _akarattal_, amely a világ minden jelenségének alapja. Ez az _akarat_ nem egy tudatos szándék, hanem egy metafizikai erő, amely az egész létezést áthatja, és az egyéni létezésben is megnyilvánul.\n\nSchopenhauer rendszere mélyen pesszimista, mivel az _akarat_ örökös kielégíthetetlenségét és az ebből fakadó _szenvedést_ tekinti az emberi lét alapvető jellemzőjének. Azonban felkínál utakat a szenvedés enyhítésére, sőt, az _akarat_ tagadására is, melyek közül a művészet, az _esztétikai szemlélődés_ és az _aszkézis_ a legfontosabbak. Filozófiája jelentős hatást gyakorolt a későbbi gondolkodókra, mint Nietzsche, Freud, és számos művészre, irodalmárra.",
+      "connections": [
+        "nemet_idealizmus_felbomlasa",
+        "schopenhauer_filozofiaja",
+        "a_vilag_mint_akarat_es_kepzet"
+      ]
+    },
+    {
+      "id": "nemet_idealizmus_felbomlasa",
+      "label": "A német idealizmus felbomlása",
+      "type": "CATEGORY",
+      "shortSummary": "A német idealizmus, különösen Hegel rendszere, a 19. század elején érte el csúcspontját, ám Schopenhauer radikális kritikája és a kor tudományos, társadalmi, valamint romantikus áramlatai együttesen vezettek annak felbomlásához. Ez a folyamat megkérdőjelezte a tiszta ész mindenhatóságát és utat nyitott az irracionális, az egyéni tapasztalat és a szenvedés filozófiai reflektálására.",
+      "longExplanation": "A 19. század elején a német idealizmus, mely Immanuel Kant transzcendentális filozófiájából sarjadt, Fichte, Schelling és különösen Georg Wilhelm Friedrich Hegel munkásságában érte el szisztematikus csúcspontját. Hegel monumentális rendszere egy átfogó, racionális, dialektikus fejlődést vázolt fel, amelyben a Szellem (Geist) önmagát ismeri meg a történelem során, egy szükségszerű és progresszív folyamat részeként. Ez a „panlogizmus” azonban egyre inkább dogmatikussá vált, és nem tudott kielégítő választ adni az egyéni emberi szenvedés, az irracionális erők, a véletlen és a történelemben megnyilvánuló értelmetlenség problémájára, melyek Schopenhauer számára központi jelentőséggel bírtak. A hegeli rendszer absztrakt, az élettől elszakadt jellege, valamint az állam és a történelem felmagasztalása egyre nagyobb ellenállást váltott ki.\n\nArthur Schopenhauer élesen bírálta Hegel „állami filozófiáját” és a dialektika „üres szószaporítását”, rámutatva a hegeli rendszer spekulatív, valóságtól elrugaszkodott jellegére. Schopenhauer a világot az ész által megismerhetetlen, vak és céltalan „Akarat” megnyilvánulásaként értelmezte, mely örökös szenvedés forrása. Ez a pesszimista, irracionális alapokon nyugvó metafizika alapjaiban rengette meg a hegeli optimista racionalizmust és a történelem progresszív értelmezését. A német idealizmus felbomlása azonban nem csupán Schopenhauer kritikájának köszönhető, hanem a kor tudományos felfedezéseinek (pl. a természettudományok fejlődése), a romantika irracionális, szubjektív áramlatainak, valamint a társadalmi és politikai változásoknak is, amelyek megkérdőjelezték a tiszta ész mindenhatóságát és a történelem szükségszerű haladását. Ez a paradigmaváltás utat nyitott a 19. század második felének és a 20. század elejének olyan filozófiai irányzatai előtt, amelyek az egyéni létezést, az irracionálist és az életfilozófiát helyezték előtérbe.",
+      "connections": [
+        "hegeli_rendszer_kritikaja",
+        "kant",
+        "hegel"
+      ],
+      "conceptContext": "Schopenhauer kritikája a hegeli idealizmussal szemben több ponton is rezonál más gondolkodók munkásságával. Søren Kierkegaard például szintén élesen bírálta Hegel rendszerét, az egyéni szubjektív tapasztalatot és a hitet állítva szembe a rendszerfilozófia absztrakt, objektív totalitásával. Friedrich Nietzsche, aki Schopenhauer hatása alatt állt, tovább vitte az irracionális „akarat” gondolatát a „hatalom akarása” koncepciójában, és radikálisan megkérdőjelezte a nyugati metafizika és moralitás racionális alapjait. Karl Marx is a hegeli idealizmus kritikájából indult ki, de materialista fordulatot hajtott végre, a gazdasági és társadalmi viszonyokat téve meg a történelem mozgatórugójává, szemben a Szellem fejlődésével. A felvilágosodás racionalizmusával szemben Schopenhauer az irracionális erők primátusát hangsúlyozta, ami előrevetítette a 20. századi egzisztencializmus és az életfilozófiák számos elemét.\n\nA német idealizmus felbomlása és az irracionális erők előtérbe kerülése analógiát mutat a pszichológia fejlődésével. A 19. század végén és a 20. század elején Sigmund Freud pszichoanalízise gyökeresen átalakította az emberi elme megértését, bevezetve a tudattalan fogalmát. Freud elmélete szerint az emberi viselkedést és gondolkodást nagyrészt irracionális, ösztönös, tudattalan erők – mint az ösztönén (id) – vezérlik, szemben a tudatos, racionális én (ego) kontrolljával. Ez a felfedezés éppúgy megkérdőjelezte a tiszta ész mindenhatóságát az emberi pszichében, ahogyan Schopenhauer az Akarat fogalmával a világ működésében. Mindkét gondolkodó az emberi tapasztalat mélyebb, nem racionális rétegeibe hatolt, feloldva a felvilágosodás emberképének egységes, racionális illúzióját.",
+      "index": 1,
+      "x": -170.5368720392386,
+      "y": -222.12911397580595,
+      "vy": -0.027923983071348017,
+      "vx": 0.016045870142744865,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "hegeli_rendszer_kritikaja",
+      "label": "A hegeli rendszer kritikája",
+      "type": "CONCEPT",
+      "shortSummary": "Schopenhauer élesen bírálta Hegel rendszerét, azt egy absztrakt, racionális konstrukciónak tartva, amely figyelmen kívül hagyja a valóság alapját képező, vak és irracionális „akarat” primátusát, valamint az emberi lét mély szenvedését és tragikumát.",
+      "longExplanation": "Schopenhauer számára Georg Wilhelm Friedrich Hegel filozófiája nem csupán tévedés volt, hanem egyenesen a valóság elferdítése, egy „üres szószaporítás” és „színlelés”, amely a fogalmakat a tapasztalat fölé helyezte. A hegeli dialektikus módszert Schopenhauer mesterkéltnek és a valóság komplexitását leegyszerűsítőnek ítélte, amely egy kényszeresen optimista, teleologikus narratívát erőltetett a világra. A kritika lényege abban állt, hogy Hegel rendszere, az Abszolút Szellem racionális kibontakozására fókuszálva, teljesen figyelmen kívül hagyta a lét alapvető irracionalitását, a vak, céltalan „akarat” mindent átható erejét, valamint az emberi létezés elkerülhetetlen szenvedését és tragikumát. Schopenhauer szerint Hegel filozófiája egy „állami filozófia” volt, amely a fennálló rendet igazolta, és elfordult a valóság fájdalmas igazságaitól. A két gondolkodó közötti alapvető szakadék a valóság végső princípiumának megértésében rejlett. Míg Hegel az ész, a racionális fejlődés és a Szellem történelmi kibontakozásának primátusát hirdette, addig Schopenhauer az irracionális, öntudatlan „akaratot” tette meg a világ lényegévé, amely a jelenségek mögött húzódó, metafizikai „dolog a maga valójában”. Ez a szembenállás nem csupán módszertani, hanem mélyen ontológiai és etikai jellegű volt. Schopenhauer kritikája hozzájárult ahhoz, hogy a 19. századi filozófia figyelme a racionális, idealista rendszerektől az irracionális, egzisztenciális és pesszimista gondolkodás felé forduljon, megnyitva az utat olyan későbbi gondolkodók számára, mint Nietzsche vagy Freud, akik szintén az emberi lélek mélyebb, irracionális rétegeit kutatták.",
+      "connections": [
+        "nemet_idealizmus_felbomlasa",
+        "akarat",
+        "szenvedes"
+      ],
+      "conceptContext": "Schopenhauer kritikája több ponton is rezonál más filozófusok gondolataival. Søren Kierkegaard például szintén élesen bírálta Hegel absztrakt, rendszerező gondolkodását, amely szerinte elhanyagolta az egyéni létezés szubjektivitását és a választás egzisztenciális súlyát. Friedrich Nietzsche, bár más alapokról indult, szintén elvetette Hegel optimista teleológiáját és a történelem racionális haladásába vetett hitét, hangsúlyozva az élet irracionális, dionüszoszi aspektusait és az „akarat a hatalomra” primátusát, ami Schopenhauer „akarat” fogalmának egyfajta átértelmezése. Interdiszciplináris analógiaként gondolhatunk a modern pszichológiára. Sigmund Freud pszichoanalízise például Schopenhauer „akarat” fogalmának egyfajta pszichológiai megfelelőjét kínálja az öntudatlan ösztönök, vágyak és az „ösztönén” (id) primátusának hangsúlyozásával, szemben a tudatos, racionális „énnel” (ego) és „felettes énnel” (superego). A hegeli rendszer a racionális, tudatos Szellem fejlődését írná le, míg Schopenhauer kritikája és saját filozófiája az emberi psziché mélyén rejlő, irracionális, kontrollálhatatlan erőkre hívja fel a figyelmet, amelyek valójában irányítják a cselekedeteinket és a világot. Ez a megközelítés párhuzamba állítható a biológia azon felismerésével is, hogy az evolúciót nem egy racionális terv, hanem a vak, céltalan természetes szelekció és a túlélési ösztönök hajtják.",
+      "index": 2,
+      "x": -326.6846713851557,
+      "y": 92.74266992082049,
+      "vy": -0.008808294729373113,
+      "vx": 0.013436746582249356,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "schopenhauer_filozofiaja",
+      "label": "A schopenhaueri filozófia alapstruktúrája",
+      "type": "CATEGORY",
+      "shortSummary": "Schopenhauer filozófiája a kanti _Ding an sich_ újrafogalmazásán alapul, azonosítva azt az _akarattal_, amely a világ jelenségeinek alapja, és a _képzet_ formájában jelenik meg számunkra.",
+      "longExplanation": "A schopenhaueri filozófia két alapvető pilléren nyugszik: a _világ mint képzet_ és a _világ mint akarat_. Az első a jelenségvilágra vonatkozik, amelyet az emberi _szubjektum_ a tér, idő és kauzalitás kanti formáiban és kategóriáiban észlel. Ez a világ a mi tudatunk számára hozzáférhető, és mint ilyen, mindig egy _szubjektum_ számára _objektum_. A _képzet_ világa tehát a jelenségek világa, amelyben élünk és cselekszünk.\n\nAzonban Schopenhauer szerint a _képzet_ világa mögött egy mélyebb valóság húzódik meg: az _akarat_. Ez az _akarat_ a _Ding an sich_, a dolgok önmagukban való lényege, amely vak, céltalan, irracionális és örökös törekvés. Az _akarat_ nem csupán az emberi vágyakat és ösztönöket jelenti, hanem az egész kozmoszt átható, minden jelenség alapját képező metafizikai erőt. Az _akarat_ megnyilvánulása az _objektiváció_ különböző fokozataiban történik, a természeti erőktől az emberi testig és tudatig.",
+      "connections": [
+        "akarat",
+        "kepzet",
+        "metafizika",
+        "ismeretelmelet",
+        "a_vilag_mint_akarat_es_kepzet"
+      ],
+      "conceptContext": "A schopenhaueri filozófia alapstruktúrája a kanti transzcendentális idealizmusból indul ki, de elutasítja annak morális optimizmusát és a _Ding an sich_ megismerhetetlenségét, ehelyett egy voluntarista, pesszimista metafizikát állítva a középpontba. Ezzel szemben áll a hegeli abszolút idealizmus, amely a Szellem racionális kibontakozását hangsúlyozza."
+    },
+    {
+      "id": "akarat",
+      "label": "Akarat",
+      "type": "CONCEPT",
+      "shortSummary": "Az „Akarat” (németül: „Wille”) Arthur Schopenhauer filozófiájának központi metafizikai fogalma, a jelenségvilág mögötti, kanti „magánvaló dolog” vak, irracionális és céltalan, örökös törekvése. Ez a kozmikus, kielégíthetetlen erő minden létezőben megnyilvánulva a szenvedés alapja.",
+      "longExplanation": "Schopenhauer metafizikájában az _akarat_ (németül: „Wille”) nem tudatos szándék, hanem egy mindent átható, vak, irracionális és céltalan kozmikus princípium. Ez a kielégíthetetlen, örökös törekvés a jelenségvilág mögötti „magánvaló dolog”, melynek különböző fokú objektivációi alkotják a világot, a természeti erőktől az élő szervezetekig. Az emberi értelem és tudat másodlagosak, az _akarat_ szolgálatában állnak, és felismerve annak kielégíthetetlen természetét, a szenvedés forrásává válnak. Az _akarat_ sosem érhet el végső kielégülést, folyamatosan újabb vágyakba hajszolja magát, ebből fakad a lét alapvető fájdalma és tragikuma.",
+      "connections": [
+        "schopenhauer_filozofiaja",
+        "kepzet",
+        "objektivacio",
+        "szenvedes",
+        "akarat_tagadasa",
+        "metafizika"
+      ],
+      "conceptContext": "Az _akarat_ fogalma Schopenhauer főművében, _A világ mint akarat és képzet_ című művében bontakozik ki, radikálisan értelmezve Kant „magánvaló dolog” koncepcióját. Míg Kant szerint a magánvaló megismerhetetlen, Schopenhauer azt azonosítja az akarattal, amely a jelenségvilág mögötti egyetlen valóság. Ez a gondolat éles ellentétben áll a felvilágosodás és a német idealizmus (különösen Hegel) racionalista optimizmusával, amelyek az ész primátusát hirdették. Schopenhauer ezzel a pesszimista, irracionális metafizikával a 19. századi filozófia egyik legjelentősebb alakjává vált, hatást gyakorolva többek között Nietzschére és Freudra, valamint párhuzamokat mutatva keleti filozófiai rendszerekkel, mint a buddhizmus.",
+      "index": 4,
+      "x": 752.3227452898653,
+      "y": 438.3498866469527,
+      "vy": 0.0068136976196944915,
+      "vx": -0.022444681492395858,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "kepzet",
+      "label": "Képzet",
+      "type": "CONCEPT",
+      "shortSummary": "A _képzet_ a világ azon aspektusa, amely a _szubjektum_ számára hozzáférhető, a tér, idő és kauzalitás formáiban megjelenő jelenségvilág.",
+      "longExplanation": "A _képzet_ a schopenhaueri filozófia másik alappillére, amely a kanti _jelenség_ fogalmának felel meg. A világ, ahogyan azt észleljük és megismerjük, mindig _képzet_ formájában jelenik meg számunkra. Ez azt jelenti, hogy a világ nem létezik önmagában, függetlenül a _szubjektumtól_, hanem mindig egy _szubjektum_ számára _objektumként_ létezik. A _képzet_ világa a tér, idő és kauzalitás (okság) formáiban szerveződik, amelyek a _szubjektum_ apriori ismereti formái.\n\nA _képzet_ világa tehát a jelenségek világa, amelyben az _akarat_ megnyilvánul. Azonban a _képzet_ csak az _akarat_ külső, felszíni megjelenése, nem maga az _akarat_ lényege. A _képzet_ világa illuzórikus, egyfajta „Mája fátyla”, amely elrejti az _akarat_ valódi, szenvedéssel teli természetét. Az _esztétikai szemlélődés_ során azonban az ember képes ideiglenesen megszabadulni az _akarat_ rabságából, és a _képzet_ világát tisztán, az _akarat_ céljaitól függetlenül szemlélni.",
+      "connections": [
+        "schopenhauer_filozofiaja",
+        "akarat",
+        "szubjektum",
+        "objektum",
+        "ismeretelmelet",
+        "a_vilag_mint_akarat_es_kepzet"
+      ],
+      "conceptContext": "A _képzet_ fogalma szorosan kapcsolódik Kant _jelenség_ fogalmához, de Schopenhauer továbbfejleszti azt, hangsúlyozva a _képzet_ illuzórikus jellegét és az _akarat_ mögöttes valóságát. Ezzel szemben áll a naiv realizmus, amely a világot közvetlenül, _képzet_ nélkül hozzáférhetőnek tekinti, valamint a hegeli abszolút idealizmus, amely a valóságot a Szellem racionális megnyilvánulásaként értelmezi."
+    },
+    {
+      "id": "a_vilag_mint_akarat_es_kepzet",
+      "label": "_A világ mint akarat és képzet_",
+      "type": "WORK",
+      "shortSummary": "Schopenhauer főműve, amelyben kifejti metafizikai rendszerét, az _akarat_ és a _képzet_ kettősségét, valamint az _akarat_ tagadásának útjait.",
+      "longExplanation": "Schopenhauer főműve, _A világ mint akarat és képzet_ (1818, átdolgozott kiadás 1844, 1859) négy könyvből áll, amelyek szisztematikusan mutatják be filozófiáját. Az első könyv a világot mint _képzetet_ tárgyalja, a _szubjektum_ és _objektum_ viszonyában, a tér, idő és kauzalitás formáiban. A második könyv a világot mint _akaratot_ mutatja be, mint a _Ding an sich_ megnyilvánulását, amely a természet minden jelenségében és az emberi testben is megnyilvánul.\n\nA harmadik könyv az _esztétikával_ foglalkozik, bemutatva, hogyan képes a művészet, különösen a _zene_, ideiglenesen megszabadítani az embert az _akarat_ rabságából, lehetővé téve a tiszta, _akarat_ nélküli szemlélődést. A negyedik könyv az _etikát_ és az _akarat_ tagadásának útjait tárgyalja, mint az _aszkézis_, a _szimpátia_ és a _szenvedés_ tudatos elfogadása, amelyek a megváltáshoz vezethetnek. A mű mélyrehatóan elemzi az emberi lét alapvető _szenvedését_ és a lehetséges kiutakat.",
+      "connections": [
+        "schopenhauer",
+        "akarat",
+        "kepzet",
+        "metafizika",
+        "etika",
+        "esztetika",
+        "szenvedes",
+        "akarat_tagadasa",
+        "művészet",
+        "zene"
+      ]
+    },
+    {
+      "id": "metafizika",
+      "label": "Metafizika",
+      "type": "CATEGORY",
+      "shortSummary": "Schopenhauer metafizikája az _akarat_ primátusát hirdeti, mint a világ alapvető, irracionális lényegét, amely a _képzet_ formájában jelenik meg.",
+      "longExplanation": "Schopenhauer metafizikája a kanti _Ding an sich_ fogalmának radikális újraértelmezésén alapul. Míg Kant szerint a _Ding an sich_ megismerhetetlen, Schopenhauer azonosítja azt az _akarattal_, amely nem egy tudatos, racionális entitás, hanem egy vak, céltalan, örökös törekvés. Ez az _akarat_ a világ minden jelenségének alapja, a természeti erőktől az emberi vágyakig. Az _akarat_ önmagában véve egységes és oszthatatlan, de a _képzet_ világában sokféleségként, az _objektiváció_ különböző fokozataiként jelenik meg.\n\nEz a voluntarista metafizika élesen szemben áll a korábbi filozófiai rendszerekkel, amelyek az észt, a Szellemet vagy Istent tekintették a világ alapjának. Schopenhauer szerint az _akarat_ örökös kielégíthetetlensége az alapja a _szenvedésnek_, amely az emberi lét elkerülhetetlen velejárója. A metafizika célja nem csupán a világ megértése, hanem a _szenvedés_ okainak feltárása és a lehetséges kiutak megmutatása.",
+      "connections": [
+        "schopenhauer_filozofiaja",
+        "akarat",
+        "kepzet",
+        "objektivacio",
+        "szenvedes"
+      ],
+      "conceptContext": "Schopenhauer metafizikája a kanti _Ding an sich_ fogalmát radikálisan újraértelmezve egy voluntarista, pesszimista rendszert hoz létre, amely élesen szemben áll a hegeli abszolút idealizmus racionális, teleologikus metafizikájával. Párhuzamba állítható a keleti filozófiák (pl. buddhizmus) bizonyos elemeivel a _szenvedés_ központi szerepe és a vágyak tagadásának fontossága miatt."
+    },
+    {
+      "id": "etika",
+      "label": "Etika",
+      "type": "CATEGORY",
+      "shortSummary": "Schopenhauer etikája a _szenvedés_ enyhítésére és az _akarat_ tagadására összpontosít, a _szimpátiát_ és az _aszkézist_ jelölve meg a morális cselekvés alapjaként.",
+      "longExplanation": "Schopenhauer etikája mélyen gyökerezik pesszimista metafizikájában, amely szerint az _akarat_ örökös törekvése és kielégíthetetlensége az alapja minden _szenvedésnek_. A morális cselekvés célja nem a boldogság elérése, hanem a _szenvedés_ enyhítése, mind a sajátunké, mind másoké. A morál alapja a _szimpátia_ (Mitleid), azaz a mások _szenvedésével_ való azonosulás, amely a _világ mint akarat_ egységének felismeréséből fakad. Ez a _szimpátia_ vezet az önzetlen cselekedetekhez, amelyek túllépnek az egyéni _akarat_ egoista törekvésein.\n\nA legmagasabb etikai út az _akarat_ tagadása, amely az _aszkézis_ és a _szenvedés_ tudatos elfogadása révén valósul meg. Ez a tagadás nem öngyilkosságot jelent, hanem a vágyakról, az életigenlésről való lemondást, a nem-akarást. Az _akarat_ tagadása vezet a megváltáshoz, a _nirvána_ állapotához, ahol az egyén megszabadul az _akarat_ rabságából és a _szenvedés_ körforgásából. Ez az etika élesen szemben áll Kant kötelességetikájával, amely a racionális _kategorikus imperatívuszra_ épül.",
+      "connections": [
+        "schopenhauer_filozofiaja",
+        "akarat",
+        "szenvedes",
+        "akarat_tagadasa",
+        "szimpátia",
+        "aszkézis",
+        "a_vilag_mint_akarat_es_kepzet"
+      ],
+      "conceptContext": "Schopenhauer etikája élesen szemben áll Kant racionális, kötelességalapú etikájával és a utilitarista etikákkal, amelyek a boldogság maximalizálására törekednek. Közelebb áll a buddhista etikához a _szenvedés_ központi szerepe és a vágyakról való lemondás hangsúlyozása miatt. Nietzsche kritikája Schopenhauer pesszimizmusával és az _akarat_ tagadásával szemben egy másik fontos kontrasztot jelent."
+    },
+    {
+      "id": "esztetika",
+      "label": "Esztétika",
+      "type": "CATEGORY",
+      "shortSummary": "Schopenhauer esztétikája szerint a _művészet_ és különösen a _zene_ képes ideiglenesen megszabadítani az embert az _akarat_ rabságából, lehetővé téve a tiszta, _akarat_ nélküli szemlélődést.",
+      "longExplanation": "Schopenhauer esztétikája az _akarat_ tagadásának egyik legfontosabb útja. A _művészet_ révén az ember képes túllépni az egyéni _akarat_ céljain és vágyain, és a _képzet_ világát tisztán, öncélúan szemlélni. Az _esztétikai szemlélődés_ során a _szubjektum_ ideiglenesen megszűnik egyéni _akarat_ hordozója lenni, és tiszta, _akarat_ nélküli, „tükörré” válik, amely a platóni _ideákat_ tükrözi. Ezek az _ideák_ az _akarat_ _objektivációjának_ különböző fokozatai, amelyek a jelenségvilág mögött állnak.\n\nA _zene_ különleges helyet foglal el Schopenhauer esztétikájában, mivel nem az _ideákat_ tükrözi, hanem közvetlenül az _akaratot_ fejezi ki, annak legmélyebb lényegét. A _zene_ ezért a legmagasabb rendű _művészet_, amely a legközvetlenebbül képes megmutatni az _akarat_ lényegét, és ezáltal a legmélyebb megváltó élményt nyújtja. Az _esztétikai szemlélődés_ pillanatai a _szenvedés_től való ideiglenes megszabadulás pillanatai, amelyek előrevetítik az _akarat_ teljes tagadásának lehetőségét.",
+      "connections": [
+        "schopenhauer_filozofiaja",
+        "akarat",
+        "kepzet",
+        "művészet",
+        "zene",
+        "objektivacio",
+        "a_vilag_mint_akarat_es_kepzet"
+      ],
+      "conceptContext": "Schopenhauer esztétikája eltér a klasszikus esztétikai elméletektől, amelyek a szépséget a harmóniával vagy a tökéletességgel azonosítják. Közelebb áll a romantikus esztétikához az irracionális és a szubjektív élmény hangsúlyozásával, de egyedülálló a _zene_ metafizikai primátusának megállapításában. Nietzsche esztétikája, különösen az apollói és dionüszoszi kettősség, részben Schopenhauer _akarat_ és _képzet_ kettősségének továbbgondolása."
+    },
+    {
+      "id": "ismeretelmelet",
+      "label": "Ismeretelmélet",
+      "type": "CATEGORY",
+      "shortSummary": "Schopenhauer ismeretelmélete Kant transzcendentális idealizmusából indul ki, a világot mint „képzetet” a szubjektum apriori formái által konstituált jelenségvilágnak tekinti. Ugyanakkor eltér Kanttól azáltal, hogy a „magánvaló dolgot” (Ding an sich) az univerzális „Akarattal” azonosítja, mely belső tapasztalat révén közvetlenül hozzáférhető.",
+      "longExplanation": "Schopenhauer ismeretelmélete Immanuel Kant transzcendentális idealizmusán alapul, mely szerint a tapasztalati világ („képzet”) a szubjektum a priori szemléleti formái (tér, idő) és az értelem kategóriái (különösen a kauzalitás) által konstituált jelenségvilág. A szubjektum tehát aktívan strukturálja a tapasztalatot. Schopenhauer azonban feloldja Kant „magánvaló dolog” (Ding an sich) megismerhetetlenségét.\n\nÉrvelése szerint a magánvaló dolog nem más, mint az univerzális _akarat_, melyet közvetlenül, belsőleg tapasztalunk meg saját testünkben mint törekvést, vágyat és ösztönt. Ez a belső, intuitív tapasztalat nyújt hozzáférést a jelenségvilág mögötti metafizikai valósághoz, az akarathoz, amely az egész kozmosz alapelve.",
+      "connections": [
+        "schopenhauer_filozofiaja",
+        "kant",
+        "akarat",
+        "kepzet",
+        "szubjektum",
+        "objektum",
+        "ding_an_sich"
+      ],
+      "conceptContext": "Schopenhauer ismeretelmélete a német idealizmus, különösen Kant kritikai filozófiájának örököse. Míg Kant szigorúan elválasztotta a jelenségvilágot a megismerhetetlen „magánvaló dologtól”, Schopenhauer a poszt-kanti idealisták (pl. Fichte, Schelling) azon törekvéséhez csatlakozik, hogy áthidalja ezt a szakadékot. Azonban ő nem az Én vagy az Abszolútum révén teszi ezt, hanem egy univerzális, irracionális „Akarat” bevezetésével, amely egyedülálló módon összeköti az ismeretelméletet a metafizikával és az etikával, megalapozva pesszimista világnézetét. Ez a megközelítés éles kontrasztban áll a hegeli dialektikával és a tiszta ész primátusával.",
+      "index": 10,
+      "x": 1419.474130965809,
+      "y": -323.0634102651804,
+      "vy": -0.0050517567638276315,
+      "vx": -0.003079348254576871,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "kant",
+      "label": "Immanuel Kant",
+      "type": "CONCEPT",
+      "shortSummary": "Immanuel Kant (1724–1804) a felvilágosodás korának meghatározó német filozófusa, akinek transzcendentális idealizmusa, különösen a jelenségvilág és a megismerhetetlen „magánvaló dolog” („Ding an sich”) közötti éles megkülönböztetése alapvető kiindulópontot és egyben vitapontot jelentett Arthur Schopenhauer filozófiája számára.",
+      "longExplanation": "Immanuel Kant kritikai filozófiája a modern gondolkodás egyik sarokköve, amely radikálisan átalakította az ismeretelméletet és a metafizikát. Fő műveiben, mint a *Tiszta ész kritikája*, azt vizsgálta, hogyan lehetséges az apriori szintetikus ítélet, és ezzel az objektív tudás. Kant szerint az emberi megismerés nem passzív tükrözése a valóságnak, hanem aktív, konstitutív folyamat. A valóságot, amelyet megtapasztalunk, a szubjektum apriori szemléleti formái – a tér és az idő – és az értelem apriori kategóriái – mint az okság, egység, sokaság – strukturálják. Ez a jelenségvilág, vagyis a „fenomenális” valóság. Ezzel szemben áll a „magánvaló dolog” („Ding an sich”), amely a jelenségeken túli, független valóság, ám számunkra elvileg megismerhetetlen marad, mivel minden megismerésünk a szubjektum formáin és kategóriáin keresztül szűrődik. Kant ezzel a megkülönböztetéssel igyekezett megmenteni a tudomány objektivitását, miközben teret engedett a morális szabadságnak és a vallásos hitnek.\n\nSchopenhauer Kantot tartotta az egyetlen valódi elődjének, aki felismerte a szubjektum aktív szerepét a valóság konstituálásában, és a világot „reprezentációként” értelmezte. Schopenhauer azonban túllépett Katon, amikor a megismerhetetlen „magánvaló dolgot” az egyetemes, vak és irracionális „akarattal” azonosította, amely a jelenségvilág mögött meghúzódó metafizikai valóság. Ezzel egy voluntarista metafizikát alapozott meg, amely élesen eltért Kant racionálisabb és morálisabb alapokon nyugvó rendszerétől. Míg Kant számára a „Ding an sich” egy megismerhetetlen határfogalom maradt, Schopenhauer számára ez vált a világ lényegévé, amelyhez közvetlen intuitív hozzáférésünk van a saját testünkön keresztül. Az etika terén is jelentős a különbség: Kant a kötelességtudatot és az ész univerzális törvényeit hangsúlyozó kategorikus imperatívuszt állította a középpontba, míg Schopenhauer a szimpátián, az együttérzésen alapuló etikát hirdette, amely a szenvedés felismeréséből és az akarat tagadásából fakad.",
+      "connections": [
+        "nemet_idealizmus_felbomlasa",
+        "ismeretelmelet",
+        "ding_an_sich",
+        "kategorikus_imperativusz"
+      ],
+      "index": 11,
+      "x": 368.83754168104167,
+      "y": -537.9548260012778,
+      "vy": -0.02247113799218727,
+      "vx": 0.0045122037283763326,
+      "fx": null,
+      "fy": null,
+      "conceptContext": "Kant filozófiája számos ponton érintkezik más gondolkodók munkásságával, miközben radikálisan új utakat nyitott. Az apriori tudás és a tapasztalat szerepének vizsgálata visszavezethető Platón ideáinak és a jelenségvilág megkülönböztetéséhez, bár Kantnál ez epistemológiai, nem ontológiai különbségtétel. Descartes szubjektumközpontú filozófiája, amely a „cogito ergo sum” elvével a gondolkodó énre helyezi a hangsúlyt, szintén előzménynek tekinthető Kant transzcendentális idealizmusához. Ugyanakkor David Hume radikális empirizmusa és szkepticizmusa, különösen az okság fogalmával kapcsolatban, ébresztette fel Kantot „dogmatikus szendergéséből”, és késztette a megismerés apriori feltételeinek vizsgálatára.\n\nInterdiszciplináris analógiaként Kant megismeréselmélete a modern kognitív tudományokhoz, különösen a pszichológiához és a neurobiológiához hasonlítható. Ahogy az emberi agy nem passzívan fogadja be a nyers érzékszervi adatokat, hanem aktívan feldolgozza, strukturálja és értelmezi azokat – például a vizuális kéreg különböző területei felelnek a színek, formák, mozgás érzékeléséért, majd ezeket integrálják egy koherens percepcióvá –, úgy Kant szerint a tudatunk is apriori formák és kategóriák segítségével konstruálja meg a jelenségvilágot. Egy másik példa lehet a virtuális valóság (VR) rendszere: a felhasználó egy strukturált, interaktív világot tapasztal meg, amelynek szabályai és megjelenése a rendszer szoftveres és hardveres keretei által meghatározottak, és alapvetően különbözik a mögöttes bináris kódtól és elektronikus áramköröktől, amelyek a „magánvaló dolog” analógiái lehetnek."
+    },
+    {
+      "id": "hegel",
+      "label": "Georg Wilhelm Friedrich Hegel",
+      "type": "CONCEPT",
+      "shortSummary": "Georg Wilhelm Friedrich Hegel (1770–1831) német idealista filozófus, akinek dialektikus rendszere a Szellem fejlődését állította a középpontba, és akit Schopenhauer élesen kritizált.",
+      "longExplanation": "Georg Wilhelm Friedrich Hegel a német idealizmus csúcspontját képviselte, egy átfogó, dialektikus rendszert alkotva, amelyben a Szellem (Geist) önmagát ismeri meg a történelem és a kultúra fejlődése során. Rendszere teleologikus és optimista volt, a racionális fejlődésbe vetett hit jellemezte. Hegel filozófiája a korabeli egyetemi élet domináns áramlata volt, és jelentős hatást gyakorolt a későbbi politikai és társadalmi gondolkodásra.\n\nSchopenhauer élesen bírálta Hegelt, akit „sarlatánnak” és „üres szószaporítónak” nevezett. Különösen kifogásolta Hegel dialektikus módszerét, amelyet mesterkéltnek és a valóság lényegét elfedőnek tartott. Schopenhauer szerint Hegel rendszere figyelmen kívül hagyta az _akarat_ irracionális erejét és az emberi lét alapvető _szenvedését_, egy hamis, racionális optimizmust hirdetve. Ez a kritika alapvető volt a német idealizmus felbomlásában és Schopenhauer saját filozófiájának kialakulásában.",
+      "connections": [
+        "nemet_idealizmus_felbomlasa",
+        "hegeli_rendszer_kritikaja"
+      ]
+    },
+    {
+      "id": "objektivacio",
+      "label": "Objektiváció",
+      "type": "CONCEPT",
+      "shortSummary": "Az _objektiváció_ az _akarat_ megnyilvánulása a _képzet_ világában, különböző fokozatokban, a természeti erőktől az emberi testig és tudatig.",
+      "longExplanation": "Az _objektiváció_ Schopenhauer metafizikájában azt a folyamatot jelenti, ahogyan az egységes, oszthatatlan _akarat_ a _képzet_ világában sokféleségként, egyedi jelenségekként jelenik meg. Ezek az _objektiváció_ különböző fokozatai, amelyek a platóni _ideáknak_ felelnek meg. A legalacsonyabb fokon az _akarat_ a természeti erőkben (gravitáció, mágnesesség) objektiválódik, majd a növényi és állati fajokban, végül a legmagasabb fokon az emberben, ahol a tudatosság is megjelenik.\n\nAz _objektiváció_ minden fokán az _akarat_ önmagáért küzd, ami a _szenvedés_ alapja. Az emberben az _akarat_ tudatosul, ami fokozza a _szenvedést_, de egyben lehetőséget is teremt az _akarat_ felismerésére és tagadására. Az _objektiváció_ fogalma segít megérteni, hogyan kapcsolódik össze az _akarat_ mint _Ding an sich_ a jelenségvilággal, és hogyan válik az egységes metafizikai alap a sokféleség forrásává.",
+      "connections": [
+        "akarat",
+        "metafizika",
+        "kepzet",
+        "esztetika"
+      ],
+      "conceptContext": "Az _objektiváció_ fogalma Schopenhauernél a platóni _ideák_ és a kanti _Ding an sich_ közötti hidat képezi, de egy voluntarista keretben. Eltér a hegeli Szellem önmegnyilvánulásától, amely racionális és teleologikus, míg Schopenhauernél az _objektiváció_ vak és céltalan."
+    },
+    {
+      "id": "szubjektum",
+      "label": "Szubjektum",
+      "type": "CONCEPT",
+      "shortSummary": "A _szubjektum_ az, aki észlel, gondolkodik és akar, a _képzet_ világának konstituálója, amely számára az _objektum_ létezik.",
+      "longExplanation": "Schopenhauer ismeretelméletében a _szubjektum_ központi szerepet játszik. A _szubjektum_ az, aki a világot mint _képzetet_ létrehozza/megteremti a tér, idő és kauzalitás apriori formái által. Nincs _objektum_ _szubjektum_ nélkül, és nincs _szubjektum_ _objektum_ nélkül; a kettő elválaszthatatlanul összetartozik. A _szubjektum_ nem egy test, hanem a tiszta, _akarat_ nélküli tudat, amely a világot szemléli.\n\nAz emberi _szubjektum_ azonban nem csupán tiszta tudat, hanem az _akarat_ megnyilvánulása is. A testünk az _akarat_ _objektivációja_, és a _szubjektum_ tudata is az _akarat_ szolgálatában áll. Az _esztétikai szemlélődés_ során azonban a _szubjektum_ képes ideiglenesen megszabadulni az _akarat_ rabságából, és tiszta, _akarat_ nélküli szemlélővé válni, aki a platóni _ideákat_ ragadja meg.",
+      "connections": [
+        "kepzet",
+        "ismeretelmelet",
+        "objektum",
+        "akarat"
+      ],
+      "conceptContext": "A _szubjektum_ schopenhaueri fogalma Kant transzcendentális _szubjektumának_ továbbgondolása, de Schopenhauer hangsúlyozza az _akarat_ szerepét a _szubjektum_ konstituálásában. Eltér a karteziánus _cogito_tól, amely a tiszta észre fókuszál, és a hegeli Szellemtől, amely az abszolút tudást célozza.",
+      "index": 14,
+      "x": 1295.199625358371,
+      "y": -683.1543313666483,
+      "vy": -0.006931515891430249,
+      "vx": 0.03659542365007502,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "objektum",
+      "label": "Objektum",
+      "type": "CONCEPT",
+      "shortSummary": "Az _objektum_ a _szubjektum_ számára megjelenő világ, a _képzet_ formájában létező jelenség.",
+      "longExplanation": "Az _objektum_ Schopenhauer ismeretelméletében a _szubjektum_ számára megjelenő világot jelenti. Minden, amit észlelünk, gondolunk vagy tapasztalunk, _objektum_ a _szubjektum_ számára. Az _objektum_ nem létezik önmagában, függetlenül a _szubjektumtól_, hanem mindig a _szubjektum_ apriori formái (tér, idő, kauzalitás) által strukturált _képzet_ formájában. Az _objektum_ tehát a jelenségvilág, amelyben az _akarat_ megnyilvánul.\n\nAz _objektum_ és a _szubjektum_ elválaszthatatlanul összetartozik, egymás feltételei. Az _objektum_ sokfélesége az _akarat_ _objektivációjának_ különböző fokozatait tükrözi. Az _objektum_ világa, mint _képzet_, illuzórikus, egyfajta „Mája fátyla”, amely elrejti az _akarat_ valódi, szenvedéssel teli természetét.",
+      "connections": [
+        "kepzet",
+        "ismeretelmelet",
+        "szubjektum",
+        "akarat"
+      ],
+      "conceptContext": "Az _objektum_ schopenhaueri fogalma Kant _jelenség_ fogalmával rokon, de Schopenhauer hangsúlyozza az _akarat_ mint mögöttes valóság szerepét. Eltér a naiv realizmus _objektum_ felfogásától, amely a világot közvetlenül, _szubjektum_tól függetlenül létezőnek tekinti."
+    },
+    {
+      "id": "akarat_tagadasa",
+      "label": "Akarat-tagadás",
+      "type": "CONCEPT",
+      "shortSummary": "Az _akarat_ tagadása az egyéni vágyakról és az életigenlésről való lemondás, az _aszkézis_ és a _szenvedés_ tudatos elfogadása révén, ami a megváltáshoz vezet.",
+      "longExplanation": "Az _akarat_ tagadása Schopenhauer etikájának és megváltástanának csúcspontja. Mivel az _akarat_ örökös törekvése és kielégíthetetlensége az alapja minden _szenvedésnek_, a megszabadulás egyetlen útja az _akarat_ megtagadása. Ez nem öngyilkosságot jelent, hanem az életigenlésről, a vágyakról, az egoista törekvésekről való lemondást. Az _akarat_ tagadása az _aszkézis_ gyakorlásával, a testi vágyak féken tartásával, a szegénység és a tisztaság vállalásával valósul meg.\n\nAz _akarat_ tagadása nem egy aktív cselekedet, hanem egy passzív állapot, a nem-akarás állapota, amely a _szenvedés_ mély felismeréséből és a _szimpátia_ gyakorlásából fakad. Ez az állapot vezet a _nirvána_ felé, ahol az egyén megszabadul az _akarat_ rabságából és a _szenvedés_ körforgásából. Az _akarat_ tagadása a legmagasabb etikai út, amely a metafizikai megváltást ígéri.",
+      "connections": [
+        "akarat",
+        "etika",
+        "szenvedes",
+        "aszkézis",
+        "szimpátia",
+        "a_vilag_mint_akarat_es_kepzet"
+      ],
+      "conceptContext": "Az _akarat_ tagadása Schopenhauernél a buddhista _nirvána_ és a keresztény _aszkézis_ bizonyos elemeivel mutat párhuzamot, de egy voluntarista metafizikai keretben. Élesen szemben áll Nietzsche _hatalom akarása_ koncepciójával, amely az _akarat_ megerősítését és az életigenlést hirdeti, valamint Kant kötelességetikájával, amely a racionális cselekvésre fókuszál."
+    },
+    {
+      "id": "szenvedes",
+      "label": "Szenvedés",
+      "type": "CONCEPT",
+      "shortSummary": "A _szenvedés_ Schopenhauer filozófiájának központi eleme, amely az _akarat_ örökös kielégíthetetlenségéből és a lét alapvető irracionalitásából fakad.",
+      "longExplanation": "Schopenhauer szerint a _szenvedés_ az emberi lét elkerülhetetlen velejárója, amely az _akarat_ örökös törekvéséből és kielégíthetetlenségéből fakad. Az _akarat_ sosem érheti el a végső kielégülést, mert amint egy vágy teljesül, azonnal újabb vágyak keletkeznek, vagy az unalom állapota következik be. Ez a folyamatos körforgás a _szenvedés_ alapja. Az élet tehát alapvetően fájdalmas, és a boldogság csupán a _szenvedés_ ideiglenes hiánya.\n\nA _szenvedés_ nem csupán az emberre jellemző, hanem az egész _akarat_ által áthatott világra. Az állatok és a növények is küzdenek a létért, és ez a küzdelem is _szenvedéssel_ jár. Az emberben azonban a tudatosság fokozza a _szenvedést_, mivel az ember képes felismerni a lét alapvető irracionalitását és az _akarat_ rabságát. A _szenvedés_ felismerése azonban egyben az _akarat_ tagadásának és a megváltásnak is az első lépése.",
+      "connections": [
+        "akarat",
+        "etika",
+        "akarat_tagadasa",
+        "a_vilag_mint_akarat_es_kepzet"
+      ],
+      "conceptContext": "A _szenvedés_ schopenhaueri koncepciója mélyen pesszimista, és élesen szemben áll a felvilágosodás optimista nézeteivel és a hegeli teleológiával. Párhuzamba állítható a buddhizmus _dukkha_ (szenvedés) fogalmával, amely szintén a vágyak kielégíthetetlenségéből fakad. Nietzsche kritikája Schopenhauer pesszimizmusával szemben az életigenlést és a _szenvedés_ mint erőforrás elfogadását hangsúlyozza."
+    },
+    {
+      "id": "művészet",
+      "label": "Művészet",
+      "type": "CONCEPT",
+      "shortSummary": "A _művészet_ Schopenhauer szerint az _akarat_ tagadásának egyik útja, amely lehetővé teszi a tiszta, _akarat_ nélküli szemlélődést és a platóni _ideák_ megragadását.",
+      "longExplanation": "A _művészet_ Schopenhauer esztétikájának központi eleme, amely az _akarat_ rabságából való ideiglenes megszabadulást kínálja. Amikor egy _műalkotást_ szemlélünk, képesek vagyunk túllépni az egyéni _akarat_ céljain és vágyain, és a _képzet_ világát tisztán, öncélúan szemlélni. Ebben az _esztétikai szemlélődés_ állapotában a _szubjektum_ ideiglenesen megszűnik egyéni _akarat_ hordozója lenni, és tiszta, _akarat_ nélküli „tükörré” válik, amely a platóni _ideákat_ tükrözi.\n\nAz _ideák_ az _akarat_ _objektivációjának_ különböző fokozatai, amelyek a jelenségvilág mögött állnak. A _művészet_ tehát nem a jelenségeket utánozza, hanem az _ideákat_ teszi láthatóvá. Ez a tiszta szemlélődés pillanatnyi megnyugvást hoz a _szenvedés_től, és előrevetíti az _akarat_ teljes tagadásának lehetőségét. A _zene_ különleges helyet foglal el, mivel közvetlenül az _akaratot_ fejezi ki, nem az _ideákat_.",
+      "connections": [
+        "esztetika",
+        "akarat",
+        "kepzet",
+        "zene",
+        "objektivacio",
+        "a_vilag_mint_akarat_es_kepzet"
+      ],
+      "conceptContext": "Schopenhauer _művészet_felfogása eltér a klasszikus mimézis-elméletektől és a romantikus szubjektív kifejezéstől, mivel a _művészetet_ az _akarat_ tagadásának és a platóni _ideák_ megragadásának eszközévé teszi. Nietzsche _művészet_felfogása, különösen a dionüszoszi _művészet_ mint az életigenlés kifejezése, részben Schopenhauer _akarat_ koncepciójának átértelmezése."
+    },
+    {
+      "id": "zene",
+      "label": "Zene",
+      "type": "CONCEPT",
+      "shortSummary": "A _zene_ Schopenhauer szerint a legmagasabb rendű _művészet_, mivel nem az _ideákat_ tükrözi, hanem közvetlenül az _akaratot_ fejezi ki, annak legmélyebb lényegét.",
+      "longExplanation": "Schopenhauer esztétikájában a _zene_ különleges és kiemelkedő helyet foglal el. Míg a többi _művészeti_ ág (festészet, szobrászat, költészet) a platóni _ideákat_, az _akarat_ _objektivációjának_ különböző fokozatait tükrözi, addig a _zene_ nem az _ideákat_ fejezi ki, hanem közvetlenül magát az _akaratot_. A _zene_ a világ belső lényegének, a vak, irracionális _akaratnak_ a közvetlen mása, egyfajta „metafizikai gyakorlat”.\n\nA _zene_ ezért a legközvetlenebbül képes megmutatni az _akarat_ lényegét, annak örökös törekvését, _szenvedését_ és kielégíthetetlenségét. A _zene_ hallgatása során az ember a legmélyebben képes átélni az _akarat_ lényegét, és ezáltal a legmélyebb megváltó élményt nyújtja, ideiglenesen megszabadítva az egyéni _akarat_ rabságából. A _zene_ egy univerzális nyelv, amely minden ember számára érthető, mert az _akarat_ minden emberben ugyanaz.",
+      "connections": [
+        "esztetika",
+        "művészet",
+        "akarat",
+        "a_vilag_mint_akarat_es_kepzet"
+      ],
+      "conceptContext": "A _zene_ schopenhaueri primátusa egyedülálló a nyugati filozófiában, és mélyen befolyásolta a romantikus zeneszerzőket és gondolkodókat. Eltér a klasszikus esztétikától, amely a _zenét_ a harmóniával és a renddel azonosítja, és a hegeli esztétikától, amely a _zenét_ a Szellem fejlődésének egy fokozataként értelmezi. Nietzsche _A tragédia születése_ című művében a dionüszoszi _zene_ erejét Schopenhauer _akarat_ koncepciójának fényében értelmezi újra."
+    },
+    {
+      "id": "szimpátia",
+      "label": "Szimpátia",
+      "type": "CONCEPT",
+      "shortSummary": "A _szimpátia_ (Mitleid) Schopenhauer etikájának alapja, a mások _szenvedésével_ való azonosulás, amely az _akarat_ egységének felismeréséből fakad.",
+      "longExplanation": "A _szimpátia_, vagyis a „Mitleid” (együttérzés, szánalom) Schopenhauer etikájának alapvető mozgatórugója. Mivel az _akarat_ egységes és oszthatatlan, minden egyéni létező az _akarat_ egy megnyilvánulása. Ennek felismerése vezet ahhoz, hogy a mások _szenvedését_ a sajátunkként éljük át, hiszen alapvetően mindannyian ugyanannak az _akaratnak_ a hordozói vagyunk. Ez az együttérzés az, ami túllép az egoista _akarat_ korlátain, és önzetlen cselekedetekre ösztönöz.\n\nA _szimpátia_ nem egy racionális elv, hanem egy közvetlen, intuitív felismerés és érzés, amely a morális cselekvés egyetlen valódi alapja. A _szimpátia_ révén az ember képes enyhíteni a _szenvedést_, és ezáltal közelebb kerülni az _akarat_ tagadásához. Ez az etikai elv élesen szemben áll Kant kötelességetikájával, amely a racionális _kategorikus imperatívuszra_ épül, és a morális cselekvés alapját a tiszta észben látja.",
+      "connections": [
+        "etika",
+        "akarat",
+        "szenvedes",
+        "akarat_tagadasa",
+        "a_vilag_mint_akarat_es_kepzet"
+      ],
+      "conceptContext": "A _szimpátia_ schopenhaueri fogalma eltér Kant racionális kötelesség-etikájától és a utilitarista elvektől, amelyek a boldogság maximalizálására törekednek. Közelebb áll Hume morális érzék elméletéhez, de Schopenhauer metafizikai alapot ad neki az _akarat_ egységének felismerésével. Nietzsche élesen kritizálta a _szimpátiát_ mint a gyengeség és az életellenesség jelét."
+    },
+    {
+      "id": "aszkézis",
+      "label": "Aszkézis",
+      "type": "CONCEPT",
+      "shortSummary": "Az _aszkézis_ az _akarat_ tagadásának egyik útja, amely a testi vágyakról, az életigenlésről való lemondást jelenti a _szenvedés_től való megszabadulás érdekében.",
+      "longExplanation": "Az _aszkézis_ Schopenhauer etikájában az _akarat_ tagadásának egyik legfontosabb gyakorlati útja. Mivel az _akarat_ a testi vágyakban és az életösztönökben nyilvánul meg, az _aszkézis_ célja ezeknek a vágyaknak a féken tartása, a róluk való lemondás. Ez magában foglalhatja a szexuális vágyakról való lemondást (cölibátus), a szegénység vállalását, a böjtölést és minden olyan tevékenység elkerülését, amely az _akarat_ kielégítésére irányul.\n\nAz _aszkézis_ nem öncélú _szenvedés_, hanem az _akarat_ rabságából való megszabadulás eszköze. Az _aszkéta_ tudatosan megtagadja az életigenlést, és ezzel közelebb kerül a _nirvána_ állapotához, ahol az _akarat_ teljesen elnémul. Ez az út a legmagasabb etikai és metafizikai megváltást ígéri, és a keleti vallások (különösen a buddhizmus) gyakorlataival mutat párhuzamot.",
+      "connections": [
+        "etika",
+        "akarat",
+        "szenvedes",
+        "akarat_tagadasa",
+        "a_vilag_mint_akarat_es_kepzet"
+      ],
+      "conceptContext": "Az _aszkézis_ schopenhaueri koncepciója a keresztény és buddhista hagyományok _aszkézis_ével mutat párhuzamot, de egy voluntarista metafizikai keretben értelmezi azt. Élesen szemben áll a hedonista és utilitarista etikákkal, amelyek a gyönyör és a boldogság maximalizálására törekednek, valamint Nietzsche életigenlő filozófiájával, amely az _aszkézist_ az életellenesség jelének tekinti."
+    },
+    {
+      "id": "ding_an_sich",
+      "label": "Magánvaló",
+      "type": "CONCEPT",
+      "shortSummary": "Kant filozófiájában a magánvaló (németül: „Ding an sich”) a jelenségvilág mögötti, emberi megismerés számára hozzáférhetetlen, transzcendens valóság. Schopenhauer ezt az egyetemes, vak akarattal azonosítja, mely a világ lényegi alapja.",
+      "longExplanation": "Immanuel Kant kritikai filozófiájában a magánvaló (németül: „Ding an sich”) a jelenségvilág mögötti, az emberi megismerés számára hozzáférhetetlen, transzcendens valóság. Kant szerint tudatunk csak a jelenségeket képes megragadni, melyeket az a priori szemléleti formák és értelemkategóriák strukturálnak, így a dolgok önmagukban megismerhetetlenek maradnak. Arthur Schopenhauer Kantot tekintette az egyetlen valódi elődjének, de radikálisan túllépett rajta, amikor a magánvalót az egyetemes „akarattal” azonosította. Schopenhauer szerint az akarat nem megismerhetetlen, hanem közvetlenül tapasztalható a saját testünkben mint belső törekvés, vágy és ösztön. Ez az immanens tapasztalat adja a kulcsot a külső világ jelenségei mögött rejlő, vak és irracionális akarat megértéséhez, feloldva ezzel Kant megismerhetetlenségi dogmáját.",
+      "connections": [
+        "kant",
+        "akarat",
+        "ismeretelmelet",
+        "metafizika"
+      ],
+      "conceptContext": "A magánvaló fogalma Immanuel Kant transzcendentális idealizmusában jelenik meg először, mint a megismerés határait kijelölő, a jelenségvilágon túli, de megismerhetetlen entitás. Kant számára ez a fogalom a tudományos megismerés érvényességét biztosítja, miközben korlátozza azt. Schopenhauer filozófiája, különösen _A világ mint akarat és képzet_ című főművében, radikális fordulatot hoz. Míg Kantnál a magánvaló a megismerés határa, Schopenhauernél a világ lényegi, metafizikai alapja, mely azonos az egyetemes, vak akarattal. Ezzel Schopenhauer Kant epistemológiai problémáját egy ontológiai válasszal oldja fel, a transzcendens megismerhetetlenségét immanens, belső tapasztalattá alakítva.",
+      "index": 22,
+      "x": 1368.9099556925935,
+      "y": -106.77445033508872,
+      "vy": -0.00008966594838054924,
+      "vx": 0.006672375826748167,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "kategorikus_imperativusz",
+      "label": "Kategorikus imperatívusz",
+      "type": "CONCEPT",
+      "shortSummary": "Kant etikájának központi fogalma, egy feltétlen erkölcsi parancs, amely a racionális lények kötelességét fejezi ki, és amely élesen szemben áll Schopenhauer _szimpátia_ alapú etikájával.",
+      "longExplanation": "A _kategorikus imperatívusz_ Immanuel Kant etikájának alapvető elve, amelyet _A gyakorlati ész kritikája_ című művében fejt ki. Ez egy feltétlen, univerzális erkölcsi parancs, amely minden racionális lényre kötelező, függetlenül a céloktól vagy következményektől. A legismertebb megfogalmazása szerint: „Cselekedj úgy, hogy akaratod maximája mindenkor egyszersmind általános törvényhozás elveként érvényesülhessen.” Ez azt jelenti, hogy csak olyan elvek szerint cselekedjünk, amelyeket egyetemes törvénnyé tehetnénk.\n\nKant szerint a morális cselekvés alapja a kötelességből fakadó tisztelet a törvény iránt, nem pedig az érzelmek vagy a következmények. Schopenhauer etikája élesen szemben áll ezzel a racionális, kötelességalapú megközelítéssel. Schopenhauer a _szimpátiát_ (Mitleid), azaz a mások _szenvedésével_ való együttérzést tekinti a morális cselekvés egyetlen valódi alapjának, elutasítva a _kategorikus imperatívusz_ absztrakt racionalitását.",
+      "connections": [
+        "kant",
+        "etika",
+        "szimpátia"
+      ],
+      "conceptContext": "A _kategorikus imperatívusz_ Kantnál a racionális autonómia és az egyetemes erkölcsi törvény kifejeződése, élesen szemben állva a Schopenhauer-féle _szimpátia_ alapú etikával, amely az érzelmekre és a metafizikai egység felismerésére épül. Eltér a utilitarista etikáktól is, amelyek a következményekre és a boldogság maximalizálására fókuszálnak."
+    },
+    {
+      "id": "parerga_es_paralipomena",
+      "label": "_Parerga és Paralipomena_",
+      "type": "WORK",
+      "shortSummary": "Schopenhauer késői gyűjteményes műve, amely esszéket és aforizmákat tartalmaz filozófiájának különböző aspektusairól, beleértve az életbölcseletet és a gyakorlati tanácsokat.",
+      "longExplanation": "A _Parerga és Paralipomena_ (1851) Schopenhauer utolsó nagy műve, amely két kötetben jelent meg. A „Parerga” (melléktermékek) kisebb esszéket tartalmaz filozófiai témákról, mint például a filozófia története, az egyetemi filozófia kritikája, vagy az írásról és a stílusról. A „Paralipomena” (kiegészítések) pedig aforizmákat, gondolatokat és megjegyzéseket gyűjt össze, amelyek kiegészítik és részletezik főművének, _A világ mint akarat és képzet_ című könyvének gondolatait.\n\nEz a mű hozzájárult Schopenhauer népszerűségének növekedéséhez, mivel stílusa könnyedebb és hozzáférhetőbb volt, mint főművéé. Az esszék és aforizmák széles skáláját ölelik fel a témáknak, az etikától és az esztétikától kezdve az életbölcseleten át a nőkkel és a halállal kapcsolatos gondolatokig. A _Parerga és Paralipomena_ bepillantást enged Schopenhauer gondolkodásának sokszínűségébe és éleslátásába, és számos későbbi gondolkodóra, íróra gyakorolt hatást.",
+      "connections": [
+        "schopenhauer",
+        "etika",
+        "esztetika"
+      ]
+    },
+    {
+      "id": "a_moral_ket_alapforrasarol",
+      "label": "_A morál két alapforrásáról_",
+      "type": "WORK",
+      "shortSummary": "Schopenhauer *A morál két alapforrásáról* című esszéjében (1841) a morális cselekvés egyetlen valódi alapjának az együttérzést (Mitleid) jelöli meg, élesen bírálva Kant racionális kötelességetikáját.",
+      "longExplanation": "Schopenhauer 1841-ben írt esszéje, *A morál két alapforrásáról*, a Norvég Királyi Tudományos Társaság pályázatára készült. Művében élesen bírálja Immanuel Kant kötelességetikáját, különösen a kategorikus imperatívusz absztrakt és az emberi természetet figyelmen kívül hagyó jellegét. Schopenhauer szerint a morál alapja nem a racionális kötelesség, hanem az együttérzés (Mitleid), a mások szenvedésével való azonosulás. Ez az egyetlen önzetlen motiváció, amely valódi morális cselekedetekre ösztönöz. Az esszé két fő része Kant kritikája, majd az együttérzésen alapuló etika kifejtése, mely metafizikai rendszerének szerves része, szemben a racionális alapú etikákkal.",
+      "connections": [
+        "schopenhauer",
+        "etika",
+        "szimpátia",
+        "kant",
+        "kategorikus_imperativusz"
+      ],
+      "index": 25,
+      "x": 434.24918999095024,
+      "y": -202.41181968491907,
+      "vy": 0.0007664655540440171,
+      "vx": 0.003985116479555381,
+      "fx": null,
+      "fy": null,
+      "conceptContext": "Schopenhauer etikája szervesen illeszkedik metafizikai rendszerébe, mely szerint a világ alapja a vak, irracionális Akarat. Az együttérzés (Mitleid) mint a morál alapja az Akarat egyéni megnyilvánulásain túllépő, azonosuló felismerésen alapul, mely enyhíti az Akarat által okozott szenvedést. Ez a megközelítés éles kontrasztban áll Immanuel Kant racionális, kötelességközpontú etikájával, és a német idealizmus, különösen Hegel rendszerének kritikájaként is értelmezhető. Schopenhauer az ész helyett az érzelmekre és az Akaratra helyezi a hangsúlyt, ezzel új irányt szabva a poszt-kanti filozófiának."
+    },
+    {
+      "id": "májá_fátyla",
+      "label": "Májá fátyla",
+      "type": "CONCEPT",
+      "shortSummary": "A májá fátyla Schopenhauer filozófiájában az érzékelhető, jelenségi világot takaró illúzió, amely elrejti az alapvető valóságot, az Akaratot.",
+      "longExplanation": "Schopenhauer a „májá fátyla” fogalmát az indiai filozófiából, különösen az upanisadokból vette át, hogy leírja a világot, ahogyan az számunkra megjelenik, mint _képzet_. Ez a fátyol az egyéni tudat számára hozzáférhető jelenségek, formák és oksági összefüggések rendszere, amely elrejti a dolgok valódi, belső lényegét, az _Akaratot_. A májá fátyla tehát a szubjektum és objektum közötti megosztottság, a tér, az idő és az okság kategóriái által strukturált világot jelenti, amelyben élünk, és amelyben a szenvedés elkerülhetetlen. Ez a világ a _Ding an sich_ (a magánvaló dolog) elfedése, egyfajta kozmikus illúzió, amelyben az egyéni akaratok tévesen különállónak és függetlennek hiszik magukat. A májá fátyla mögött rejlő egységes Akarat felismerése a filozófiai belátás és a megváltás útja. A művészet, különösen a zene, képes áttörni ezen a fátylon, és közvetlen betekintést nyújtani az Akaratba, feloldva az egyéni szenvedést.",
+      "connections": [
+        "schopenhauer",
+        "kepzet",
+        "a_vilag_mint_akarat_es_kepzet",
+        "ismeretelmelet",
+        "ding_an_sich",
+        "fenomenalis_vilag",
+        "illuzio",
+        "indiai_filozofia"
+      ],
+      "conceptContext": "Ez a fogalom éles ellentétben áll a nyugati racionalista hagyomány azon nézetével, amely a jelenségi világot a valóság közvetlen megnyilvánulásának tekinti. Párhuzamba állítható Kant _Ding an sich_ és _fenomenális világ_ megkülönböztetésével, de Schopenhauer a májá fátylát egy sokkal radikálisabb, illuzórikusabb értelemben használja."
+    },
+    {
+      "id": "indiai_filozofia",
+      "label": "Indiai filozófia",
+      "type": "CATEGORY",
+      "shortSummary": "Az indiai filozófia Schopenhauer gondolkodására jelentős hatást gyakorolt, különösen az upanisadok és a buddhizmus tanításai révén, melyek a világ illuzórikus természetét és a szenvedés feloldását hangsúlyozzák.",
+      "longExplanation": "Arthur Schopenhauer az első jelentős nyugati filozófusok egyike volt, aki mélyrehatóan tanulmányozta és beépítette az indiai filozófia elemeit saját rendszerébe. Különösen az upanisadok és a buddhizmus tanításai rezonáltak vele, amelyek a világ jelenségi, illuzórikus természetét (májá), az egyéni akaratok mögött rejlő egységes valóságot (brahman/átman), valamint a szenvedés elkerülhetetlenségét és az attól való megszabadulás útját (nirvána) hangsúlyozták. Schopenhauer az akarat fogalmát nagyrészt ezen keleti metafizikai elvek inspirációjára fejlesztette ki, mint a világ alapvető, vak, céltalan hajtóerejét. Az indiai filozófia hatása Schopenhauer etikájában is megmutatkozik, különösen az _akarat-tagadás_ és az _aszkézis_ eszméjében, amelyek a szenvedéstől való megszabadulás eszközei. A szimpátia és az együttérzés fontossága is visszhangozza a buddhista tanításokat. Schopenhauer úgy vélte, hogy az indiai filozófia évezredekkel megelőzte a nyugati gondolkodást bizonyos alapvető igazságok felismerésében, és rendszere egyfajta szintézist kínál a keleti bölcsesség és a nyugati kritikai filozófia között.",
+      "connections": [
+        "schopenhauer",
+        "májá_fátyla",
+        "akarat",
+        "akarat_tagadasa",
+        "szenvedes",
+        "aszkézis",
+        "szimpátia"
+      ],
+      "conceptContext": "Az indiai filozófia éles kontrasztban áll a nyugati, görög-keresztény hagyományra épülő, gyakran teocentrikus vagy antropocentrikus rendszerekkel, amelyek a világot célszerűnek és értelmesnek tekintik. Schopenhauer az indiai gondolkodásban talált megerősítést saját pesszimista világképére és az Akarat metafizikájára.",
+      "index": 27,
+      "x": 972.1140083314483,
+      "y": 932.4930169405229,
+      "vy": -0.013109079776821795,
+      "vx": 0.0025024313042180447,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "fenomenalis_vilag",
+      "label": "Fenomenális világ",
+      "type": "CONCEPT",
+      "shortSummary": "A fenomenális világ Schopenhauer és Kant filozófiájában az a világ, ahogyan az számunkra megjelenik, az érzékelés és az értelem kategóriái által strukturálva, szemben a magánvaló dologgal.",
+      "longExplanation": "A fenomenális világ fogalma kulcsfontosságú Schopenhauer ismeretelméletében, és szorosan kapcsolódik Kant _A tiszta ész kritikája_ című művében bevezetett megkülönböztetéséhez. Kant szerint az emberi megismerés csak a jelenségekre (fenoménekre) korlátozódik, azaz azokra a dolgokra, amelyek az érzékelés és az értelem a priori formái (tér, idő, okság) által strukturálva jelennek meg számunkra. A magánvaló dolog (_Ding an sich_) megismerhetetlen marad. Schopenhauer ezt a kanti megkülönböztetést veszi alapul, amikor a világot _képzetként_ írja le. A fenomenális világ tehát az a világ, amelyet a májá fátyla takar, azaz a szubjektum számára megjelenő, sokféleségben és individualitásban létező világ. Ez a világ az _objektumok_ világa, amelyek mind az egyetemes _Akarat_ objektivációi, de az egyéni tudat számára különálló entitásokként jelennek meg. A fenomenális világban uralkodik az okság elve, a tér és az idő, és ez az a szféra, ahol a szenvedés és a folytonos küzdelem zajlik. A filozófiai belátás célja, hogy ezen a jelenségi világon túllépve felismerje az Akarat egységét.",
+      "connections": [
+        "kepzet",
+        "májá_fátyla",
+        "objektum",
+        "ismeretelmelet",
+        "ding_an_sich",
+        "kant",
+        "szubjektum"
+      ],
+      "conceptContext": "A fenomenális világ fogalma Kantnál a megismerés korlátait jelöli ki, míg Schopenhauernél a _májá fátylával_ azonosulva egy illuzórikus, szenvedéssel teli valóságot ír le, amely mögött az Akarat rejtőzik. Ezzel szemben a naiv realizmus a jelenségi világot tekinti a valóság egyetlen és közvetlen formájának."
+    },
+    {
+      "id": "illuzio",
+      "label": "Illúzió",
+      "type": "CONCEPT",
+      "shortSummary": "Az illúzió Schopenhauer filozófiájában a májá fátyla által teremtett jelenségi világ megtévesztő természete, amely elrejti az Akarat valódi, egységes lényegét.",
+      "longExplanation": "Schopenhauer számára a világ, ahogyan azt az egyéni tudat érzékeli és értelmezi, alapvetően egy _illúzió_. Ez az illúzió a _májá fátyla_ által jön létre, amely a tér, az idő és az okság kategóriáin keresztül strukturálja a valóságot, és a sokféleség, az individualitás és a különállóság látszatát kelti. Az illúzió lényege, hogy az egyéni akaratok tévesen hiszik magukat függetlennek és önálló létezőknek, miközben valójában mindannyian az egyetemes, vak _Akarat_ megnyilvánulásai. Ez a tévedés vezet a folytonos vágyakozáshoz, a küzdelemhez és a _szenvedéshez_, mivel az egyéni akarat sosem érheti el a teljes és tartós kielégülést az illuzórikus világban. Az illúzió felismerése az első lépés a filozófiai belátás és az _akarat-tagadás_ felé, amely lehetővé teszi a megszabadulást a szenvedés körforgásából. A művészet, különösen a zene, képes ideiglenesen áttörni ezen az illúzión, és közvetlen betekintést nyújtani az Akaratba, feloldva az egyéni akarat rabságát.",
+      "connections": [
+        "májá_fátyla",
+        "kepzet",
+        "szenvedes",
+        "akarat",
+        "akarat_tagadasa",
+        "fenomenalis_vilag"
+      ],
+      "conceptContext": "Az illúzió fogalma Schopenhauernél radikálisabb, mint a hétköznapi értelemben vett tévedés; egy kozmikus, metafizikai megtévesztést jelent. Ezzel szemben a felvilágosodás gondolkodói az emberi ész erejében hittek, amely képes eloszlatni az illúziókat és feltárni a valóságot."
+    },
+    {
+      "id": "vágy_es_hiany",
+      "label": "Vágy és hiány",
+      "type": "CONCEPT",
+      "shortSummary": "Schopenhauer szerint az akarat megnyilvánulása a fenomenális világban mint örökös vágyakozás és hiányérzet, ami a szenvedés alapja.",
+      "longExplanation": "Az _akarat_, mint a magánvaló, vak és céltalan erő, a _képzet_ világában mint számtalan egyedi vágy és törekvés jelenik meg. Minden vágy egy hiányérzetből fakad, egy betöltetlen szükségletből, ami fájdalmat okoz. Amint egy vágy beteljesül, azonnal újabbak keletkeznek, vagy a beteljesülés pillanatnyi örömét hamarosan felváltja az unalom, ami szintén a hiány egy formája. Ez a folyamatos körforgás, a vágyak soha véget nem érő láncolata az, ami Schopenhauer szerint az emberi lét alapvető _szenvedését_ adja.A vágy és hiány állapota nem csupán az emberre jellemző, hanem az egész élővilágra kiterjed, az _akarat objektivációjának_ minden szintjén megfigyelhető. Az állatok ösztönös küzdelme a létért, a növények növekedési kényszere mind az _akarat_ megnyilvánulásai, melyek a beteljesületlenség és a hiányérzet révén _szenvedést_ generálnak. A vágyak kielégítése csak átmeneti megnyugvást hoz, sosem végleges boldogságot, mivel az _akarat_ lényege a szüntelen törekvés, nem pedig a cél elérése.",
+      "connections": [
+        "akarat",
+        "szenvedes",
+        "fenomenalis_vilag"
+      ],
+      "conceptContext": "Ez a koncepció éles ellentétben áll az optimista filozófiákkal, amelyek a vágyak beteljesülésében látják a boldogság forrását, és inkább a buddhista tanításokhoz közelít, melyek a vágyat a szenvedés gyökerének tekintik."
+    },
+    {
+      "id": "individuacio_elve",
+      "label": "Individuáció elve",
+      "type": "CONCEPT",
+      "shortSummary": "A _principium individuationis_ az a kantiánus-indiai ihletésű elv, amely szerint a tér és idő formái által az egyetlen, oszthatatlan Akarat sok egyedi lényként jelenik meg a képzet világában.",
+      "longExplanation": "Schopenhauer _Kant_ ismeretelméletét felhasználva magyarázza, hogy az egyetlen, _magánvaló akarat_ hogyan válik sokféleséggé a _fenomenális világban_. Az _individuáció elve_ (latinul _principium individuationis_) a tér és idő formáira utal, amelyek az emberi megismerés alapvető keretei. Ezek a formák teszik lehetővé, hogy az egyetemes _akarat_ számtalan egyedi lényként, tárgyként és jelenségként jelenjen meg, elkülönülve egymástól. Ez az elv felelős azért, hogy az _akarat objektivációi_, azaz az egyedi lények, egymással versengő, egymásnak ellentmondó vágyakkal rendelkezzenek, ami elkerülhetetlenül konfliktushoz és _szenvedéshez_ vezet.Az _individuáció elve_ szorosan kapcsolódik a _Májá fátylához_ az _indiai filozófiában_, amely az illúzió és a jelenségvilág elválasztó erejét szimbolizálja. Mivel az egyedi lények nem ismerik fel, hogy mindannyian ugyanannak az egyetlen _akaratnak_ a megnyilvánulásai, hanem különálló entitásoknak hiszik magukat, önző módon törekednek saját vágyaik kielégítésére, gyakran mások rovására. Ez a tévedés, az _individuáció elvének_ rabságában élés az alapja a kölcsönös _szenvedésnek_ és a világban uralkodó kegyetlenségnek.",
+      "connections": [
+        "akarat",
+        "májá_fátyla",
+        "fenomenalis_vilag",
+        "szenvedes",
+        "kant",
+        "ismeretelmelet"
+      ],
+      "conceptContext": "Ez az elv Schopenhauer kantiánus örökségét mutatja, különösen a tér és idő mint a megismerés apriori formáinak hangsúlyozásában. Párhuzamba állítható az _indiai filozófia Májá_ koncepciójával, amely az illúzió és a sokféleség fátylát jelenti, elrejtve az egységes valóságot."
+    },
+    {
+      "id": "céltalan_torekvés",
+      "label": "Céltalan törekvés",
+      "type": "CONCEPT",
+      "shortSummary": "Az akarat lényegi tulajdonsága a szüntelen, belső cél nélküli törekvés, ami soha nem ér el végső beteljesülést, és ezáltal a szenvedés örök forrása.",
+      "longExplanation": "Schopenhauer szerint az _akarat_ nem egy racionális, célokat kitűző entitás, hanem egy vak, irracionális, örökös hajtóerő. Lényegéből fakadóan soha nem érheti el a végső beteljesülést, mert maga a törekvés a lényege, nem pedig egy konkrét cél elérése. Amint egy vágy kielégül, az _akarat_ azonnal újabb célok felé fordul, vagy ha nincs új cél, az unalom és a hiányérzet lép a helyébe. Ez a _céltalan törekvés_ az, ami az életet egy örökös, kielégíthetetlen küzdelemmé teszi, ahol a pillanatnyi örömök csak rövid szünetek a _szenvedés_ és a hiány tengerében.\n\nAz _akarat objektivációi_, azaz az egyedi lények, mind ennek a _céltalan törekvésnek_ a megnyilvánulásai. Az emberi létet átható elégedetlenség, a boldogság utáni hajsza, amely sosem ér véget, mind az _akarat_ ezen alapvető tulajdonságából fakad. A világban tapasztalható állandó mozgás, változás és pusztulás is az _akarat_ szüntelen, belső nyugtalanságának külső megnyilvánulása. Ez a belátás alapozza meg Schopenhauer pesszimista világképét, ahol a _szenvedés_ nem csupán egy esetleges állapot, hanem az _akarat_ lényegéből fakadó, elkerülhetetlen valóság.",
+      "connections": [
+        "akarat",
+        "szenvedes",
+        "objektivacio",
+        "vágy_es_hiany"
+      ],
+      "conceptContext": "Ez a koncepció élesen szemben áll a teleologikus (célorientált) világképekkel, mint például az arisztotelészi vagy hegeli filozófia, amelyek a világban és az emberi történelemben egy végső célt vagy fejlődési irányt feltételeznek. Schopenhauer ezzel szemben a céltalanságot és az irracionalitást hangsúlyozza.",
+      "index": 32,
+      "x": 421.23381183308675,
+      "y": 1040.2032513765266,
+      "vy": -0.005356608460864815,
+      "vx": -0.03693373328125447,
+      "fx": null,
+      "fy": null
+    },
+    {
+      "id": "életigenlés",
+      "label": "Életigenlés",
+      "type": "CONCEPT",
+      "shortSummary": "Az _életigenlés_ Schopenhauernél az _akarat_ feltétel nélküli elfogadása és megerősítése, ami a szenvedés örökös fenntartásához vezet, mivel az _akarat_ lényege a törekvés és a hiány.",
+      "longExplanation": "Az _életigenlés_ Schopenhauer filozófiájában azt jelenti, hogy az egyén tudatosan vagy tudattalanul megerősíti az _akaratot_ magában és a világban. Ez a megerősítés nem csupán a puszta létezés elfogadását jelenti, hanem a vágyak, az ösztönök és a törekvések feltétel nélküli követését. Mivel az _akarat_ lényege a _céltalan törekvés_ és a _vágy és hiány_ állapota, az _életigenlés_ elkerülhetetlenül a _szenvedés_ fenntartásához és fokozásához vezet. Az ember, aki igent mond az életre, igent mond az _akarat_ diktátumaira, és ezzel a _szenvedés_ körforgásába zárja magát, hiszen minden beteljesült vágy helyébe újabbak lépnek, és a halál is csak az _akarat_ újabb megnyilvánulásához vezet.Az _életigenlés_ ellentéte az _akarat-tagadás_, amely a _szenvedésből_ való megszabadulás egyetlen útja Schopenhauer szerint. Az _életigenlés_ nem csupán az egyéni vágyak kielégítésére irányuló törekvésben nyilvánul meg, hanem a fajfenntartás ösztönében, a szexualitásban és a gyermeknemzésben is, amelyek az _akarat_ legközvetlenebb objektivációi. Ezek a cselekedetek biztosítják az _akarat_ továbbélését és újabb egyedi megnyilvánulásainak létrejöttét, ezzel perpetuálva a _szenvedést_ a világban. Az _életigenlés_ tehát nem egy morális erény, hanem az _akarat_ rabságában való lét kifejeződése.",
+      "connections": [
+        "akarat",
+        "szenvedes",
+        "akarat_tagadasa",
+        "vágy_es_hiany",
+        "céltalan_torekvés"
+      ],
+      "conceptContext": "Az _életigenlés_ Schopenhauernél alapvetően negatív konnotációval bír, ellentétben például Nietzsche _életigenlésével_, amely az élet minden aspektusának, még a szenvedésnek is a dionüszoszi elfogadását jelenti. Schopenhauer számára az _életigenlés_ a szenvedés fenntartója, míg Nietzsche számára az erő és a nagyság jele."
+    }
+  ],
+  "links": [
+    {
+      "source": "schopenhauer",
+      "target": "nemet_idealizmus_felbomlasa",
+      "relationLabel": "hozzájárult"
+    },
+    {
+      "source": "schopenhauer",
+      "target": "schopenhauer_filozofiaja",
+      "relationLabel": "kidolgozta"
+    },
+    {
+      "source": "schopenhauer",
+      "target": "a_vilag_mint_akarat_es_kepzet",
+      "relationLabel": "főműve"
+    },
+    {
+      "source": "nemet_idealizmus_felbomlasa",
+      "target": "hegeli_rendszer_kritikaja",
+      "relationLabel": "oka"
+    },
+    {
+      "source": "nemet_idealizmus_felbomlasa",
+      "target": "kant",
+      "relationLabel": "előzménye"
+    },
+    {
+      "source": "nemet_idealizmus_felbomlasa",
+      "target": "hegel",
+      "relationLabel": "kritizált alakja"
+    },
+    {
+      "source": "hegeli_rendszer_kritikaja",
+      "target": "akarat",
+      "relationLabel": "kiemeli az"
+    },
+    {
+      "source": "hegeli_rendszer_kritikaja",
+      "target": "szenvedes",
+      "relationLabel": "hangsúlyozza a"
+    },
+    {
+      "source": "schopenhauer_filozofiaja",
+      "target": "akarat",
+      "relationLabel": "központi fogalma"
+    },
+    {
+      "source": "schopenhauer_filozofiaja",
+      "target": "kepzet",
+      "relationLabel": "központi fogalma"
+    },
+    {
+      "source": "schopenhauer_filozofiaja",
+      "target": "metafizika",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "schopenhauer_filozofiaja",
+      "target": "etika",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "schopenhauer_filozofiaja",
+      "target": "esztetika",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "schopenhauer_filozofiaja",
+      "target": "ismeretelmelet",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "schopenhauer_filozofiaja",
+      "target": "a_vilag_mint_akarat_es_kepzet",
+      "relationLabel": "részletesen kifejtve"
+    },
+    {
+      "source": "akarat",
+      "target": "kepzet",
+      "relationLabel": "megnyilvánul a"
+    },
+    {
+      "source": "akarat",
+      "target": "objektivacio",
+      "relationLabel": "objektiválódik"
+    },
+    {
+      "source": "akarat",
+      "target": "szenvedes",
+      "relationLabel": "oka a"
+    },
+    {
+      "source": "akarat",
+      "target": "akarat_tagadasa",
+      "relationLabel": "célja a"
+    },
+    {
+      "source": "akarat",
+      "target": "metafizika",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "kepzet",
+      "target": "szubjektum",
+      "relationLabel": "számára létezik"
+    },
+    {
+      "source": "kepzet",
+      "target": "objektum",
+      "relationLabel": "formájában jelenik meg"
+    },
+    {
+      "source": "kepzet",
+      "target": "ismeretelmelet",
+      "relationLabel": "tárgya"
+    },
+    {
+      "source": "a_vilag_mint_akarat_es_kepzet",
+      "target": "akarat",
+      "relationLabel": "elemzi az"
+    },
+    {
+      "source": "a_vilag_mint_akarat_es_kepzet",
+      "target": "kepzet",
+      "relationLabel": "elemzi a"
+    },
+    {
+      "source": "a_vilag_mint_akarat_es_kepzet",
+      "target": "metafizika",
+      "relationLabel": "tartalmaz"
+    },
+    {
+      "source": "a_vilag_mint_akarat_es_kepzet",
+      "target": "etika",
+      "relationLabel": "tartalmaz"
+    },
+    {
+      "source": "a_vilag_mint_akarat_es_kepzet",
+      "target": "esztetika",
+      "relationLabel": "tartalmaz"
+    },
+    {
+      "source": "a_vilag_mint_akarat_es_kepzet",
+      "target": "szenvedes",
+      "relationLabel": "központi témája"
+    },
+    {
+      "source": "a_vilag_mint_akarat_es_kepzet",
+      "target": "akarat_tagadasa",
+      "relationLabel": "bemutatja az"
+    },
+    {
+      "source": "a_vilag_mint_akarat_es_kepzet",
+      "target": "művészet",
+      "relationLabel": "elemzi a"
+    },
+    {
+      "source": "a_vilag_mint_akarat_es_kepzet",
+      "target": "zene",
+      "relationLabel": "kiemeli a"
+    },
+    {
+      "source": "metafizika",
+      "target": "objektivacio",
+      "relationLabel": "magyarázza az"
+    },
+    {
+      "source": "metafizika",
+      "target": "szenvedes",
+      "relationLabel": "alapja a"
+    },
+    {
+      "source": "etika",
+      "target": "szenvedes",
+      "relationLabel": "célja a"
+    },
+    {
+      "source": "etika",
+      "target": "akarat_tagadasa",
+      "relationLabel": "útja az"
+    },
+    {
+      "source": "etika",
+      "target": "szimpátia",
+      "relationLabel": "alapja a"
+    },
+    {
+      "source": "etika",
+      "target": "aszkézis",
+      "relationLabel": "gyakorlata az"
+    },
+    {
+      "source": "esztetika",
+      "target": "művészet",
+      "relationLabel": "központi eleme a"
+    },
+    {
+      "source": "esztetika",
+      "target": "zene",
+      "relationLabel": "kiemelt formája a"
+    },
+    {
+      "source": "esztetika",
+      "target": "objektivacio",
+      "relationLabel": "kapcsolódik az"
+    },
+    {
+      "source": "ismeretelmelet",
+      "target": "kant",
+      "relationLabel": "épül"
+    },
+    {
+      "source": "ismeretelmelet",
+      "target": "ding_an_sich",
+      "relationLabel": "újraértelmezi a"
+    },
+    {
+      "source": "ismeretelmelet",
+      "target": "szubjektum",
+      "relationLabel": "központi fogalma"
+    },
+    {
+      "source": "ismeretelmelet",
+      "target": "objektum",
+      "relationLabel": "központi fogalma"
+    },
+    {
+      "source": "kant",
+      "target": "ding_an_sich",
+      "relationLabel": "fogalma"
+    },
+    {
+      "source": "kant",
+      "target": "kategorikus_imperativusz",
+      "relationLabel": "etikájának alapja"
+    },
+    {
+      "source": "hegel",
+      "target": "hegeli_rendszer_kritikaja",
+      "relationLabel": "tárgya"
+    },
+    {
+      "source": "szubjektum",
+      "target": "objektum",
+      "relationLabel": "feltételezi az"
+    },
+    {
+      "source": "akarat_tagadasa",
+      "target": "aszkézis",
+      "relationLabel": "gyakorlata az"
+    },
+    {
+      "source": "akarat_tagadasa",
+      "target": "szimpátia",
+      "relationLabel": "elősegíti a"
+    },
+    {
+      "source": "művészet",
+      "target": "zene",
+      "relationLabel": "legmagasabb formája"
+    },
+    {
+      "source": "szimpátia",
+      "target": "kategorikus_imperativusz",
+      "relationLabel": "ellentétben áll a"
+    },
+    {
+      "source": "ding_an_sich",
+      "target": "akarat",
+      "relationLabel": "azonos Schopenhauernél az"
+    },
+    {
+      "source": "schopenhauer",
+      "target": "parerga_es_paralipomena",
+      "relationLabel": "műve"
+    },
+    {
+      "source": "schopenhauer",
+      "target": "a_moral_ket_alapforrasarol",
+      "relationLabel": "műve"
+    },
+    {
+      "source": "a_moral_ket_alapforrasarol",
+      "target": "etika",
+      "relationLabel": "tárgya"
+    },
+    {
+      "source": "a_moral_ket_alapforrasarol",
+      "target": "szimpátia",
+      "relationLabel": "kiemeli a"
+    },
+    {
+      "source": "a_moral_ket_alapforrasarol",
+      "target": "kant",
+      "relationLabel": "kritizálja"
+    },
+    {
+      "source": "a_moral_ket_alapforrasarol",
+      "target": "kategorikus_imperativusz",
+      "relationLabel": "kritizálja a"
+    },
+    {
+      "source": "schopenhauer",
+      "target": "májá_fátyla",
+      "relationLabel": "felhasználja a koncepciót"
+    },
+    {
+      "source": "kepzet",
+      "target": "májá_fátyla",
+      "relationLabel": "a fátyol által megjelenített"
+    },
+    {
+      "source": "a_vilag_mint_akarat_es_kepzet",
+      "target": "májá_fátyla",
+      "relationLabel": "tárgyalja"
+    },
+    {
+      "source": "ismeretelmelet",
+      "target": "májá_fátyla",
+      "relationLabel": "része"
+    },
+    {
+      "source": "ding_an_sich",
+      "target": "májá_fátyla",
+      "relationLabel": "elfedi"
+    },
+    {
+      "source": "fenomenalis_vilag",
+      "target": "májá_fátyla",
+      "relationLabel": "azonos a"
+    },
+    {
+      "source": "illuzio",
+      "target": "májá_fátyla",
+      "relationLabel": "lényege"
+    },
+    {
+      "source": "indiai_filozofia",
+      "target": "májá_fátyla",
+      "relationLabel": "eredete"
+    },
+    {
+      "source": "schopenhauer",
+      "target": "indiai_filozofia",
+      "relationLabel": "inspirálódott belőle"
+    },
+    {
+      "source": "akarat",
+      "target": "indiai_filozofia",
+      "relationLabel": "párhuzamos koncepciók"
+    },
+    {
+      "source": "akarat_tagadasa",
+      "target": "indiai_filozofia",
+      "relationLabel": "párhuzamos koncepciók"
+    },
+    {
+      "source": "szenvedes",
+      "target": "indiai_filozofia",
+      "relationLabel": "központi téma"
+    },
+    {
+      "source": "aszkézis",
+      "target": "indiai_filozofia",
+      "relationLabel": "párhuzamos koncepciók"
+    },
+    {
+      "source": "szimpátia",
+      "target": "indiai_filozofia",
+      "relationLabel": "párhuzamos koncepciók"
+    },
+    {
+      "source": "kepzet",
+      "target": "fenomenalis_vilag",
+      "relationLabel": "azonos a"
+    },
+    {
+      "source": "objektum",
+      "target": "fenomenalis_vilag",
+      "relationLabel": "része"
+    },
+    {
+      "source": "ismeretelmelet",
+      "target": "fenomenalis_vilag",
+      "relationLabel": "vizsgálja"
+    },
+    {
+      "source": "ding_an_sich",
+      "target": "fenomenalis_vilag",
+      "relationLabel": "ellentéte"
+    },
+    {
+      "source": "kant",
+      "target": "fenomenalis_vilag",
+      "relationLabel": "fogalmát bevezette"
+    },
+    {
+      "source": "szubjektum",
+      "target": "fenomenalis_vilag",
+      "relationLabel": "számára megjelenő"
+    },
+    {
+      "source": "májá_fátyla",
+      "target": "illuzio",
+      "relationLabel": "teremti"
+    },
+    {
+      "source": "kepzet",
+      "target": "illuzio",
+      "relationLabel": "lehet"
+    },
+    {
+      "source": "szenvedes",
+      "target": "illuzio",
+      "relationLabel": "következménye"
+    },
+    {
+      "source": "akarat",
+      "target": "illuzio",
+      "relationLabel": "elfedi"
+    },
+    {
+      "source": "akarat_tagadasa",
+      "target": "illuzio",
+      "relationLabel": "feloldja"
+    },
+    {
+      "source": "vágy_es_hiany",
+      "target": "akarat",
+      "relationLabel": "az akarat megnyilvánulása"
+    },
+    {
+      "source": "vágy_es_hiany",
+      "target": "szenvedes",
+      "relationLabel": "oka"
+    },
+    {
+      "source": "vágy_es_hiany",
+      "target": "fenomenalis_vilag",
+      "relationLabel": "jellemzője"
+    },
+    {
+      "source": "individuacio_elve",
+      "target": "akarat",
+      "relationLabel": "magyarázza az akarat sokféleségét"
+    },
+    {
+      "source": "individuacio_elve",
+      "target": "májá_fátyla",
+      "relationLabel": "párhuzamos koncepció"
+    },
+    {
+      "source": "individuacio_elve",
+      "target": "fenomenalis_vilag",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "individuacio_elve",
+      "target": "szenvedes",
+      "relationLabel": "hozzájárul a"
+    },
+    {
+      "source": "individuacio_elve",
+      "target": "kant",
+      "relationLabel": "ihletője"
+    },
+    {
+      "source": "individuacio_elve",
+      "target": "ismeretelmelet",
+      "relationLabel": "kapcsolódik az"
+    },
+    {
+      "source": "céltalan_torekvés",
+      "target": "akarat",
+      "relationLabel": "lényegi tulajdonsága"
+    },
+    {
+      "source": "céltalan_torekvés",
+      "target": "szenvedes",
+      "relationLabel": "oka"
+    },
+    {
+      "source": "céltalan_torekvés",
+      "target": "objektivacio",
+      "relationLabel": "megnyilvánul az"
+    },
+    {
+      "source": "céltalan_torekvés",
+      "target": "vágy_es_hiany",
+      "relationLabel": "eredményezi a"
+    },
+    {
+      "source": "életigenlés",
+      "target": "akarat",
+      "relationLabel": "megerősíti az"
+    },
+    {
+      "source": "életigenlés",
+      "target": "szenvedes",
+      "relationLabel": "fenntartja a"
+    },
+    {
+      "source": "életigenlés",
+      "target": "akarat_tagadasa",
+      "relationLabel": "ellentéte"
+    },
+    {
+      "source": "életigenlés",
+      "target": "vágy_es_hiany",
+      "relationLabel": "táplálja a"
+    },
+    {
+      "source": "életigenlés",
+      "target": "céltalan_torekvés",
+      "relationLabel": "fenntartja a"
+    }
+  ],
+  "customOrder": [
+    "schopenhauer",
+    "nemet_idealizmus_felbomlasa",
+    "hegeli_rendszer_kritikaja",
+    "hegel",
+    "kant",
+    "kategorikus_imperativusz",
+    "schopenhauer_filozofiaja",
+    "a_vilag_mint_akarat_es_kepzet",
+    "akarat",
+    "kepzet",
+    "céltalan_torekvés",
+    "életigenlés",
+    "illuzio",
+    "vágy_es_hiany",
+    "metafizika",
+    "objektivacio",
+    "szenvedes",
+    "etika",
+    "a_moral_ket_alapforrasarol",
+    "akarat_tagadasa",
+    "aszkézis",
+    "szimpátia",
+    "esztetika",
+    "művészet",
+    "zene",
+    "ismeretelmelet",
+    "fenomenalis_vilag",
+    "individuacio_elve",
+    "ding_an_sich",
+    "májá_fátyla",
+    "objektum",
+    "szubjektum",
+    "indiai_filozofia",
+    "parerga_es_paralipomena"
+  ],
+  "metadata": {
+    "icon": "umbrella"
+  }
+}
