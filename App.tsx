@@ -188,13 +188,20 @@ const App: React.FC = () => {
     };
     loadLibrary();
 
-    // --- DEEP LINKING LOGIC ---
+    // --- DEEP LINKING LOGIC (URL PATH or ?src=) ---
+    // Safe path extraction: handles case where pathname might lack leading slash in some envs
+    const rawPath = window.location.pathname;
+    const path = rawPath.startsWith('/') ? rawPath.slice(1) : rawPath;
+    
     const params = new URLSearchParams(window.location.search);
     const src = params.get('src');
     
-    if (src) {
-        // Ha van ?src=nietzsche paraméter, azt töltjük be
-        handleLoadOnlineGraphByFilename(src);
+    // Priority: 1. Clean Path, 2. Query Param. 
+    // Filter out common false positives like "index.html" or protocol fragments like "ttps:"
+    if (path && path !== '' && path !== 'index.html' && !path.includes(':')) {
+         handleLoadOnlineGraphByFilename(decodeURIComponent(path));
+    } else if (src) {
+         handleLoadOnlineGraphByFilename(src);
     }
 
     return () => window.removeEventListener('resize', handleResize);
@@ -722,7 +729,8 @@ const App: React.FC = () => {
           setIsOutlineOpen(false);
       } catch (err) {
           console.error("Error loading online graph", err);
-          setError("Nem sikerült betölteni az online gráfot. Ellenőrizd, hogy a fájl létezik-e.");
+          // More user friendly error
+          setError("A keresett online gráf nem található. Lehet, hogy a link hibás, vagy a fájl törölve lett.");
       } finally {
           setLoading(false);
       }
