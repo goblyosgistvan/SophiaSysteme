@@ -1,0 +1,18 @@
+[
+  {
+    "filename": "arthur_schopenhauer.json",
+    "title": "Arthur Schopenhauer",
+    "description": "Leírás jön ide.",
+    "category": "Romantika",
+    "added": "2025.01.22.",
+    "icon": "umbrella"
+  },
+  {
+    "filename": "friedrich_nietzsche.json",
+    "title": "Friedrich Nietzsche",
+    "description": "Leírás ide jön.",
+    "category": "Egzisztencializmus",
+    "added": "2025.01.22.",
+    "icon": "flame"
+  }
+]

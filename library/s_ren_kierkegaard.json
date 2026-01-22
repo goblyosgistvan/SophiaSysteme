@@ -1,0 +1,1199 @@
+{
+  "nodes": [
+    {
+      "id": "kierkegaard",
+      "label": "Søren Kierkegaard",
+      "type": "ROOT",
+      "shortSummary": "Dán filozófus, teológus és költő, akit az egzisztencializmus atyjaként tartanak számon, és aki az egyén szubjektív tapasztalatára, a szabadságra, a választásra és a hitre helyezte a hangsúlyt.",
+      "longExplanation": "Søren Kierkegaard (1813–1855) munkássága radikális szakítást jelentett a korabeli német idealizmussal, különösen Hegel rendszerével. Filozófiájának középpontjában az _egyes ember_ áll, akinek szubjektív létezése, belső küzdelmei és választásai a legfontosabbak. Műveiben gyakran használt álnéven írt, hogy különböző perspektívákat mutasson be, és az olvasót aktív gondolkodásra ösztönözze, nem pedig passzív befogadásra.\n\nKierkegaard mélyen vallásos gondolkodó volt, aki a kereszténység lényegét kereste, és kritikusan viszonyult a korabeli dán államegyházhoz, amelyet a hit elvilágiasodásával vádolt. Filozófiája nem egy zárt rendszert kínál, hanem az emberi lét paradoxonait, a szorongást, a kétségbeesést és a hit irracionális ugrását vizsgálja, hangsúlyozva a személyes elköteleződés és a szubjektív igazság fontosságát az objektív tudással szemben.",
+      "connections": [
+        "egzisztencia_fogalma",
+        "let_stadiumai",
+        "szorongas",
+        "ketsegbees",
+        "hit_szemelyessege",
+        "muveszetfilozofia",
+        "kesei_schelling_jegyzetek",
+        "szubjektiv_igazsag",
+        "egyes_ember",
+        "paradoxon"
+      ],
+      "conceptContext": ""
+    },
+    {
+      "id": "egzisztencia_fogalma",
+      "label": "Az egzisztencia fogalma",
+      "type": "CONCEPT",
+      "shortSummary": "Kierkegaardnál az egzisztencia az egyéni, szubjektív létet jelenti, amely a választás, a szabadság és a felelősség terhe alatt áll, és nem oldható fel egy abszolút rendszerben.",
+      "longExplanation": "Az egzisztencia Kierkegaard filozófiájának sarokköve, amely élesen szemben áll a hegeli _lét_ fogalmával. Míg Hegel az abszolút szellem fejlődését és az egyénnek a rendszerbe való beilleszkedését hangsúlyozta, Kierkegaard számára az egzisztencia az egyedi, megismételhetetlen emberi létet jelenti, amely folyamatosan _válik_, és sosem válik teljessé vagy rendszerezhetővé. Az egzisztencia a _lehetőség_ és a _valóság_ közötti feszültségben él, és a _szabadság_ terhe alatt áll, amely a _szorongás_ forrása is.\n\nAz egzisztencia nem egy statikus állapot, hanem egy dinamikus folyamat, amelyben az egyénnek folyamatosan választania kell, és felelősséget kell vállalnia döntéseiért. Ez a választás nem racionális kalkuláció eredménye, hanem egy szubjektív, szenvedélyes elköteleződés. Az egzisztencia fogalma alapvető a lét-stádiumok megértéséhez, mivel minden stádium az egzisztencia egy-egy módját írja le, és az átmenet közöttük mindig egy radikális _ugrás_.",
+      "connections": [
+        "kierkegaard",
+        "let_stadiumai",
+        "szabadsag",
+        "szorongas",
+        "egyes_ember",
+        "hegel",
+        "kesei_schelling_jegyzetek"
+      ],
+      "conceptContext": "Ellentétben áll a hegeli rendszerrel, amely az egyedi létet az abszolút szellem alá rendeli. Párhuzamban áll a későbbi egzisztencialista gondolkodókkal (Heidegger, Sartre), akik szintén az egyéni létet és a szabadságot hangsúlyozták."
+    },
+    {
+      "id": "kesei_schelling_jegyzetek",
+      "label": "Kései Schelling filozófiája a Kierkegaard jegyzetekben",
+      "type": "CATEGORY",
+      "shortSummary": "Kierkegaard 1841-ben részt vett Schelling berlini előadásain, és jegyzeteiben kritikusan viszonyult a német idealista filozófus kései rendszeréhez, különösen annak rendszerszerűségéhez és az egzisztencia elhanyagolásához.",
+      "longExplanation": "Søren Kierkegaard 1841-ben Berlinbe utazott, hogy meghallgassa F. W. J. Schelling előadásait, akit akkoriban a német idealizmus egyik utolsó nagy alakjának tartottak. Kierkegaard reménykedett abban, hogy Schelling „pozitív filozófiája” választ adhat a hegeli rendszer hiányosságaira, különösen az egyéni egzisztencia és a szabadság kérdésében. Jegyzeteket készített az előadásokról, amelyekből kiderül, hogy bár kezdetben lelkes volt, hamarosan kiábrándult Schellingből.\n\nKierkegaard kritikája elsősorban arra irányult, hogy Schelling rendszere, bár a szabadságot és a lehetőséget hangsúlyozta, mégis túl absztrakt és rendszerszerű maradt, és nem tudta megragadni az egyéni egzisztencia konkrét, szubjektív valóságát. Kierkegaard úgy érezte, Schelling nem tudott kilépni a spekulatív filozófia keretei közül, és nem jutott el a valódi egzisztenciális tapasztalathoz. Ez a kiábrándulás megerősítette Kierkegaard-t abban a meggyőződésében, hogy a filozófiának az egyéni létet kell vizsgálnia, nem pedig absztrakt rendszereket építenie.",
+      "connections": [
+        "kierkegaard",
+        "schelling",
+        "egzisztencia_fogalma",
+        "hegel"
+      ],
+      "conceptContext": "Schelling kései filozófiája az egzisztencia és a szabadság kérdéseivel foglalkozott, de Kierkegaard számára mégis túl rendszerszerű maradt, ellentétben az ő szubjektív egzisztenciát hangsúlyozó megközelítésével."
+    },
+    {
+      "id": "let_stadiumai",
+      "label": "A lét-stádiumai",
+      "type": "CATEGORY",
+      "shortSummary": "Kierkegaard három alapvető lét-stádiumot különböztet meg: az esztétikai, az etikai és a vallási stádiumot, amelyek nem fejlődési fokozatok, hanem minőségi ugrások az emberi egzisztenciában.",
+      "longExplanation": "Kierkegaard a _Vagy-vagy_ című művében vezeti be a lét-stádiumok fogalmát, amelyek az emberi egzisztencia különböző módjait írják le. Ezek a stádiumok nem logikai vagy kronológiai fejlődési fokozatok, hanem minőségi ugrások, amelyek egy radikális _választás_ és _elköteleződés_ eredményei. Az egyén szabadon dönthet arról, hogy melyik stádiumban él, és az egyikből a másikba való átlépés mindig egy egzisztenciális _ugrást_ igényel, amely magában foglalja a korábbi létmód feladását.\n\nA három stádium – az esztétikai, az etikai és a vallási – az emberi szabadság és felelősség különböző szintjeit mutatja be. Az esztétikai stádium a pillanatnyi élvezet és a felelőtlenség világa, az etikai stádium a választás és az univerzális erkölcsi törvényeknek való alávetettség, míg a vallási stádium a hit paradoxonán alapul, ahol az egyén abszolút viszonyba kerül Istennel, felfüggesztve az etikaiat egy magasabb parancs kedvéért. Kierkegaard szerint a legtöbb ember az esztétikai vagy az etikai stádiumban reked, és csak kevesen jutnak el a vallási stádiumba.",
+      "connections": [
+        "kierkegaard",
+        "esztetikai_stadium",
+        "etikai_stadium",
+        "vallasi_stadium",
+        "ugras",
+        "valasztas",
+        "egzisztencia_fogalma",
+        "vagy_vagy"
+      ],
+      "conceptContext": "Kierkegaard ezen modellje nem fejlődési séma, hanem minőségi ugrások sorozata, ellentétben a hegeli dialektikával, amely a fokozatos, logikai fejlődést hangsúlyozza."
+    },
+    {
+      "id": "esztetikai_stadium",
+      "label": "Esztétikai stádium",
+      "type": "CONCEPT",
+      "shortSummary": "A lét-stádiumok közül az első, amelyet a pillanatnyi élvezet, a felelőtlenség, a szépség és az unalom elkerülése jellemez, és amelyben az egyén a lehetőségek világában él elköteleződés nélkül.",
+      "longExplanation": "Az esztétikai stádium az emberi egzisztencia azon módja, amelyben az egyén a külső ingerekre és a pillanatnyi élvezetekre fókuszál. Az esztéta kerüli az elköteleződést, a felelősséget és a döntéseket, amelyek korlátoznák szabadságát. Élete a változatosság, a szépség és az intellektuális élvezetek kereséséről szól, gyakran a művészet és a kultúra világában. Az esztéta számára a legfőbb ellenség az _unalom_, amelyet folyamatosan új élményekkel próbál elűzni.\n\nKierkegaard az esztétikai stádiumot gyakran Don Juan alakjával illusztrálja, aki a csábítás és a pillanatnyi gyönyör megtestesítője. Bár az esztétikai létmód vonzó lehet, Kierkegaard szerint végső soron _kétségbeeséshez_ vezet, mivel az egyén nem talál valódi értelmet és elköteleződést az életében. Az esztéta nem választja önmagát, hanem sodródik a lehetőségek között, és így nem válik valódi _énné_.",
+      "connections": [
+        "let_stadiumai",
+        "vagy_vagy",
+        "don_juan",
+        "ketsegbees",
+        "muveszetfilozofia",
+        "unalom"
+      ],
+      "conceptContext": "Jellemzője az azonnali élvezet keresése, a felelősség elkerülése. Kontrasztban áll az etikai és vallási stádiummal, amelyek az elköteleződést és a felelősségvállalást hangsúlyozzák."
+    },
+    {
+      "id": "etikai_stadium",
+      "label": "Etikai stádium",
+      "type": "CONCEPT",
+      "shortSummary": "A lét-stádiumok közül a második, amelyben az egyén tudatosan választja önmagát, felelősséget vállal tetteiért, és az univerzális erkölcsi törvényeknek veti alá magát.",
+      "longExplanation": "Az etikai stádium az esztétikai stádiumból való _ugrás_ eredménye, amelyben az egyén felismeri a választás és a felelősség fontosságát. Az etikus ember nem a pillanatnyi élvezeteknek él, hanem tudatosan elkötelezi magát az univerzális erkölcsi normák és a kötelesség mellett. Feleséget választ, családot alapít, munkát vállal, és a közösség hasznos tagjává válik. Az etikai stádiumban az egyén az _általános_ érvényű erkölcsi elvek szerint él, és önmagát mint felelős, választó lényt konstituálja.\n\nKierkegaard a _Vagy-vagy_ című művében „Bíró Vilmos” alakján keresztül mutatja be az etikai stádiumot, aki a házasság és a kötelességtudat képviselője. Bár az etikai stádium magasabb rendű az esztétikainál, és az _én_ kialakulásának fontos lépcsője, Kierkegaard szerint mégsem a legmagasabb létmód. Az etikai stádium korlátai abban rejlenek, hogy az univerzális erkölcs nem tudja kezelni az egyéni, abszolút viszonyt Istennel, és bizonyos helyzetekben az etikai elvek elégtelennek bizonyulhatnak, ami a _bűn_ és a _kétségbeesés_ felismeréséhez vezethet.",
+      "connections": [
+        "let_stadiumai",
+        "vagy_vagy",
+        "valasztas",
+        "felelosseg",
+        "univerzalis_erkolcs",
+        "ketsegbees",
+        "bun"
+      ],
+      "conceptContext": "A választás és a felelősségvállalás stádiuma, ahol az egyén az univerzális erkölcsi törvényeknek veti alá magát. Kontrasztban áll az esztétikai stádiummal, amely a felelőtlenséget, és a vallási stádiummal, amely az etikai felfüggesztését jelenti."
+    },
+    {
+      "id": "vallasi_stadium",
+      "label": "Vallási stádium",
+      "type": "CONCEPT",
+      "shortSummary": "A lét-stádiumok közül a legmagasabb, amelyben az egyén a hit _paradoxonán_ keresztül abszolút viszonyba kerül Istennel, felfüggesztve az etikaiat egy magasabb, isteni parancs kedvéért.",
+      "longExplanation": "A vallási stádium az etikai stádiumból való radikális _ugrás_ eredménye, amelyben az egyén felismeri az univerzális erkölcs korlátait, és egy abszolút viszonyba kerül Istennel. Ez a stádium a _hit_ paradoxonán alapul, amely az emberi értelem számára _abszurdnak_ tűnik. A hit lovagja, mint például Ábrahám, kész felfüggeszteni az etikaiat – például fia, Izsák feláldozásával –, mert egy magasabb, isteni parancsot követ. Ez a „teleologikus felfüggesztés” azt jelenti, hogy az egyén egyedül áll Isten előtt, és döntései nem magyarázhatók racionális vagy univerzális erkölcsi elvekkel.\n\nA vallási stádiumban az _egyes ember_ a legteljesebb mértékben önmaga, mivel abszolút viszonyban áll az Abszolúttal. Ez a stádium a _szubjektív igazság_ csúcsa, ahol az igazság nem objektív tények halmaza, hanem az egyén szenvedélyes, belső elköteleződése. A vallási ember a _szorongás_ és a _kétségbeesés_ mélységein keresztül jut el a hithez, amely egyben a _bűn_ felismerését és az _Isten_ előtti megbánást is magában foglalja. Ez a stádium a legnehezebb és a legmagányosabb, de egyben a legautentikusabb létmód is Kierkegaard szerint.",
+      "connections": [
+        "let_stadiumai",
+        "hit_szemelyessege",
+        "paradoxon",
+        "abszurd",
+        "abraam",
+        "isten",
+        "ugras",
+        "szubjektiv_igazsag",
+        "szorongas",
+        "ketsegbees",
+        "bun",
+        "a_felelem_es_retteges"
+      ],
+      "conceptContext": "A hit paradoxonán alapul, ahol az egyén felfüggeszti az etikaiat egy magasabb, isteni parancs kedvéért. Kontrasztban áll az etikai stádiummal, amely az univerzális erkölcsi normákhoz való ragaszkodást jelenti, és a dogmatikus, intézményesített vallással, amely az objektív hitet hangsúlyozza."
+    },
+    {
+      "id": "szorongas",
+      "label": "Szorongás",
+      "type": "CONCEPT",
+      "shortSummary": "A szorongás Kierkegaardnál a szabadság és a végtelen lehetőségek tudatából fakadó, tárgy nélküli félelem, amely a bűn lehetőségére mutat rá.",
+      "longExplanation": "Kierkegaard _A félelem és rettegés_ című művében elemzi a szorongást, amelyet élesen megkülönböztet a _félelemtől_. A félelemnek mindig van egy konkrét tárgya (pl. egy veszélyes állat), míg a szorongás tárgytalan, a _semmi_ előtt érzett szédülés. A szorongás az emberi _szabadság_ velejárója, abból fakad, hogy az embernek végtelen lehetőségei vannak, és választania kell. Ez a választás magában foglalja a _bűn_ lehetőségét is, még mielőtt a bűn elkövetésre kerülne. A szorongás tehát a szabadság és a bűn közötti átmeneti állapot, a „lehetőség valósága”.\n\nA szorongás nem pusztán negatív érzés, hanem egyben az emberi fejlődés motorja is. Azáltal, hogy az ember megtapasztalja a szorongást, tudatosul benne a szabadsága és a felelőssége, és ez ösztönözheti arra, hogy _ugrást_ tegyen az etikai vagy a vallási stádiumba. A szorongás az _én_ kialakulásának alapvető eleme, mivel az egyénnek szembe kell néznie a saját végességével és a választás terhével. A szorongás felismerése vezethet a _kétségbeeséshez_ is, ha az egyén nem tudja kezelni a szabadság terhét.",
+      "connections": [
+        "kierkegaard",
+        "szabadsag",
+        "bun",
+        "a_felelem_es_retteges",
+        "ketsegbees",
+        "ugras",
+        "egzisztencia_fogalma"
+      ],
+      "conceptContext": "Nem azonos a félelemmel, amelynek tárgya van. A szorongás a szabadság és a végtelen lehetőségek tudatából fakad, a semmi előtt érzett szédülés. Párhuzamban áll Heidegger _félelem_ fogalmával, amely szintén az emberi lét alapvető tapasztalata."
+    },
+    {
+      "id": "ketsegbees",
+      "label": "Kétségbeesés",
+      "type": "CONCEPT",
+      "shortSummary": "A kétségbeesés Kierkegaardnál a szellem betegsége, az _én_ nem akar önmaga lenni, vagy önmaga akar lenni, de nem tud, és a bűnnel való szembesülésből fakad.",
+      "longExplanation": "Kierkegaard _A halálos betegség_ című művében a kétségbeesést a „halálos betegségnek” nevezi, amely nem a test, hanem a _szellem_ betegsége. A kétségbeesés az _én_ viszonya önmagához, amelyben az én nem akar önmaga lenni, vagy önmaga akar lenni, de nem tud. Ez a betegség abból fakad, hogy az ember egy szintézis a végtelen és a véges, az időbeli és az örök, a szabadság és a szükségszerűség között, és ha ez a szintézis felbomlik, kétségbeesésbe esik.\n\nA kétségbeesésnek több formája van: az egyik, amikor az ember nem akar önmaga lenni (pl. az esztéta, aki elmenekül a felelősség elől), a másik, amikor önmaga akar lenni, de nem tud (pl. az etikus, aki felismeri a bűnét, de nem tudja feloldani). A kétségbeesés végső soron a _bűn_ tudatából fakad, abból, hogy az ember elszakadt Istentől. A kétségbeesésből való egyetlen kiút a _hit_, amelyben az én Istenre támaszkodva, Isten előtt vállalja önmagát. A kétségbeesés tehát egyben a hitre való felhívás is, egy egzisztenciális válság, amely a vallási stádiumba való _ugráshoz_ vezethet.",
+      "connections": [
+        "kierkegaard",
+        "bun",
+        "a_halalos_betegseg",
+        "hit_szemelyessege",
+        "szorongas",
+        "en",
+        "ugras",
+        "esztetikai_stadium",
+        "etikai_stadium"
+      ],
+      "conceptContext": "A szellem betegsége, az én nem akar önmaga lenni, vagy önmaga akar lenni, de nem tud. Ellentétben áll a hit állapotával, amelyben az én Istenre támaszkodva, Isten előtt vállalja önmagát."
+    },
+    {
+      "id": "felelem_es_bun",
+      "label": "Félelem és bűn",
+      "type": "CONCEPT",
+      "shortSummary": "Kierkegaardnál a félelem a bűn előtti állapot, a bűn pedig a szabadság rossz irányú felhasználása, amely az emberi egzisztencia alapvető problémája.",
+      "longExplanation": "Kierkegaard _A félelem és rettegés_ című művében a _félelem_ (Angest, gyakran szorongásként fordítják) és a _bűn_ szoros kapcsolatát vizsgálja. A félelem nem azonos a konkrét veszélytől való rettegéssel, hanem a _szabadság_ és a _lehetőség_ tudatából fakadó, tárgy nélküli szorongás. Ez a szorongás az emberi lét alapvető tapasztalata, amely megelőzi a bűnt, de egyben rá is mutat annak lehetőségére. Az ember szorong, mert szabadon választhat a jó és a rossz között, és ez a választás magában hordozza a bűn elkövetésének lehetőségét.\n\nA _bűn_ Kierkegaard számára nem pusztán egy rossz cselekedet, hanem egy egzisztenciális állapot, az ember elszakadása Istentől. A bűn az _én_ kétségbeesésének végső formája, amikor az én nem akar önmaga lenni Isten előtt, vagy önmaga akar lenni Isten nélkül. A bűn az eredendő bűn keresztény tanához kapcsolódik, de Kierkegaard hangsúlyozza az egyéni felelősséget és a választás aktusát. A bűn felismerése és a bűnbánat elengedhetetlen a _hit_ és a _vallási stádium_ eléréséhez, mivel csak Isten előtt lehet feloldozást nyerni a bűn terhe alól.",
+      "connections": [
+        "kierkegaard",
+        "szorongas",
+        "bun",
+        "szabadsag",
+        "a_felelem_es_retteges",
+        "ketsegbees",
+        "vallasi_stadium",
+        "isten"
+      ],
+      "conceptContext": "A félelem a bűn előtti állapot, a bűn pedig a szabadság rossz irányú felhasználása. Kapcsolódik az eredendő bűn keresztény tanához, de az egyéni felelősséget és a választást hangsúlyozza, ellentétben a determinisztikus teológiai nézetekkel."
+    },
+    {
+      "id": "hit_szemelyessege",
+      "label": "A hit személyessége",
+      "type": "CONCEPT",
+      "shortSummary": "Kierkegaard szerint a hit nem egy objektív doktrína elfogadása, hanem egy szubjektív, szenvedélyes elköteleződés, egy egyéni _ugrás_, amely az _abszurd_ elfogadását jelenti Isten előtt.",
+      "longExplanation": "A hit Kierkegaard filozófiájának központi eleme, amelyet élesen megkülönböztet a puszta tudástól vagy a racionális meggyőződéstől. A hit nem egy objektív igazság, egy dogmatikus rendszer vagy egy történelmi tény elfogadása, hanem egy mélyen személyes, szubjektív és szenvedélyes elköteleződés. Ez az elköteleződés egy _ugrást_ igényel az értelem határain túlra, az _abszurd_ elfogadását, mint például Isten emberré válásának _paradoxonát_. A hitben az _egyes ember_ egyedül áll Isten előtt, és abszolút viszonyba kerül vele, felfüggesztve az univerzális etikai elveket.\n\nA hit személyessége azt jelenti, hogy senki sem hihet más helyett, és a hit nem örökölhető vagy tanítható. Ez egy belső döntés, amely a _szorongás_ és a _kétségbeesés_ mélységein keresztül születik meg. A hit nem ad racionális magyarázatokat, hanem a bizalom és az elköteleződés aktusa egy olyan valóság iránt, amely meghaladja az emberi értelmet. Kierkegaard kritikusan viszonyult a korabeli intézményesített kereszténységhez, amelyet a hit elvilágiasodásával és a személyes elköteleződés hiányával vádolt, hangsúlyozva, hogy a valódi hit mindig egyéni és radikális.",
+      "connections": [
+        "kierkegaard",
+        "vallasi_stadium",
+        "szubjektiv_igazsag",
+        "paradoxon",
+        "abszurd",
+        "ugras",
+        "egyes_ember",
+        "isten",
+        "a_halalos_betegseg",
+        "filozofiai_morzsak",
+        "befejezetlen_tudomanyos_utorat"
+      ],
+      "conceptContext": "A hit nem egy objektív doktrína elfogadása, hanem egy szubjektív, szenvedélyes elköteleződés, amely egyéni ugrást igényel. Ellentétben áll a dogmatikus, intézményesített vallással és az objektív teológiával, amelyek a hitet racionális tényekre vagy közösségi rítusokra redukálják."
+    },
+    {
+      "id": "muveszetfilozofia",
+      "label": "Művészetfilozófiája",
+      "type": "CATEGORY",
+      "shortSummary": "Kierkegaard művészetfilozófiája szorosan kapcsolódik az esztétikai létstádiumhoz, de nem elítéli a művészetet, hanem annak korlátait mutatja be az emberi egzisztencia teljességéhez képest.",
+      "longExplanation": "Kierkegaard művészetfilozófiája elsősorban a _Vagy-vagy_ című művében bontakozik ki, ahol az esztétikai létstádiumot elemzi. Bár az esztéta a művészet és a szépség világában él, Kierkegaard nem a művészetet ítéli el, hanem azt a létmódot, amely kizárólag az esztétikai élvezetekre fókuszál, elkerülve az etikai és vallási elköteleződést. A művészet, különösen a zene és az irodalom, képes megragadni az emberi lélek mélységeit és a lehetőségek gazdagságát, de önmagában nem ad választ az egzisztenciális kérdésekre.\n\nKierkegaard elemzi például Mozart _Don Juan_ című operáját, mint az esztétikai zsenialitás és a pillanatnyi élvezet megtestesítőjét. A művészet képes felkelteni a vágyat, a szenvedélyt és az _unalom_ elkerülését, de nem képes az _én_ valódi konstituálására vagy a _kétségbeesés_ feloldására. A művészetfilozófia tehát Kierkegaardnál nem öncélú, hanem az emberi egzisztencia mélyebb megértésének eszköze, amely rámutat az esztétikai létmód korlátaira és a magasabb stádiumok szükségességére.",
+      "connections": [
+        "kierkegaard",
+        "esztetikai_stadium",
+        "vagy_vagy",
+        "don_juan",
+        "romantika",
+        "unalom"
+      ],
+      "conceptContext": "Kierkegaard művészetfilozófiája szorosan kapcsolódik az esztétikai létstádiumhoz, de nem elítéli a művészetet, hanem annak korlátait mutatja be az emberi egzisztencia teljességéhez képest. Kritikusan viszonyul a romantika túlzott szubjektivizmusához és a művészet abszolutizálásához."
+    },
+    {
+      "id": "vagy_vagy",
+      "label": "_Vagy-vagy_",
+      "type": "WORK",
+      "shortSummary": "Kierkegaard egyik legfontosabb korai műve, amely két álnéven írt részből áll, és az esztétikai és etikai létstádiumok közötti választást mutatja be.",
+      "longExplanation": "A _Vagy-vagy_ (1843) Kierkegaard egyik legterjedelmesebb és legbefolyásosabb műve, amelyet Victor Eremita álnéven adott ki. A könyv két fő részből áll, amelyeket „A” és „B” szerzők írtak. „A” az esztétikai létmódot képviseli, naplóbejegyzések, esszék és aforizmák formájában, amelyek a pillanatnyi élvezetekre, a szépségre és az _unalom_ elkerülésére fókuszálnak. Itt található a híres _Don Juan_ elemzés is. „B” pedig az etikai létmódot képviseli, „Bíró Vilmos” leveleiben, amelyek a választás, a felelősség és a házasság fontosságát hangsúlyozzák.\n\nA mű címe, a „vagy-vagy”, a két létmód közötti radikális _választás_ szükségességére utal. Kierkegaard nem ad egyértelmű választ, hanem az olvasót kényszeríti arra, hogy maga döntsön. A könyv nem pusztán filozófiai értekezés, hanem irodalmi alkotás is, amely a különböző perspektívák ütköztetésével mélyíti el az _egzisztencia_ megértését. A _Vagy-vagy_ alapvető a lét-stádiumok elméletének megértéséhez, és bevezeti a _kétségbeesés_ fogalmát is, mint az esztétikai létmód végső következményét.",
+      "connections": [
+        "kierkegaard",
+        "esztetikai_stadium",
+        "etikai_stadium",
+        "let_stadiumai",
+        "valasztas",
+        "don_juan",
+        "muveszetfilozofia",
+        "ketsegbees",
+        "unalom"
+      ],
+      "conceptContext": ""
+    },
+    {
+      "id": "a_felelem_es_retteges",
+      "label": "_A félelem és rettegés_",
+      "type": "WORK",
+      "shortSummary": "Kierkegaard 1843-ban Johannes de Silentio álnéven írt műve, amely Ábrahám történetén keresztül vizsgálja a hit _paradoxonát_, a _szorongást_ és az etikai felfüggesztését.",
+      "longExplanation": "_A félelem és rettegés_ (1843) Kierkegaard egyik legmélyebb és legprovokatívabb műve, amelyben Johannes de Silentio álnéven az _Ábrahám_ és Izsák történetét elemzi. A könyv a _hit_ _paradoxonát_ vizsgálja, azt a helyzetet, amikor az egyénnek egy isteni parancs miatt fel kell függesztenie az univerzális etikai elveket. Ábrahám kész feláldozni fiát, ami az etikai szempontból gyilkosság, de a hit szempontjából a legmagasabb rendű cselekedet.\n\nA mű bevezeti a „teleologikus felfüggesztés” fogalmát, amely szerint a hit lovagja egy magasabb cél érdekében felfüggeszti az etikaiat. Ez a felfüggesztés nem jelenti az etikai elvetését, hanem annak meghaladását. A könyv emellett mélyen elemzi a _szorongást_ is, mint az emberi _szabadság_ és a _bűn_ lehetőségének tudatából fakadó alapvető egzisztenciális érzést. _A félelem és rettegés_ alapvető a _vallási stádium_ megértéséhez, és rávilágít a hit irracionális, szubjektív és magányos természetére.",
+      "connections": [
+        "kierkegaard",
+        "szorongas",
+        "bun",
+        "hit_szemelyessege",
+        "paradoxon",
+        "abraam",
+        "vallasi_stadium",
+        "szabadsag"
+      ],
+      "conceptContext": ""
+    },
+    {
+      "id": "a_halalos_betegseg",
+      "label": "_A halálos betegség_",
+      "type": "WORK",
+      "shortSummary": "Kierkegaard 1849-ben Anti-Climacus álnéven írt műve, amely a _kétségbeesést_ mint a _szellem_ betegségét elemzi, és a _hit_ mint egyetlen gyógyír fontosságát hangsúlyozza.",
+      "longExplanation": "_A halálos betegség_ (1849) Kierkegaard egyik legfontosabb teológiai-filozófiai műve, amelyet Anti-Climacus álnéven publikált. A könyv a _kétségbeesést_ vizsgálja, amelyet a „halálos betegségnek” nevez, nem a test, hanem a _szellem_ betegségének. A kétségbeesés az _én_ viszonya önmagához, amelyben az én nem akar önmaga lenni, vagy önmaga akar lenni, de nem tud. Ez a betegség abból fakad, hogy az ember egy szintézis a végtelen és a véges, az időbeli és az örök, a szabadság és a szükségszerűség között, és ha ez a szintézis felbomlik, kétségbeesésbe esik.\n\nKierkegaard részletesen elemzi a kétségbeesés különböző formáit és mélységeit, és arra a következtetésre jut, hogy a kétségbeesés végső soron a _bűn_ tudatából fakad, abból, hogy az ember elszakadt Istentől. A könyv szerint a kétségbeesésből való egyetlen kiút a _hit_, amelyben az én Istenre támaszkodva, Isten előtt vállalja önmagát. _A halálos betegség_ tehát nem csupán a kétségbeesés diagnózisa, hanem a _hit személyességének_ és a _vallási stádium_ szükségességének erőteljes védelme is.",
+      "connections": [
+        "kierkegaard",
+        "ketsegbees",
+        "bun",
+        "hit_szemelyessege",
+        "en",
+        "szellem",
+        "vallasi_stadium"
+      ],
+      "conceptContext": ""
+    },
+    {
+      "id": "filozofiai_morzsak",
+      "label": "_Filozófiai morzsák_",
+      "type": "WORK",
+      "shortSummary": "Kierkegaard 1844-ben Johannes Climacus álnéven írt műve, amely a _szubjektív igazság_ és a _hit_ természetét vizsgálja, különösen a kereszténység paradoxonát.",
+      "longExplanation": "A _Filozófiai morzsák_ (1844) Johannes Climacus álnéven megjelent mű, amely Kierkegaard egyik legfontosabb hozzájárulása az ismeretelmélethez és a teológiához. A könyv a _szubjektív igazság_ fogalmát fejti ki, szembeállítva azt az objektív, rendszerszerű igazsággal. Kierkegaard azt a kérdést teszi fel, hogy hogyan lehet az örök igazságot időben megragadni, és hogyan lehet a _hit_ által tudásra jutni, ha a hit meghaladja az értelmet.\n\nA mű a kereszténység _paradoxonát_ vizsgálja, azt, hogy Isten, az örök, időben emberré lett. Ez az esemény az emberi értelem számára _abszurd_, és csak _hit_ által ragadható meg. A könyv hangsúlyozza, hogy a hit nem egy racionális következtetés eredménye, hanem egy _ugrás_, egy személyes döntés. A _Filozófiai morzsák_ alapvető a _hit személyességének_ és a _vallási stádium_ megértéséhez, és előkészíti a _Befejezetlen tudományos utóirat_ gondolatait.",
+      "connections": [
+        "kierkegaard",
+        "szubjektiv_igazsag",
+        "hit_szemelyessege",
+        "paradoxon",
+        "abszurd",
+        "ugras",
+        "vallasi_stadium",
+        "befejezetlen_tudomanyos_utorat"
+      ],
+      "conceptContext": ""
+    },
+    {
+      "id": "befejezetlen_tudomanyos_utorat",
+      "label": "_Befejezetlen tudományos utóirat a Filozófiai morzsákhoz_",
+      "type": "WORK",
+      "shortSummary": "Kierkegaard 1846-ban Johannes Climacus álnéven írt terjedelmes műve, amely továbbfejleszti a _szubjektív igazság_ és a _hit_ fogalmát, és élesen kritizálja a hegeli rendszert.",
+      "longExplanation": "A _Befejezetlen tudományos utóirat a Filozófiai morzsákhoz_ (1846) Kierkegaard egyik legfontosabb és legátfogóbb filozófiai műve, amelyet Johannes Climacus álnéven publikált. A könyv a _Filozófiai morzsák_ gondolatait fejleszti tovább, és a _szubjektív igazság_ fogalmát állítja a középpontba. A híres mondat, „Az igazság szubjektivitás”, itt kapja meg a legteljesebb kifejtését. Kierkegaard élesen kritizálja a hegeli rendszert és az objektív filozófiát, amely szerinte elhanyagolja az _egyes ember_ egzisztenciális valóságát és a _hit_ személyes, szenvedélyes természetét.\n\nA mű hangsúlyozza, hogy az igazság nem egy külső, objektív tény, amelyet passzívan befogadunk, hanem egy belső, szenvedélyes elköteleződés, amely az egyén _választásából_ fakad. A _hit_ nem racionális bizonyítékokon alapul, hanem egy _ugrás_ az _abszurdba_, amelyben az egyén abszolút viszonyba kerül Istennel. Az _Utóirat_ a _lét-stádiumok_ elméletét is részletesen tárgyalja, és a _vallási stádiumot_ mint a legmagasabb létmódot mutatja be. Ez a mű Kierkegaard egyik legfontosabb anti-hegeli kiáltványa, amely az egzisztencialista gondolkodás alapjait fektette le.",
+      "connections": [
+        "kierkegaard",
+        "szubjektiv_igazsag",
+        "hit_szemelyessege",
+        "hegel",
+        "objektiv_igazsag",
+        "egyes_ember",
+        "ugras",
+        "abszurd",
+        "vallasi_stadium",
+        "filozofiai_morzsak",
+        "let_stadiumai"
+      ],
+      "conceptContext": ""
+    },
+    {
+      "id": "schelling",
+      "label": "F. W. J. Schelling",
+      "type": "CONCEPT",
+      "shortSummary": "Német idealista filozófus, akinek kései filozófiája az egzisztencia és a szabadság kérdéseivel foglalkozott, de Kierkegaard számára mégis túl rendszerszerű maradt.",
+      "longExplanation": "Friedrich Wilhelm Joseph Schelling (1775–1854) a német idealizmus egyik kulcsfigurája volt, aki kezdetben Fichte, majd később Hegel mellett állt. Filozófiája az idők során jelentős változásokon ment keresztül, és kései korszakában a „pozitív filozófia” felé fordult, amely az _egzisztencia_, a _szabadság_ és a kinyilatkoztatás kérdéseivel foglalkozott, szemben a korábbi „negatív filozófiával”, amely a tiszta ész spekulációjára épült.\n\nKierkegaard 1841-ben részt vett Schelling berlini előadásain, remélve, hogy választ talál a hegeli rendszer hiányosságaira. Bár Schelling kísérlete, hogy a szabadságot és az egyéni létet beépítse rendszerébe, vonzó volt Kierkegaard számára, végül kiábrándult belőle. Kierkegaard úgy vélte, Schelling még mindig túl absztrakt és rendszerszerű maradt, és nem tudta megragadni az _egyes ember_ konkrét, szubjektív egzisztenciáját. Ez a kritika hozzájárult Kierkegaard saját egzisztencialista filozófiájának kialakulásához, amely élesen szembeállította a szubjektív létet az objektív rendszerekkel.",
+      "connections": [
+        "kesei_schelling_jegyzetek",
+        "hegel",
+        "egzisztencia_fogalma",
+        "szabadsag",
+        "kierkegaard"
+      ],
+      "conceptContext": "Német idealista filozófus, akinek kései filozófiája az egzisztencia és a szabadság kérdéseivel foglalkozott, de Kierkegaard számára mégis túl rendszerszerű maradt, ellentétben az ő szubjektív egzisztenciát hangsúlyozó megközelítésével. Gyakran állítják szembe Hegellel, de Kierkegaard mindkettőjük rendszerét kritikusan szemlélte."
+    },
+    {
+      "id": "szubjektiv_igazsag",
+      "label": "Szubjektív igazság",
+      "type": "CONCEPT",
+      "shortSummary": "Kierkegaard szerint az igazság nem objektív tények halmaza, hanem az egyén szenvedélyes, belső elköteleződése, amely az _én_ és az _örök_ viszonyában rejlik.",
+      "longExplanation": "A szubjektív igazság Kierkegaard filozófiájának egyik legforradalmibb fogalma, amelyet a _Filozófiai morzsák_ és a _Befejezetlen tudományos utóirat_ című műveiben fejt ki. Kierkegaard szerint az igazság nem egy külső, objektív valóság, amelyet az értelem passzívan befogad, hanem egy belső, szenvedélyes elköteleződés, amely az _egyes ember_ egzisztenciális valóságában gyökerezik. A híres mondat, „Az igazság szubjektivitás”, azt jelenti, hogy az igazság nem a „mit” (a tartalom), hanem a „hogyan” (az elköteleződés módja) kérdése.\n\nEz a fogalom élesen szemben áll a hegeli _objektív igazsággal_ és a tudományos racionalizmussal. A szubjektív igazság a _hit_ lényegi eleme, amelyben az egyén abszolút viszonyba kerül Istennel, még akkor is, ha ez az értelem számára _abszurdnak_ vagy _paradoxnak_ tűnik. A szubjektív igazság nem azt jelenti, hogy mindenki számára más az igazság, hanem azt, hogy az igazság csak személyes, szenvedélyes elköteleződés által válhat valóságossá az egyén számára. Ez az elköteleződés az _én_ konstituálásának alapja, és a _vallási stádium_ legfőbb jellemzője.",
+      "connections": [
+        "kierkegaard",
+        "hit_szemelyessege",
+        "objektiv_igazsag",
+        "vallasi_stadium",
+        "egyes_ember",
+        "paradoxon",
+        "abszurd",
+        "filozofiai_morzsak",
+        "befejezetlen_tudomanyos_utorat",
+        "hegel"
+      ],
+      "conceptContext": "Kierkegaard szerint az igazság nem objektív tények halmaza, hanem az egyén szenvedélyes, belső elköteleződése. Ellentétben áll az objektív igazság hegeli felfogásával, amely a rendszerszerű, racionálisan megragadható igazságot hangsúlyozza."
+    },
+    {
+      "id": "objektiv_igazsag",
+      "label": "Objektív igazság",
+      "type": "CONCEPT",
+      "shortSummary": "Az igazság külső, rendszerszerű, racionálisan megragadható formája, amelyet Kierkegaard a _szubjektív igazsággal_ állít szembe, mint az _egyes ember_ egzisztenciális valóságát elhanyagolót.",
+      "longExplanation": "Az objektív igazság Kierkegaard számára az a fajta igazság, amelyet a tudomány, a logika vagy a filozófiai rendszerek próbálnak megragadni. Ez az igazság külső, általános érvényű és racionálisan bizonyítható. Jellemzője, hogy a tartalomra, a „mit”-re fókuszál, és igyekszik kizárni a szubjektív elemeket. Kierkegaard élesen kritizálta az objektív igazság abszolutizálását, különösen a hegeli filozófiában, ahol az egyéni lét feloldódik az abszolút szellem fejlődésében.\n\nKierkegaard szerint az objektív igazság, bár fontos lehet bizonyos területeken, nem képes megragadni az emberi _egzisztencia_ lényegét, a _szabadságot_, a _választást_ és a _hit_ személyes, szenvedélyes természetét. Az objektív igazságra való túlzott fókusz elvezethet az _én_ elidegenedéséhez és a _kétségbeeséshez_, mivel nem ad választ az egyéni lét végső kérdéseire. Kierkegaard nem tagadta az objektív tények létezését, de hangsúlyozta, hogy az emberi lét szempontjából a _szubjektív igazság_ sokkal relevánsabb és mélyebb.",
+      "connections": [
+        "szubjektiv_igazsag",
+        "hegel",
+        "kierkegaard",
+        "egzisztencia_fogalma",
+        "hit_szemelyessege"
+      ],
+      "conceptContext": "Az igazság külső, rendszerszerű, racionálisan megragadható formája, amelyet Kierkegaard a szubjektív igazsággal állít szembe. Jellemző a hegeli filozófiára és a tudományos racionalizmusra, amelyekkel Kierkegaard az egyéni egzisztencia és a hit szempontjából polemizált."
+    },
+    {
+      "id": "ugras",
+      "label": "Ugrás",
+      "type": "CONCEPT",
+      "shortSummary": "A lét-stádiumok közötti átmenet, amely nem logikai fejlődés, hanem egy radikális, szabad döntés, amely a _hit_ lényegi eleme is.",
+      "longExplanation": "Az _ugrás_ Kierkegaard filozófiájának kulcsfogalma, amely a _lét-stádiumok_ közötti átmenetet írja le. Ez az átmenet nem egy fokozatos, logikai vagy dialektikus fejlődés, mint Hegel rendszerében, hanem egy radikális, minőségi változás, egy szabad és kockázatos döntés. Az _esztétikai stádiumból_ az _etikaiba_, majd az _etikaiból a vallásiba_ való átlépés mindig egy _ugrást_ igényel, amelyben az egyén feladja a korábbi létmód biztonságát és elkötelezi magát egy új, ismeretlen valóság mellett.\n\nAz _ugrás_ a _hit_ lényegi eleme is. A hit nem racionális bizonyítékokon alapul, hanem egy _ugrás_ az _abszurdba_, amelyben az egyén abszolút viszonyba kerül Istennel. Ez az _ugrás_ magában foglalja a _szorongás_ és a _kétségbeesés_ megtapasztalását, és a _szabadság_ radikális gyakorlását. Az _ugrás_ tehát nem egy passzív befogadás, hanem egy aktív, egzisztenciális döntés, amely az _egyes ember_ _énjének_ konstituálásához vezet.",
+      "connections": [
+        "kierkegaard",
+        "let_stadiumai",
+        "esztetikai_stadium",
+        "etikai_stadium",
+        "vallasi_stadium",
+        "hit_szemelyessege",
+        "valasztas",
+        "szabadsag",
+        "abszurd",
+        "szorongas",
+        "ketsegbees"
+      ],
+      "conceptContext": "A létstádiumok közötti átmenet, amely nem logikai fejlődés, hanem egy radikális, szabad döntés. Ellentétben áll a fokozatos, dialektikus fejlődéssel, amelyet Hegel képviselt."
+    },
+    {
+      "id": "egyes_ember",
+      "label": "Egyes ember",
+      "type": "CONCEPT",
+      "shortSummary": "Kierkegaard filozófiájának középpontjában álló egyén, aki nem oldódik fel a közösségben vagy az abszolút szellemben, hanem szubjektív, szabad és felelős lény.",
+      "longExplanation": "Az _egyes ember_ Kierkegaard filozófiájának abszolút középpontja. Ez a fogalom élesen szemben áll a hegeli rendszerrel, amelyben az egyén az abszolút szellem fejlődésének egy mozzanata, és feloldódik a közösségben vagy az államban. Kierkegaard számára az _egyes ember_ az, aki _egzisztál_, aki szabadon választ, felelősséget vállal, és egyedül áll Isten előtt. Az _egyes ember_ nem redukálható a tömegre, a fajra vagy bármilyen általános kategóriára.\n\nAz _egyes ember_ az, aki megtapasztalja a _szorongást_, a _kétségbeesést_ és a _bűnt_, és aki képes a _hit_ _ugrására_. Az _én_ konstituálása az _egyes ember_ feladata, amely a _szubjektív igazság_ megtalálásában és a _hit személyességében_ teljesedik ki. Kierkegaard egész munkássága az _egyes ember_ egzisztenciális küzdelmeinek, választásainak és a hitre való felhívásának szentelődik, hangsúlyozva az egyéni felelősséget és a személyes elköteleződés fontosságát a kollektív vagy absztrakt rendszerekkel szemben.",
+      "connections": [
+        "kierkegaard",
+        "egzisztencia_fogalma",
+        "szubjektiv_igazsag",
+        "hit_szemelyessege",
+        "szorongas",
+        "ketsegbees",
+        "bun",
+        "ugras",
+        "hegel",
+        "valasztas"
+      ],
+      "conceptContext": "Kierkegaard filozófiájának középpontjában álló egyén, aki nem oldódik fel a közösségben vagy az abszolút szellemben. Ellentétben áll a tömeggel és a hegeli szellemmel, amelyek az egyéni létet alárendelik a kollektívnek vagy az absztraktnak."
+    },
+    {
+      "id": "paradoxon",
+      "label": "Paradoxon",
+      "type": "CONCEPT",
+      "shortSummary": "A _hit_ lényegi eleme, amely meghaladja az emberi ész korlátait, például Isten emberré válása, és az _abszurd_ elfogadását igényli.",
+      "longExplanation": "A _paradoxon_ Kierkegaard filozófiájában a _hit_ központi fogalma, különösen a _Filozófiai morzsák_ és _A félelem és rettegés_ című művekben. A paradoxon az, ami az emberi értelem számára felfoghatatlan, ellentmondásos vagy abszurd. A kereszténység alapvető paradoxona például az, hogy az örök Isten időben emberré lett, vagy hogy a végtelen a végesben jelent meg. Ez az esemény nem magyarázható racionálisan, és nem is bizonyítható logikailag.\n\nA _hit_ éppen abban áll, hogy az egyén elfogadja ezt a paradoxont, és _ugrást_ tesz az értelem határain túlra. A _hit lovagja_, mint _Ábrahám_, maga is egy paradoxon, hiszen egy isteni parancs miatt felfüggeszti az univerzális etikai elveket. A paradoxon tehát nem egy logikai hiba, hanem az emberi lét és a _vallási stádium_ lényegi jellemzője, amely rávilágít az emberi értelem korlátaira és a _szubjektív igazság_ mélységére. A paradoxon elfogadása a _hit személyességének_ alapja.",
+      "connections": [
+        "kierkegaard",
+        "hit_szemelyessege",
+        "abszurd",
+        "vallasi_stadium",
+        "ugras",
+        "abraam",
+        "filozofiai_morzsak",
+        "a_felelem_es_retteges",
+        "szubjektiv_igazsag"
+      ],
+      "conceptContext": "A hit lényegi eleme, amely meghaladja az emberi ész korlátait, például Isten emberré válása. Ellentétben áll a racionális megértéssel és a logikai koherenciával, és az _abszurd_ elfogadását igényli."
+    },
+    {
+      "id": "abszurd",
+      "label": "Abszurd",
+      "type": "CONCEPT",
+      "shortSummary": "A _hit_ _paradoxonának_ egy aspektusa, amely az emberi értelem számára felfoghatatlan, és amelyet a _vallási stádiumban_ az egyénnek el kell fogadnia.",
+      "longExplanation": "Az _abszurd_ Kierkegaard filozófiájában szorosan kapcsolódik a _paradoxon_ fogalmához, és a _hit_ lényegi jellemzője. Az abszurd az, ami az emberi értelem számára értelmetlennek, logikátlannak vagy felfoghatatlannak tűnik. A keresztény hit alapvető tételei, mint például Isten emberré válása, vagy a halál utáni élet ígérete, az emberi ész számára abszurdnak tűnhetnek.\n\nKierkegaard szerint a _hit_ nem abban áll, hogy racionálisan megmagyarázzuk vagy feloldjuk az abszurdot, hanem abban, hogy _ugrást_ teszünk, és elfogadjuk azt. Ez az elfogadás nem passzív belenyugvás, hanem egy aktív, szenvedélyes elköteleződés, amely az _egyes ember_ _szubjektív igazságának_ alapja. Az abszurd elfogadása a _vallási stádium_ velejárója, és a _hit személyességének_ bizonyítéka, amelyben az egyén egyedül áll Isten előtt, és bizalmát egy olyan valóságba helyezi, amely meghaladja az emberi értelmet.",
+      "connections": [
+        "kierkegaard",
+        "paradoxon",
+        "hit_szemelyessege",
+        "vallasi_stadium",
+        "ugras",
+        "szubjektiv_igazsag"
+      ],
+      "conceptContext": "A hit paradoxonának egy aspektusa, amely az emberi értelem számára felfoghatatlan. Párhuzamban áll Camus abszurd fogalmával, de Kierkegaardnál az abszurd nem a nihilizmushoz, hanem a hithez vezet."
+    },
+    {
+      "id": "szabadsag",
+      "label": "Szabadság",
+      "type": "CONCEPT",
+      "shortSummary": "Az emberi _egzisztencia_ alapvető jellemzője, amely a _szorongás_ forrása is, és a _választás_ képességében nyilvánul meg.",
+      "longExplanation": "A _szabadság_ Kierkegaard filozófiájában az emberi _egzisztencia_ alapvető és elidegeníthetetlen jellemzője. Az ember szabadon választhat a lehetőségek között, és ez a választás nem determinált. Ez a szabadság azonban nem könnyű teher, hanem a _szorongás_ forrása is. Az ember szorong, mert végtelen lehetőségei vannak, és minden választás egyben lemondást is jelent más lehetőségekről. A szabadság tehát a „lehetőség valósága”, amely a _bűn_ lehetőségét is magában hordozza.\n\nA szabadság gyakorlása alapvető a _lét-stádiumok_ közötti _ugráshoz_. Az _esztétikai stádiumban_ az egyén elmenekül a szabadság terhe elől, az _etikai stádiumban_ tudatosan választja önmagát és a felelősséget, míg a _vallási stádiumban_ a legteljesebb szabadságot éli meg azáltal, hogy abszolút viszonyba kerül Istennel. A szabadság tehát nem pusztán a külső korlátok hiánya, hanem egy belső, egzisztenciális képesség, amely az _én_ konstituálásának alapja.",
+      "connections": [
+        "kierkegaard",
+        "egzisztencia_fogalma",
+        "szorongas",
+        "valasztas",
+        "bun",
+        "ugras",
+        "let_stadiumai",
+        "schelling"
+      ],
+      "conceptContext": "Az emberi egzisztencia alapvető jellemzője, amely a szorongás forrása is. Párhuzamban áll a későbbi egzisztencialista filozófiák (Heidegger, Sartre) szabadságfogalmával, de Kierkegaardnál a szabadság végső soron Istenhez vezet."
+    },
+    {
+      "id": "valasztas",
+      "label": "Választás",
+      "type": "CONCEPT",
+      "shortSummary": "Az emberi lét alapvető aktusa, különösen az _etikai stádiumban_, de a _vallási stádiumba_ való _ugrás_ is egy radikális választás.",
+      "longExplanation": "A _választás_ Kierkegaard filozófiájának egyik központi fogalma, amely szorosan kapcsolódik a _szabadsághoz_ és az _egzisztencia_ fogalmához. Az ember nem passzívan létezik, hanem folyamatosan választania kell, és ezek a választások konstituálják az _énjét_. A _Vagy-vagy_ című mű címe is a választás radikális természetére utal, amelyben az egyénnek döntenie kell az _esztétikai_ és az _etikai_ létmód között.\n\nA választás nem pusztán racionális mérlegelés eredménye, hanem egy egzisztenciális aktus, amely magában foglalja a felelősségvállalást és a kockázatot. Az _etikai stádiumban_ az egyén tudatosan választja önmagát és az univerzális erkölcsi törvényeket. A _vallási stádiumba_ való _ugrás_ pedig a legradikálisabb választás, amelyben az egyén abszolút viszonyba kerül Istennel, felfüggesztve az etikaiat. A választás tehát nem elkerülhető, és az emberi lét lényegi eleme, amely a _szorongás_ forrása is, de egyben az _én_ kialakulásának alapja is.",
+      "connections": [
+        "kierkegaard",
+        "szabadsag",
+        "let_stadiumai",
+        "esztetikai_stadium",
+        "etikai_stadium",
+        "vallasi_stadium",
+        "ugras",
+        "vagy_vagy",
+        "szorongas",
+        "egyes_ember"
+      ],
+      "conceptContext": "Az emberi lét alapvető aktusa, különösen az etikai stádiumban, de a vallási stádiumba való ugrás is egy radikális választás. Párhuzamban áll a későbbi egzisztencialista filozófiák (Sartre) választásfogalmával, de Kierkegaardnál a választás végső soron Istenhez vezet."
+    },
+    {
+      "id": "isten",
+      "label": "Isten",
+      "type": "CONCEPT",
+      "shortSummary": "A _vallási stádium_ és a _hit_ végső tárgya, akihez az _egyes ember_ abszolút viszonyban áll, és aki előtt az _én_ konstituálódik.",
+      "longExplanation": "Isten Kierkegaard filozófiájának abszolút középpontja, különösen a _vallási stádiumban_ és a _hit személyességének_ megértésében. Kierkegaard számára Isten nem egy absztrakt filozófiai fogalom vagy egy racionálisan bizonyítható létező, hanem egy élő, személyes valóság, akihez az _egyes ember_ abszolút viszonyban áll. Ez a viszony nem közvetíthető a közösségen, az egyházon vagy a filozófiai rendszereken keresztül, hanem egyedül, személyesen jön létre.\n\nIsten az, aki előtt az _én_ konstituálódik, és aki előtt az ember megtapasztalja a _bűnt_ és a _kétségbeesést_. A _hit_ _ugrása_ Istenbe vetett bizalom, amely meghaladja az emberi értelmet és az _abszurd_ elfogadását igényli. Az _Ábrahám_ története a _A félelem és rettegés_ című műben példázza ezt az abszolút viszonyt, ahol az egyén Isten parancsára felfüggeszti az etikaiat. Isten tehát nem csupán egy teológiai fogalom, hanem az emberi _egzisztencia_ végső célja és értelme Kierkegaard számára.",
+      "connections": [
+        "kierkegaard",
+        "vallasi_stadium",
+        "hit_szemelyessege",
+        "abraam",
+        "paradoxon",
+        "abszurd",
+        "ugras",
+        "bun",
+        "ketsegbees",
+        "egyes_ember",
+        "a_felelem_es_retteges",
+        "a_halalos_betegseg"
+      ],
+      "conceptContext": "A vallási stádium és a hit végső tárgya, akihez az egyén abszolút viszonyban áll. Ellentétben áll a deista Isten-képpel, amely egy távoli, teremtő, de nem beavatkozó Istent feltételez, és a hegeli abszolút szellemmel, amely az emberi történelemben bontakozik ki."
+    },
+    {
+      "id": "abraam",
+      "label": "Ábrahám",
+      "type": "CONCEPT",
+      "shortSummary": "A _hit lovagjának_ prototípusa Kierkegaard _A félelem és rettegés_ című művében, aki Isten parancsára kész feláldozni fiát, Izsákot, felfüggesztve ezzel az etikaiat.",
+      "longExplanation": "Ábrahám alakja központi szerepet játszik Kierkegaard _A félelem és rettegés_ című művében, ahol a _hit lovagjának_ archetípusaként jelenik meg. Ábrahám az, aki Isten parancsára kész feláldozni fiát, Izsákot, ezzel felfüggesztve az univerzális etikai törvényeket, amelyek szerint a gyilkosság bűn. Ez a cselekedet az emberi értelem számára _abszurd_ és _paradox_, de Ábrahám mégis megteszi, mert abszolút bizalma van _Istenben_.\n\nÁbrahám története illusztrálja a _vallási stádium_ lényegét, ahol az _egyes ember_ egyedül áll Isten előtt, és egy magasabb, isteni parancsot követ. Ez a „teleologikus felfüggesztés” azt jelenti, hogy a hit lovagja egy magasabb cél érdekében felfüggeszti az etikaiat, anélkül, hogy azt elvetné. Ábrahám nem egy tragikus hős, aki a közösségért áldozza fel magát, hanem egy _hit lovagja_, aki a _paradoxon_ erejével hisz abban, hogy Isten visszaadja neki Izsákot. Az ő története rávilágít a _hit személyességének_ és az _ugrás_ radikális természetére.",
+      "connections": [
+        "kierkegaard",
+        "vallasi_stadium",
+        "hit_szemelyessege",
+        "paradoxon",
+        "abszurd",
+        "isten",
+        "a_felelem_es_retteges",
+        "ugras",
+        "egyes_ember"
+      ],
+      "conceptContext": "A hit lovagjának prototípusa, aki Isten parancsára kész feláldozni fiát, Izsákot, felfüggesztve ezzel az etikaiat. Ellentétben áll a tragikus hőssel, aki az univerzális etikaiért áldozza fel magát, és a racionális morállal, amely nem engedi meg az etikai felfüggesztését."
+    },
+    {
+      "id": "hegel",
+      "label": "G. W. F. Hegel",
+      "type": "CONCEPT",
+      "shortSummary": "Német idealista filozófus, akinek rendszere az _objektív szellem_ fejlődését hangsúlyozza, szemben Kierkegaard _szubjektív egzisztenciájával_.",
+      "longExplanation": "Georg Wilhelm Friedrich Hegel (1770–1831) a német idealizmus csúcspontját képviseli, akinek filozófiai rendszere az _abszolút szellem_ dialektikus fejlődését írja le. Hegel szerint a valóság egy racionális, logikai folyamat, amelyben az ellentétek feloldódnak egy magasabb szintézisben. Az _egyes ember_ és az egyéni lét Hegel rendszerében az abszolút szellem fejlődésének egy mozzanata, és végső soron feloldódik a közösségben, az államban és a történelemben.\n\nKierkegaard Hegel egyik fő ellenfele volt, és filozófiáját nagyrészt Hegel rendszerének kritikájaként fejlesztette ki. Kierkegaard elutasította Hegel absztrakt, rendszerszerű gondolkodását, amely szerinte elhanyagolta az _egyes ember_ konkrét, szubjektív _egzisztenciáját_, a _szabadságot_, a _választást_ és a _hit_ személyes természetét. Kierkegaard számára az _objektív igazság_ hegeli felfogása nem tudta megragadni az emberi lét paradoxonait és a _szubjektív igazság_ mélységét. A _Befejezetlen tudományos utóirat_ különösen élesen kritizálja Hegelt, hangsúlyozva, hogy a filozófiának az egyéni létet kell vizsgálnia, nem pedig absztrakt rendszereket építenie.",
+      "connections": [
+        "kierkegaard",
+        "egzisztencia_fogalma",
+        "objektiv_igazsag",
+        "szubjektiv_igazsag",
+        "egyes_ember",
+        "kesei_schelling_jegyzetek",
+        "befejezetlen_tudomanyos_utorat",
+        "let_stadiumai"
+      ],
+      "conceptContext": "Kierkegaard egyik fő ellenfele, akinek rendszere az objektív szellem fejlődését hangsúlyozza, szemben Kierkegaard szubjektív egzisztenciájával. Az ő filozófiája az _objektív igazság_ és a rendszerszerűség megtestesítője, amellyel Kierkegaard a _szubjektív igazságot_ és az _egyes ember_ egyediségét állította szembe."
+    },
+    {
+      "id": "romantika",
+      "label": "Romantika",
+      "type": "CATEGORY",
+      "shortSummary": "A 19. századi művészeti és filozófiai irányzat, amelyhez Kierkegaard az _esztétikai stádiumot_ és a _művészetfilozófiát_ is viszonyítja, gyakran kritikusan.",
+      "longExplanation": "A romantika a 18. század végén és a 19. század elején virágzó művészeti, irodalmi és filozófiai mozgalom volt, amely a racionalizmus és a felvilágosodás ellenhatásaként jött létre. Jellemzője volt az érzelmek, a szubjektivitás, a képzelet, a természet iránti rajongás, a múlt idealizálása és az egyéni zsenialitás hangsúlyozása. A romantikusok gyakran keresték a végtelent, a misztikusat és a transzcendenst, és a művészetet az emberi lét legmagasabb kifejezési formájának tekintették.\n\nKierkegaard művészetfilozófiája és az _esztétikai stádium_ elemzése szorosan kapcsolódik a romantikához. Bár Kierkegaard maga is elismerte a romantikus művészet erejét és szépségét, kritikusan viszonyult a romantika túlzott szubjektivizmusához, a felelőtlenséghez és az _unalom_ elkerüléséhez, amely az _esztétikai stádium_ jellemzője. Úgy vélte, hogy a romantika, bár mély érzelmeket és esztétikai élményeket kínál, nem képes az _én_ valódi konstituálására vagy a _kétségbeesés_ feloldására, és végső soron elkerüli az egzisztenciális _választás_ és _elköteleződés_ terhét.",
+      "connections": [
+        "kierkegaard",
+        "muveszetfilozofia",
+        "esztetikai_stadium",
+        "unalom",
+        "vagy_vagy"
+      ],
+      "conceptContext": "A 19. századi művészeti és filozófiai irányzat, amelyhez Kierkegaard az esztétikai stádiumot és a művészetfilozófiát is viszonyítja, gyakran kritikusan. Párhuzamban áll a szubjektivitás hangsúlyozásával, de ellentétben áll a romantika felelőtlenségével és az egzisztenciális elköteleződés hiányával."
+    },
+    {
+      "id": "don_juan",
+      "label": "Don Juan",
+      "type": "CONCEPT",
+      "shortSummary": "Az _esztétikai stádium_ archetípusa Kierkegaard _Vagy-vagy_ című művében, a pillanatnyi élvezet és a felelőtlenség megtestesítője.",
+      "longExplanation": "Don Juan alakja Kierkegaard _Vagy-vagy_ című művében az _esztétikai stádium_ tökéletes megtestesítője. Kierkegaard Mozart _Don Giovanni_ című operájának elemzésén keresztül mutatja be Don Juan karakterét, mint a tiszta érzékiség, a pillanatnyi élvezet és a korlátlan csábítás szellemét. Don Juan nem választ, nem kötelezi el magát, hanem folyamatosan új élményeket keres, elkerülve mindenféle felelősséget és elköteleződést. Élete a lehetőségek és a változatosság jegyében telik, és a legfőbb ellensége az _unalom_.\n\nKierkegaard szerint Don Juan alakja, bár lenyűgöző lehet, végső soron üres és _kétségbeeséshez_ vezető létmódot képvisel. Az ő élete a pillanatban élés, a felelőtlenség és az _én_ konstituálásának elkerülése. Don Juan nem válik valódi _énné_, mert nem tesz radikális _választásokat_ és nem vállal felelősséget. Az ő alakja tehát nem egy erkölcsi példa, hanem egy figyelmeztetés az esztétikai létmód korlátaira és a mélyebb egzisztenciális elköteleződés szükségességére.",
+      "connections": [
+        "kierkegaard",
+        "esztetikai_stadium",
+        "vagy_vagy",
+        "muveszetfilozofia",
+        "unalom",
+        "ketsegbees",
+        "valasztas"
+      ],
+      "conceptContext": "Az esztétikai stádium archetípusa, a pillanatnyi élvezet és a felelőtlenség megtestesítője. Kontrasztban áll az etikai és vallási stádium elköteleződésével és felelősségvállalásával."
+    },
+    {
+      "id": "unalom",
+      "label": "Unalom",
+      "type": "CONCEPT",
+      "shortSummary": "Az _esztétikai stádium_ egyik alapvető jellemzője, amelyet az esztéta folyamatosan új élményekkel próbál elűzni, de amely végső soron _kétségbeeséshez_ vezet.",
+      "longExplanation": "Az _unalom_ Kierkegaard filozófiájában az _esztétikai stádium_ egyik legfontosabb jellemzője és mozgatórugója. Az esztéta, aki a pillanatnyi élvezetekre és a változatosságra fókuszál, folyamatosan új ingereket keres, hogy elkerülje az unalmat. Az unalom Kierkegaard szerint nem pusztán a tétlenség érzése, hanem egy mélyebb egzisztenciális üresség, amely abból fakad, hogy az egyén nem kötelezi el magát semmi iránt, és nem talál valódi értelmet az életében.\n\nAz unalom elkerülése érdekében az esztéta folyamatosan változtatja a környezetét, a kapcsolatait és az élvezeteit, de ez a menekülés csak ideiglenes megoldást nyújt. Kierkegaard szerint az unalom végső soron _kétségbeeséshez_ vezet, mert az egyén rájön, hogy a külső élvezetek nem képesek kitölteni a belső ürességet, és nem tudják konstituálni az _énjét_. Az unalom tehát egyfajta jelzés, amely arra ösztönözheti az egyént, hogy _ugrást_ tegyen az _etikai_ vagy a _vallási stádiumba_, ahol valódi elköteleződést és értelmet találhat.",
+      "connections": [
+        "kierkegaard",
+        "esztetikai_stadium",
+        "vagy_vagy",
+        "don_juan",
+        "ketsegbees",
+        "muveszetfilozofia",
+        "ugras"
+      ],
+      "conceptContext": "Az esztétikai stádium egyik alapvető jellemzője, amelyet az esztéta folyamatosan új élményekkel próbál elűzni. Párhuzamban áll a modern egzisztencialista gondolkodók (pl. Heidegger) _unalom_ fogalmával, mint az emberi lét alapvető tapasztalatával, de Kierkegaardnál ez a kétségbeeséshez és a hitre való felhíváshoz vezet."
+    },
+    {
+      "id": "felelosseg",
+      "label": "Felelősség",
+      "type": "CONCEPT",
+      "shortSummary": "Az _etikai stádium_ alapvető jellemzője, amelyben az egyén tudatosan vállalja tettei következményeit és az univerzális erkölcsi törvényeknek való alávetettséget.",
+      "longExplanation": "A _felelősség_ Kierkegaard filozófiájában az _etikai stádium_ központi fogalma. Míg az _esztétikai stádiumban_ az egyén elkerüli a felelősséget és a döntéseket, az etikus ember tudatosan vállalja tettei következményeit és az univerzális erkölcsi törvényeknek való alávetettséget. A felelősségvállalás az _én_ konstituálásának alapja, mivel azáltal, hogy az egyén döntéseket hoz és azokért felelősséget vállal, valódi _énné_ válik.\n\nA felelősség nem pusztán külső kényszer, hanem egy belső elköteleződés, amely a _választás_ aktusából fakad. Az etikus ember felismeri, hogy tettei nem csak rá, hanem a közösségre is hatással vannak, és ezért az általános érvényű erkölcsi normák szerint cselekszik. Bár a felelősségvállalás az etikai stádiumban magasabb rendű az esztétikainál, Kierkegaard szerint mégsem a legmagasabb létmód, mivel az univerzális erkölcs nem tudja kezelni az egyéni, abszolút viszonyt _Istennel_, és a _bűn_ felismerése meghaladja az etikai kereteket.",
+      "connections": [
+        "kierkegaard",
+        "etikai_stadium",
+        "valasztas",
+        "szabadsag",
+        "bun",
+        "egyes_ember",
+        "vagy_vagy"
+      ],
+      "conceptContext": "Az etikai stádium alapvető jellemzője, amelyben az egyén tudatosan vállalja tettei következményeit és az univerzális erkölcsi törvényeknek való alávetettséget. Kontrasztban áll az esztétikai stádium felelőtlenségével, és a vallási stádiumban az etikai felfüggesztésével."
+    },
+    {
+      "id": "univerzalis_erkolcs",
+      "label": "Univerzális erkölcs",
+      "type": "CONCEPT",
+      "shortSummary": "Az _etikai stádium_ alapját képező általános érvényű erkölcsi törvények és normák, amelyeknek az egyén aláveti magát.",
+      "longExplanation": "Az _univerzális erkölcs_ Kierkegaard filozófiájában az _etikai stádium_ alapját képezi. Ez az erkölcs azokat az általános érvényű törvényeket és normákat foglalja magában, amelyek minden emberre vonatkoznak, és amelyek a közösségi élet alapját képezik. Az etikus ember tudatosan aláveti magát ezeknek a törvényeknek, és tetteit az általános jó és a kötelességtudat vezérli. Ez az erkölcs a racionalitáson és a közösségi konszenzuson alapul, és a _felelősségvállalás_ elengedhetetlen része.\n\nKierkegaard elismeri az univerzális erkölcs fontosságát az emberi társadalomban, és magasabb rendűnek tartja az _esztétikai stádium_ felelőtlenségénél. Azonban rámutat az univerzális erkölcs korlátaira is. Szerinte az univerzális erkölcs nem képes kezelni az _egyes ember_ abszolút viszonyát _Istennel_, és bizonyos helyzetekben, mint például _Ábrahám_ történetében, az isteni parancs felülírhatja az etikaiat. Ez a „teleologikus felfüggesztés” a _vallási stádium_ lényegi jellemzője, amely meghaladja az univerzális erkölcs kereteit, és a _hit_ _paradoxonán_ alapul.",
+      "connections": [
+        "kierkegaard",
+        "etikai_stadium",
+        "felelosseg",
+        "vallasi_stadium",
+        "abraam",
+        "paradoxon",
+        "isten"
+      ],
+      "conceptContext": "Az etikai stádium alapját képező általános érvényű erkölcsi törvények és normák. Párhuzamban áll Kant kategorikus imperatívuszával, de Kierkegaardnál az univerzális erkölcsöt a vallási stádiumban felülírhatja az isteni parancs."
+    },
+    {
+      "id": "en",
+      "label": "Én",
+      "type": "CONCEPT",
+      "shortSummary": "Az emberi _szellem_ szintézise, amely a végtelen és a véges, az időbeli és az örök között áll, és amelynek konstituálása az _egyes ember_ egzisztenciális feladata.",
+      "longExplanation": "Az _én_ Kierkegaard filozófiájában, különösen _A halálos betegség_ című műben, az emberi _szellem_ szintézise. Az ember egy olyan lény, aki a végtelen és a véges, az időbeli és az örök, a szabadság és a szükségszerűség között áll. Az _én_ nem egy statikus entitás, hanem egy folyamatosan _válik_, és viszonyban áll önmagával, valamint _Istennel_. Az _én_ konstituálása az _egyes ember_ egzisztenciális feladata, amely a _választás_ és a _felelősségvállalás_ aktusain keresztül valósul meg.\n\nHa ez a szintézis felbomlik, vagy ha az _én_ nem akar önmaga lenni, vagy önmaga akar lenni, de nem tud, akkor _kétségbeesésbe_ esik. A kétségbeesés tehát az _én_ betegsége. Az _én_ csak akkor válhat teljessé és egészségessé, ha _Istenre_ támaszkodva, Isten előtt vállalja önmagát. Ez a _hit_ aktusa, amelyben az _én_ abszolút viszonyba kerül az Abszolúttal. Az _én_ tehát nem önmagában létezik, hanem mindig viszonyban áll valamivel, és a legmélyebb viszony az Istennel való kapcsolat.",
+      "connections": [
+        "kierkegaard",
+        "ketsegbees",
+        "szellem",
+        "egyes_ember",
+        "isten",
+        "hit_szemelyessege",
+        "valasztas",
+        "felelosseg",
+        "a_halalos_betegseg"
+      ],
+      "conceptContext": "Az emberi szellem szintézise, amely a végtelen és a véges, az időbeli és az örök között áll. Párhuzamban áll a szubjektum modern filozófiai fogalmával, de Kierkegaardnál az én konstituálása mindig Isten előtt történik, ellentétben a szekuláris én-felfogásokkal."
+    },
+    {
+      "id": "szellem",
+      "label": "Szellem",
+      "type": "CONCEPT",
+      "shortSummary": "Kierkegaardnál az emberi _én_ alapvető dimenziója, amely a végtelen és a véges, az időbeli és az örök szintézise, és amelynek betegsége a _kétségbeesés_.",
+      "longExplanation": "A _szellem_ Kierkegaard filozófiájában nem egy absztrakt entitás, hanem az emberi _én_ alapvető dimenziója, amely a végtelen és a véges, az időbeli és az örök szintézise. Az ember nem pusztán test és lélek, hanem _szellem_ is, és ez a szellem az, ami lehetővé teszi számára, hogy viszonyba lépjen önmagával és _Istennel_. A szellem az, ami az embert _egyes emberré_ teszi, és ami a _szabadság_ és a _választás_ képességét adja.\n\nHa ez a szintézis felbomlik, vagy ha az _én_ nem tudja fenntartani a viszonyt önmagához és Istenhez, akkor a _szellem_ megbetegszik, és ez a betegség a _kétségbeesés_. A kétségbeesés tehát nem fizikai vagy pszichológiai állapot, hanem a _szellem_ egzisztenciális válsága. A _szellem_ egészsége abban áll, hogy az _én_ _Istenre_ támaszkodva, Isten előtt vállalja önmagát, ami a _hit_ aktusa. A szellem tehát az emberi lét legmélyebb rétege, amely a _vallási stádiumban_ éri el teljességét.",
+      "connections": [
+        "kierkegaard",
+        "en",
+        "ketsegbees",
+        "isten",
+        "hit_szemelyessege",
+        "egyes_ember",
+        "szabadsag",
+        "valasztas",
+        "a_halalos_betegseg"
+      ],
+      "conceptContext": "Kierkegaardnál az emberi én alapvető dimenziója, amely a végtelen és a véges, az időbeli és az örök szintézise. Ellentétben áll a hegeli abszolút szellemmel, amely egy objektív, történelmi entitás, és a materialista felfogásokkal, amelyek tagadják a szellem létezését."
+    }
+  ],
+  "links": [
+    {
+      "source": "kierkegaard",
+      "target": "egzisztencia_fogalma",
+      "relationLabel": "központi fogalma"
+    },
+    {
+      "source": "kierkegaard",
+      "target": "let_stadiumai",
+      "relationLabel": "kidolgozta"
+    },
+    {
+      "source": "kierkegaard",
+      "target": "szorongas",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "kierkegaard",
+      "target": "ketsegbees",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "kierkegaard",
+      "target": "hit_szemelyessege",
+      "relationLabel": "hangsúlyozza"
+    },
+    {
+      "source": "kierkegaard",
+      "target": "muveszetfilozofia",
+      "relationLabel": "foglalkozott vele"
+    },
+    {
+      "source": "kierkegaard",
+      "target": "kesei_schelling_jegyzetek",
+      "relationLabel": "kritikusan viszonyult hozzá"
+    },
+    {
+      "source": "kierkegaard",
+      "target": "szubjektiv_igazsag",
+      "relationLabel": "hangsúlyozza"
+    },
+    {
+      "source": "kierkegaard",
+      "target": "egyes_ember",
+      "relationLabel": "filozófiájának középpontja"
+    },
+    {
+      "source": "kierkegaard",
+      "target": "paradoxon",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "egzisztencia_fogalma",
+      "target": "let_stadiumai",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "egzisztencia_fogalma",
+      "target": "szabadsag",
+      "relationLabel": "velejárója"
+    },
+    {
+      "source": "egzisztencia_fogalma",
+      "target": "szorongas",
+      "relationLabel": "forrása"
+    },
+    {
+      "source": "egzisztencia_fogalma",
+      "target": "egyes_ember",
+      "relationLabel": "az ő léte"
+    },
+    {
+      "source": "egzisztencia_fogalma",
+      "target": "hegel",
+      "relationLabel": "ellentétben áll"
+    },
+    {
+      "source": "egzisztencia_fogalma",
+      "target": "kesei_schelling_jegyzetek",
+      "relationLabel": "kritikája érinti"
+    },
+    {
+      "source": "kesei_schelling_jegyzetek",
+      "target": "schelling",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "kesei_schelling_jegyzetek",
+      "target": "hegel",
+      "relationLabel": "viszonyul hozzá"
+    },
+    {
+      "source": "let_stadiumai",
+      "target": "esztetikai_stadium",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "let_stadiumai",
+      "target": "etikai_stadium",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "let_stadiumai",
+      "target": "vallasi_stadium",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "let_stadiumai",
+      "target": "ugras",
+      "relationLabel": "átmenet közöttük"
+    },
+    {
+      "source": "let_stadiumai",
+      "target": "valasztas",
+      "relationLabel": "igényli"
+    },
+    {
+      "source": "let_stadiumai",
+      "target": "vagy_vagy",
+      "relationLabel": "bemutatja"
+    },
+    {
+      "source": "esztetikai_stadium",
+      "target": "vagy_vagy",
+      "relationLabel": "bemutatja"
+    },
+    {
+      "source": "esztetikai_stadium",
+      "target": "don_juan",
+      "relationLabel": "archetípusa"
+    },
+    {
+      "source": "esztetikai_stadium",
+      "target": "ketsegbees",
+      "relationLabel": "vezethet hozzá"
+    },
+    {
+      "source": "esztetikai_stadium",
+      "target": "muveszetfilozofia",
+      "relationLabel": "kapcsolódik hozzá"
+    },
+    {
+      "source": "esztetikai_stadium",
+      "target": "unalom",
+      "relationLabel": "jellemzője"
+    },
+    {
+      "source": "etikai_stadium",
+      "target": "vagy_vagy",
+      "relationLabel": "bemutatja"
+    },
+    {
+      "source": "etikai_stadium",
+      "target": "valasztas",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "etikai_stadium",
+      "target": "felelosseg",
+      "relationLabel": "jellemzője"
+    },
+    {
+      "source": "etikai_stadium",
+      "target": "univerzalis_erkolcs",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "etikai_stadium",
+      "target": "ketsegbees",
+      "relationLabel": "vezethet hozzá"
+    },
+    {
+      "source": "etikai_stadium",
+      "target": "bun",
+      "relationLabel": "felismerése"
+    },
+    {
+      "source": "vallasi_stadium",
+      "target": "hit_szemelyessege",
+      "relationLabel": "lényege"
+    },
+    {
+      "source": "vallasi_stadium",
+      "target": "paradoxon",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "vallasi_stadium",
+      "target": "abszurd",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "vallasi_stadium",
+      "target": "abraam",
+      "relationLabel": "példája"
+    },
+    {
+      "source": "vallasi_stadium",
+      "target": "isten",
+      "relationLabel": "viszonyul hozzá"
+    },
+    {
+      "source": "vallasi_stadium",
+      "target": "ugras",
+      "relationLabel": "átmenet hozzá"
+    },
+    {
+      "source": "vallasi_stadium",
+      "target": "szubjektiv_igazsag",
+      "relationLabel": "csúcsa"
+    },
+    {
+      "source": "vallasi_stadium",
+      "target": "szorongas",
+      "relationLabel": "átvezethet hozzá"
+    },
+    {
+      "source": "vallasi_stadium",
+      "target": "ketsegbees",
+      "relationLabel": "átvezethet hozzá"
+    },
+    {
+      "source": "vallasi_stadium",
+      "target": "bun",
+      "relationLabel": "feloldása"
+    },
+    {
+      "source": "vallasi_stadium",
+      "target": "a_felelem_es_retteges",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "szorongas",
+      "target": "szabadsag",
+      "relationLabel": "fakad belőle"
+    },
+    {
+      "source": "szorongas",
+      "target": "bun",
+      "relationLabel": "lehetőségére mutat"
+    },
+    {
+      "source": "szorongas",
+      "target": "a_felelem_es_retteges",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "szorongas",
+      "target": "ketsegbees",
+      "relationLabel": "vezethet hozzá"
+    },
+    {
+      "source": "szorongas",
+      "target": "ugras",
+      "relationLabel": "ösztönözheti"
+    },
+    {
+      "source": "ketsegbees",
+      "target": "bun",
+      "relationLabel": "fakad belőle"
+    },
+    {
+      "source": "ketsegbees",
+      "target": "a_halalos_betegseg",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "ketsegbees",
+      "target": "hit_szemelyessege",
+      "relationLabel": "gyógyír rá"
+    },
+    {
+      "source": "ketsegbees",
+      "target": "en",
+      "relationLabel": "betegsége"
+    },
+    {
+      "source": "ketsegbees",
+      "target": "szellem",
+      "relationLabel": "betegsége"
+    },
+    {
+      "source": "ketsegbees",
+      "target": "ugras",
+      "relationLabel": "vezethet hozzá"
+    },
+    {
+      "source": "felelem_es_bun",
+      "target": "szorongas",
+      "relationLabel": "kapcsolódik hozzá"
+    },
+    {
+      "source": "felelem_es_bun",
+      "target": "szabadsag",
+      "relationLabel": "rossz felhasználása"
+    },
+    {
+      "source": "felelem_es_bun",
+      "target": "a_felelem_es_retteges",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "felelem_es_bun",
+      "target": "isten",
+      "relationLabel": "elszakadás tőle"
+    },
+    {
+      "source": "hit_szemelyessege",
+      "target": "paradoxon",
+      "relationLabel": "lényege"
+    },
+    {
+      "source": "hit_szemelyessege",
+      "target": "abszurd",
+      "relationLabel": "elfogadása"
+    },
+    {
+      "source": "hit_szemelyessege",
+      "target": "ugras",
+      "relationLabel": "aktusa"
+    },
+    {
+      "source": "hit_szemelyessege",
+      "target": "egyes_ember",
+      "relationLabel": "az ő hite"
+    },
+    {
+      "source": "hit_szemelyessege",
+      "target": "isten",
+      "relationLabel": "viszonyul hozzá"
+    },
+    {
+      "source": "hit_szemelyessege",
+      "target": "szubjektiv_igazsag",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "hit_szemelyessege",
+      "target": "filozofiai_morzsak",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "hit_szemelyessege",
+      "target": "befejezetlen_tudomanyos_utorat",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "muveszetfilozofia",
+      "target": "esztetikai_stadium",
+      "relationLabel": "kapcsolódik hozzá"
+    },
+    {
+      "source": "muveszetfilozofia",
+      "target": "vagy_vagy",
+      "relationLabel": "bemutatja"
+    },
+    {
+      "source": "muveszetfilozofia",
+      "target": "don_juan",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "muveszetfilozofia",
+      "target": "romantika",
+      "relationLabel": "viszonyul hozzá"
+    },
+    {
+      "source": "vagy_vagy",
+      "target": "don_juan",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "vagy_vagy",
+      "target": "unalom",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "vagy_vagy",
+      "target": "valasztas",
+      "relationLabel": "központi témája"
+    },
+    {
+      "source": "a_felelem_es_retteges",
+      "target": "abraam",
+      "relationLabel": "központi alakja"
+    },
+    {
+      "source": "a_felelem_es_retteges",
+      "target": "paradoxon",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "a_felelem_es_retteges",
+      "target": "szabadsag",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "a_halalos_betegseg",
+      "target": "en",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "a_halalos_betegseg",
+      "target": "szellem",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "filozofiai_morzsak",
+      "target": "szubjektiv_igazsag",
+      "relationLabel": "elemzi"
+    },
+    {
+      "source": "filozofiai_morzsak",
+      "target": "befejezetlen_tudomanyos_utorat",
+      "relationLabel": "előzménye"
+    },
+    {
+      "source": "befejezetlen_tudomanyos_utorat",
+      "target": "hegel",
+      "relationLabel": "kritizálja"
+    },
+    {
+      "source": "befejezetlen_tudomanyos_utorat",
+      "target": "objektiv_igazsag",
+      "relationLabel": "kritizálja"
+    },
+    {
+      "source": "schelling",
+      "target": "hegel",
+      "relationLabel": "kortársa"
+    },
+    {
+      "source": "szubjektiv_igazsag",
+      "target": "objektiv_igazsag",
+      "relationLabel": "ellentétben áll"
+    },
+    {
+      "source": "szubjektiv_igazsag",
+      "target": "hegel",
+      "relationLabel": "ellentétben áll"
+    },
+    {
+      "source": "objektiv_igazsag",
+      "target": "hegel",
+      "relationLabel": "jellemzője"
+    },
+    {
+      "source": "ugras",
+      "target": "valasztas",
+      "relationLabel": "aktusa"
+    },
+    {
+      "source": "ugras",
+      "target": "szabadsag",
+      "relationLabel": "gyakorlása"
+    },
+    {
+      "source": "ugras",
+      "target": "abszurd",
+      "relationLabel": "az abszurdba"
+    },
+    {
+      "source": "egyes_ember",
+      "target": "szabadsag",
+      "relationLabel": "jellemzője"
+    },
+    {
+      "source": "egyes_ember",
+      "target": "valasztas",
+      "relationLabel": "aktusa"
+    },
+    {
+      "source": "egyes_ember",
+      "target": "en",
+      "relationLabel": "az ő énje"
+    },
+    {
+      "source": "paradoxon",
+      "target": "abszurd",
+      "relationLabel": "kapcsolódik hozzá"
+    },
+    {
+      "source": "szabadsag",
+      "target": "valasztas",
+      "relationLabel": "képessége"
+    },
+    {
+      "source": "valasztas",
+      "target": "felelosseg",
+      "relationLabel": "magában foglalja"
+    },
+    {
+      "source": "isten",
+      "target": "en",
+      "relationLabel": "előtte konstituálódik"
+    },
+    {
+      "source": "en",
+      "target": "szellem",
+      "relationLabel": "dimenziója"
+    }
+  ],
+  "customOrder": [
+    "kierkegaard",
+    "kesei_schelling_jegyzetek",
+    "egzisztencia_fogalma",
+    "schelling",
+    "hegel",
+    "befejezetlen_tudomanyos_utorat",
+    "egyes_ember",
+    "objektiv_igazsag",
+    "szubjektiv_igazsag",
+    "en",
+    "szabadsag",
+    "szorongas",
+    "felelem_es_bun",
+    "filozofiai_morzsak",
+    "let_stadiumai",
+    "esztetikai_stadium",
+    "unalom",
+    "ketsegbees",
+    "etikai_stadium",
+    "felelosseg",
+    "valasztas",
+    "vallasi_stadium",
+    "ugras",
+    "hit_szemelyessege",
+    "abraam",
+    "abszurd",
+    "isten",
+    "paradoxon",
+    "univerzalis_erkolcs",
+    "szellem",
+    "a_halalos_betegseg",
+    "a_felelem_es_retteges",
+    "vagy_vagy",
+    "muveszetfilozofia",
+    "don_juan",
+    "romantika"
+  ],
+  "metadata": {
+    "icon": "leaf"
+  }
+}
