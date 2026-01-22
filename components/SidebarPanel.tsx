@@ -1,13 +1,15 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { SavedGraph } from '../types';
-import { ChevronLeft, Folder, File, ChevronRight, ChevronDown, FolderPlus, Trash2, Edit2, FolderOpen, Upload, HardDrive, LogOut, Book, Star, Heart, Brain, Globe, Lightbulb, Zap, Feather, Anchor, Target, Music, Code, Smile, Coffee, Sun, Rocket, Home, GraduationCap, Trophy, Crown, Diamond, Spade, Club, Gamepad2, Ghost, Skull, Palette, FlaskConical, Atom, Leaf, Snowflake, Flame, Droplets, Gavel, Scale, Sword, Shield, Scroll, Hourglass, Compass, Map, Key, Lock, Unlock, Eye, Fingerprint, Dna, Microscope, Telescope, Magnet, Calculator, Sigma, Pi, Box, Package, Layers, Grid, Circle, Triangle, Square, Hexagon, Cloud, Moon, Umbrella, Scissors, Bell, Clock, Calendar, Camera, Video, Mic, Speaker, Headphones, Monitor, Smartphone, Watch, Printer, Wifi, Battery, Plug, Trash, Archive, Inbox, Mail, MessageCircle, Phone, User, Users } from 'lucide-react';
+import { SavedGraph, LibraryItem } from '../types';
+import { ChevronLeft, Folder, File, ChevronRight, ChevronDown, FolderPlus, Trash2, Edit2, FolderOpen, Upload, HardDrive, LogOut, Book, Star, Heart, Brain, Globe, Lightbulb, Zap, Feather, Anchor, Target, Music, Code, Smile, Coffee, Sun, Moon, Cloud, Snowflake, Umbrella, Rocket, Home, GraduationCap, Trophy, Crown, Diamond, Gavel, Scale, Sword, Shield, Scroll, Hourglass, Compass, Map, Key, Lock, Unlock, Eye, Fingerprint, Dna, Microscope, Telescope, Magnet, Calculator, Sigma, Pi, Box, Package, Layers, Grid, Circle, Triangle, Square, Hexagon, Scissors, Bell, Clock, Calendar, Camera, Video, Mic, Speaker, Headphones, Monitor, Smartphone, Watch, Printer, Wifi, Battery, Plug, Trash, Archive, Inbox, Mail, MessageCircle, User, Users, Spade, Club, Gamepad2, Ghost, Skull, Palette, FlaskConical, Atom, Leaf, Flame, Droplets, DownloadCloud, ExternalLink } from 'lucide-react';
 
 interface SidebarPanelProps {
   savedGraphs: SavedGraph[];
+  onlineLibrary: LibraryItem[]; // New prop
   isOpen: boolean;
   onToggle: () => void;
   onLoadGraph: (graph: SavedGraph) => void;
+  onLoadOnlineGraph: (item: LibraryItem) => void; // New prop
   onDeleteGraph: (id: string) => void;
   onRenameGraph: (id: string, newName: string) => void;
   onUpdateIcon: (id: string, newIcon: string) => void;
@@ -122,9 +124,11 @@ const AVAILABLE_ICONS = [
 
 const SidebarPanel: React.FC<SidebarPanelProps> = ({
   savedGraphs,
+  onlineLibrary,
   isOpen,
   onToggle,
   onLoadGraph,
+  onLoadOnlineGraph,
   onDeleteGraph,
   onRenameGraph,
   onUpdateIcon,
@@ -141,6 +145,7 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState('');
   const [draggedGraphId, setDraggedGraphId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'local' | 'online'>('local');
   
   // Icon selector state
   const [showIconSelector, setShowIconSelector] = useState<string | null>(null);
@@ -403,8 +408,8 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
       >
         <div className="flex items-center justify-between p-5 border-b border-stone-200">
            <div>
-               <h3 className="font-sans text-sm font-bold uppercase tracking-widest text-ink mb-1">Gráfok</h3>
-               {folderName && (
+               <h3 className="font-sans text-sm font-bold uppercase tracking-widest text-ink mb-1">Fájlok</h3>
+               {folderName && activeTab === 'local' && (
                    <span className="text-[10px] text-green-600 bg-green-50 px-1.5 py-0.5 rounded border border-green-100 flex items-center gap-1 w-fit">
                        <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                        {folderName}
@@ -419,55 +424,129 @@ const SidebarPanel: React.FC<SidebarPanelProps> = ({
            </button>
         </div>
 
-        <div className="p-2 border-b border-stone-200 flex gap-2">
-            <button 
-                onClick={() => onCreateFolder("")}
-                className="flex-1 flex items-center justify-center gap-2 py-1.5 bg-white border border-stone-300 rounded text-xs font-medium text-stone-600 hover:border-accent hover:text-accent transition-colors"
+        {/* Tabs */}
+        <div className="flex p-2 gap-2 border-b border-stone-200 bg-stone-50/50">
+            <button
+                onClick={() => setActiveTab('local')}
+                className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wide rounded-md transition-colors ${activeTab === 'local' ? 'bg-white shadow-sm text-ink text-accent' : 'text-secondary hover:bg-stone-200'}`}
             >
-                <FolderPlus size={14} />
-                Új Mappa
+                Helyi
+            </button>
+            <button
+                onClick={() => setActiveTab('online')}
+                className={`flex-1 py-1.5 text-xs font-bold uppercase tracking-wide rounded-md transition-colors ${activeTab === 'online' ? 'bg-white shadow-sm text-ink text-blue-600' : 'text-secondary hover:bg-stone-200'}`}
+            >
+                Online Könyvtár
             </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
-            {/* Render Root Children Directly */}
-            {fileTree.children.map(child => renderNode(child))}
-            
-            {savedGraphs.length === 0 && (
-                <div className="text-center py-8 text-stone-400 text-sm italic">
-                    Nincs mentett gráf.
+        {activeTab === 'local' ? (
+            <>
+                <div className="p-2 border-b border-stone-200 flex gap-2">
+                    <button 
+                        onClick={() => onCreateFolder("")}
+                        className="flex-1 flex items-center justify-center gap-2 py-1.5 bg-white border border-stone-300 rounded text-xs font-medium text-stone-600 hover:border-accent hover:text-accent transition-colors"
+                    >
+                        <FolderPlus size={14} />
+                        Új Mappa
+                    </button>
                 </div>
-            )}
-        </div>
 
-        {/* --- Sidebar Footer (Tools) --- */}
-        <div className="p-4 border-t border-stone-200 bg-stone-50/50 space-y-2">
-            {!isFolderConnected ? (
-                 <button 
-                    onClick={onConnectFolder}
-                    className="w-full flex items-center justify-start gap-3 px-3 py-2 text-sm font-medium text-ink hover:bg-white hover:shadow-sm rounded transition-all"
-                >
-                    <HardDrive className="w-4 h-4 text-secondary" />
-                    Mappa csatolása
-                </button>
-            ) : (
-                <button 
-                    onClick={onDisconnectFolder}
-                    className="w-full flex items-center justify-start gap-3 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded transition-colors"
-                >
-                    <LogOut className="w-4 h-4" />
-                    Mappa leválasztása
-                </button>
-            )}
-            
-            <button 
-                onClick={onImportGraph}
-                className="w-full flex items-center justify-start gap-3 px-3 py-2 text-sm font-medium text-ink hover:bg-white hover:shadow-sm rounded transition-all"
-            >
-                <Upload className="w-4 h-4 text-secondary" />
-                Importálás (.json)
-            </button>
-        </div>
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
+                    {/* Render Root Children Directly */}
+                    {fileTree.children.map(child => renderNode(child))}
+                    
+                    {savedGraphs.length === 0 && (
+                        <div className="text-center py-8 text-stone-400 text-sm italic">
+                            Nincs mentett gráf.
+                        </div>
+                    )}
+                </div>
+
+                {/* --- Sidebar Footer (Tools) --- */}
+                <div className="p-4 border-t border-stone-200 bg-stone-50/50 space-y-2">
+                    {!isFolderConnected ? (
+                        <button 
+                            onClick={onConnectFolder}
+                            className="w-full flex items-center justify-start gap-3 px-3 py-2 text-sm font-medium text-ink hover:bg-white hover:shadow-sm rounded transition-all"
+                        >
+                            <HardDrive className="w-4 h-4 text-secondary" />
+                            Mappa csatolása
+                        </button>
+                    ) : (
+                        <button 
+                            onClick={onDisconnectFolder}
+                            className="w-full flex items-center justify-start gap-3 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded transition-colors"
+                        >
+                            <LogOut className="w-4 h-4" />
+                            Mappa leválasztása
+                        </button>
+                    )}
+                    
+                    <button 
+                        onClick={onImportGraph}
+                        className="w-full flex items-center justify-start gap-3 px-3 py-2 text-sm font-medium text-ink hover:bg-white hover:shadow-sm rounded transition-all"
+                    >
+                        <Upload className="w-4 h-4 text-secondary" />
+                        Importálás (.json)
+                    </button>
+                </div>
+            </>
+        ) : (
+            // --- ONLINE LIBRARY VIEW ---
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
+                <div className="mb-4 px-2 pt-2">
+                    <p className="text-xs text-secondary leading-relaxed">
+                        A GitHub-on tárolt közösségi tudástár elemei. Ezeket megnyitva mentheted őket a saját gépedre.
+                    </p>
+                </div>
+
+                {onlineLibrary.length > 0 ? (
+                    <div className="space-y-1">
+                        {onlineLibrary.map((item, index) => {
+                            const IconComp = getIconComponent(item.icon);
+                            return (
+                                <div 
+                                    key={index}
+                                    onClick={() => onLoadOnlineGraph(item)}
+                                    className="group p-3 rounded-lg border border-transparent hover:border-blue-200 hover:bg-blue-50/50 cursor-pointer transition-all"
+                                >
+                                    <div className="flex items-center gap-3 mb-1">
+                                        <div className="p-1.5 bg-blue-100 text-blue-600 rounded-md">
+                                            <IconComp size={16} />
+                                        </div>
+                                        <h4 className="font-serif text-ink font-medium">{item.title}</h4>
+                                    </div>
+                                    <p className="text-xs text-secondary pl-[38px] line-clamp-2">{item.description}</p>
+                                    <div className="flex items-center gap-2 pl-[38px] mt-2">
+                                        <span className="text-[10px] uppercase tracking-wider text-blue-400 bg-white border border-blue-100 px-1.5 py-0.5 rounded">
+                                            {item.category}
+                                        </span>
+                                        <span className="text-[10px] text-stone-400 ml-auto">
+                                            {item.added}
+                                        </span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                ) : (
+                     <div className="text-center py-12 px-4">
+                        <DownloadCloud className="w-8 h-8 text-stone-300 mx-auto mb-3" />
+                        <p className="text-sm text-stone-500 font-medium">A könyvtár betöltése...</p>
+                        <p className="text-xs text-stone-400 mt-1">Ha nem jelenik meg semmi, ellenőrizd, hogy a <code>public/library/index.json</code> elérhető-e.</p>
+                    </div>
+                )}
+                
+                <div className="mt-8 p-4 bg-stone-100 rounded-lg text-center">
+                    <ExternalLink className="w-5 h-5 text-stone-400 mx-auto mb-2" />
+                    <p className="text-xs text-stone-500 mb-2">Szeretnél hozzájárulni?</p>
+                    <a href="https://github.com" target="_blank" rel="noreferrer" className="text-xs font-bold text-blue-600 hover:underline">
+                        Pull Request küldése GitHubon
+                    </a>
+                </div>
+            </div>
+        )}
       </div>
   );
 };
