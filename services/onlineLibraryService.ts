@@ -1,61 +1,80 @@
 
 import { GraphData, LibraryItem } from '../types';
 
-// Alapértelmezésben a gyökérben is kereshetünk, vagy a library mappában
-export const fetchLibraryIndex = async (): Promise<LibraryItem[]> => {
+// Segédfüggvény a biztonságos JSON letöltéshez
+const tryFetchJSON = async (url: string): Promise<any | null> => {
     try {
-        const response = await fetch(`./library/index.json`);
+        const response = await fetch(url);
         const contentType = response.headers.get("content-type");
         
-        // Ha HTML-t kapunk vissza (Vercel SPA fallback), akkor nincs index fájl
-        if (!response.ok || (contentType && contentType.includes("text/html"))) {
-            return [];
+        // Ha a válasz OK, és NEM HTML (404 redirect elkerülése)
+        // Megengedjük a null content-type-ot is, vagy application/json-t
+        if (response.ok && (!contentType || !contentType.includes("text/html"))) {
+            return await response.json();
         }
-        return await response.json();
-    } catch (error) {
-        return [];
+    } catch (e) {
+        // Hálózati hiba vagy JSON parse hiba esetén csendben null-t adunk
     }
+    return null;
+};
+
+export const fetchLibraryIndex = async (): Promise<LibraryItem[]> => {
+    // Próbáljuk először relatív, majd abszolút útvonalon
+    let data = await tryFetchJSON('./library/index.json');
+    if (!data) {
+        data = await tryFetchJSON('/library/index.json');
+    }
+    return data || [];
 };
 
 export const fetchOnlineGraph = async (filenameOrUrl: string): Promise<GraphData> => {
     try {
-        // Kiterjesztés normalizálása: levesszük, majd a logikában visszarakjuk
         const baseName = filenameOrUrl.replace(/\.json$/i, '');
-        
-        // Jelöltek listája (URL-ek, amiket megpróbálunk letölteni)
         const candidates: string[] = [];
 
-        // 1. ESET: Ha teljes URL vagy útvonal (tartalmaz / jelet)
+        // 1. ESET: Teljes URL vagy útvonal
         if (filenameOrUrl.includes('/') || filenameOrUrl.startsWith('http')) {
             const url = filenameOrUrl.endsWith('.json') ? filenameOrUrl : `${filenameOrUrl}.json`;
             candidates.push(url);
         } 
-        // 2. ESET: Csak fájlnév (pl. "arthur_schopenhauer")
+        // 2. ESET: Csak fájlnév -> Generálunk lehetséges útvonalakat
         else {
-            // Prioritás: Először a library mappában keressük!
             candidates.push(`/library/${baseName}.json`);
-            // Fallback: Gyökérkönyvtár
-            candidates.push(`/${baseName}.json`);
+            candidates.push(`./library/${baseName}.json`); // Relatív útvonal próba
+            candidates.push(`/${baseName}.json`); // Gyökér próba
         }
 
-        // Végigmegyünk a jelölteken
+        // Végigpróbáljuk a jelölteket
         for (const url of candidates) {
-            try {
-                const response = await fetch(url);
-                const contentType = response.headers.get("content-type");
+            const data = await tryFetchJSON(url);
+            if (data) return data;
+        }
+
+        // 3. ESET: SMART FALLBACK - Ha nem találtuk, megnézzük az indexben (kis/nagybetű eltérés kezelése)
+        if (!filenameOrUrl.includes('/')) {
+            console.log(`Közvetlen elérés sikertelen: ${baseName}. Keresés az indexben...`);
+            const index = await fetchLibraryIndex();
+            
+            const lowerBase = baseName.toLowerCase();
+            // Keresünk egyezést (kisbetűsítve, kiterjesztés nélkül)
+            const match = index.find(item => 
+                item.filename.replace(/\.json$/i, '').toLowerCase() === lowerBase
+            );
+
+            if (match) {
+                console.log(`Találat az indexben: ${match.filename}`);
+                // Próbáljuk a megtalált pontos fájlnévvel
+                const matchUrl = `/library/${match.filename}`;
+                const data = await tryFetchJSON(matchUrl);
+                if (data) return data;
                 
-                // A Vercel a nem létező fájlokra (404) gyakran 200 OK + index.html-t ad vissza.
-                // Ezért ellenőrizzük, hogy NEM HTML-t kaptunk-e.
-                if (response.ok && contentType && !contentType.includes("text/html")) {
-                    return await response.json();
-                }
-            } catch (e) {
-                // Folytatjuk a következő jelölttel
-                console.warn(`Nem sikerült betölteni innen: ${url}`);
+                // Végső próba relatív útvonallal
+                const matchUrlRel = `./library/${match.filename}`;
+                const dataRel = await tryFetchJSON(matchUrlRel);
+                if (dataRel) return dataRel;
             }
         }
 
-        // Ha semmi nem sikerült
         throw new Error(`A kért gráf nem található: ${baseName}`);
 
     } catch (error) {
@@ -65,9 +84,7 @@ export const fetchOnlineGraph = async (filenameOrUrl: string): Promise<GraphData
 };
 
 export const generateShareableLink = (filename: string): string => {
-    // A felhasználó kérésére ?src= formátumot használunk a megosztáshoz
     const origin = window.location.origin;
-    // Eltávolítjuk a .json kiterjesztést és az esetleges mappákat a tiszta névhez
     const cleanName = filename.split('/').pop()?.replace('.json', '') || filename;
     return `${origin}/?src=${cleanName}`;
 };
