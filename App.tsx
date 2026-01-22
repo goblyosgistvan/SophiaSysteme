@@ -1067,7 +1067,7 @@ const App: React.FC = () => {
   }, [isMobile, panelWidth]);
 
   return (
-    <div className="h-screen w-screen flex flex-col bg-paper text-ink overflow-hidden relative">
+    <div className={`h-screen w-screen flex flex-col bg-paper text-ink overflow-hidden relative ${isEmbedded ? 'border-4 border-stone-200' : ''}`}>
       <input 
           type="file" 
           ref={fileInputRef}
@@ -1077,11 +1077,13 @@ const App: React.FC = () => {
       />
       
       <div className="absolute top-4 left-6 z-50 flex flex-col items-center gap-3 pointer-events-auto">
-          <div className="w-10 h-10 bg-ink text-paper rounded-full flex items-center justify-center font-serif text-2xl cursor-pointer shadow-md hover:scale-105 transition-transform" onClick={goHome}>
-              S
-          </div>
+          {!isEmbedded && (
+            <div className="w-10 h-10 bg-ink text-paper rounded-full flex items-center justify-center font-serif text-2xl cursor-pointer shadow-md hover:scale-105 transition-transform" onClick={goHome}>
+                S
+            </div>
+          )}
           
-          {!hasSearched && !loading && !isSidebarOpen && (
+          {!hasSearched && !loading && !isSidebarOpen && !isEmbedded && (
               <button 
                 onClick={() => setIsSidebarOpen(true)}
                 className="p-2 bg-white rounded-full text-secondary hover:text-ink shadow-sm border border-stone-200 transition-colors"
@@ -1101,10 +1103,28 @@ const App: React.FC = () => {
               </button>
           )}
 
-          {hasSearched && !loading && (
+          {!isEmbedded && hasSearched && !loading && (
             <h1 className="font-serif text-xl tracking-wide hidden md:block cursor-pointer text-[#D1D1D1] hover:text-ink transition-colors absolute left-14 top-1" onClick={goHome}>Sophia</h1>
           )}
       </div>
+
+      {/* --- Online Indicator Pill (Hidden in embedded mode) --- */}
+      {!isEmbedded && isOnlineGraph && (
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-40 animate-in fade-in slide-in-from-top-2">
+              <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-1.5 rounded-full shadow-sm flex items-center gap-2 text-sm font-medium">
+                  <Globe className="w-4 h-4" />
+                  <span>Online Olvasó Mód</span>
+                  {data && folderHandle && (
+                      <button 
+                        onClick={handleManualSave} 
+                        className="ml-2 bg-blue-600 hover:bg-blue-700 text-white px-2 py-0.5 rounded text-xs transition-colors"
+                      >
+                          Mentés sajátként
+                      </button>
+                  )}
+              </div>
+          </div>
+      )}
 
       {showGraphSearch && hasSearched && (
           <div className="absolute top-8 left-1/2 -translate-x-1/2 z-[100] animate-in fade-in slide-in-from-top-4 duration-300">
@@ -1191,48 +1211,50 @@ const App: React.FC = () => {
                     </button>
                 </div>
 
-                <div className="relative flex items-center export-container">
-                    <button 
-                        onClick={() => setShowExportMenu(!showExportMenu)}
-                        className={`text-[#D1D1D1] hover:text-ink transition-colors ${showExportMenu ? 'text-ink' : ''}`}
-                        title="Exportálás"
-                    >
-                        <Download className="w-6 h-6" />
-                    </button>
-                    
-                    {showExportMenu && (
-                        <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-stone-200 py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                             {isOnlineGraph && (
+                {!isEmbedded && (
+                    <div className="relative flex items-center export-container">
+                        <button 
+                            onClick={() => setShowExportMenu(!showExportMenu)}
+                            className={`text-[#D1D1D1] hover:text-ink transition-colors ${showExportMenu ? 'text-ink' : ''}`}
+                            title="Exportálás"
+                        >
+                            <Download className="w-6 h-6" />
+                        </button>
+                        
+                        {showExportMenu && (
+                            <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-stone-200 py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                                {isOnlineGraph && (
+                                    <button 
+                                        onClick={handleShareLink}
+                                        className="w-full text-left px-4 py-3 hover:bg-stone-50 flex items-center gap-3 transition-colors text-blue-600"
+                                    >
+                                        {copiedLink ? <CheckCircle className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+                                        <span className="font-sans text-sm font-medium">
+                                            {copiedLink ? "Link másolva!" : "Link másolása"}
+                                        </span>
+                                    </button>
+                                )}
+
                                 <button 
-                                    onClick={handleShareLink}
-                                    className="w-full text-left px-4 py-3 hover:bg-stone-50 flex items-center gap-3 transition-colors text-blue-600"
+                                    onClick={handleExportMarkdown}
+                                    className="w-full text-left px-4 py-3 hover:bg-stone-50 flex items-center gap-3 transition-colors"
                                 >
-                                    {copiedLink ? <CheckCircle className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
-                                    <span className="font-sans text-sm font-medium">
-                                        {copiedLink ? "Link másolva!" : "Link másolása"}
-                                    </span>
+                                    <FileText className="w-4 h-4 text-secondary" />
+                                    <span className="font-sans text-sm text-ink">Esszé (.md)</span>
                                 </button>
-                             )}
+                                <button 
+                                    onClick={handleExportJSON}
+                                    className="w-full text-left px-4 py-3 hover:bg-stone-50 flex items-center gap-3 transition-colors border-t border-stone-100"
+                                >
+                                    <FileJson className="w-4 h-4 text-secondary" />
+                                    <span className="font-sans text-sm text-ink">Adatfájl (.json)</span>
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
 
-                             <button 
-                                onClick={handleExportMarkdown}
-                                className="w-full text-left px-4 py-3 hover:bg-stone-50 flex items-center gap-3 transition-colors"
-                             >
-                                 <FileText className="w-4 h-4 text-secondary" />
-                                 <span className="font-sans text-sm text-ink">Esszé (.md)</span>
-                             </button>
-                             <button 
-                                onClick={handleExportJSON}
-                                className="w-full text-left px-4 py-3 hover:bg-stone-50 flex items-center gap-3 transition-colors border-t border-stone-100"
-                             >
-                                 <FileJson className="w-4 h-4 text-secondary" />
-                                 <span className="font-sans text-sm text-ink">Adatfájl (.json)</span>
-                             </button>
-                        </div>
-                    )}
-                </div>
-
-                 {folderHandle && (
+                 {!isEmbedded && folderHandle && (
                      <button 
                         onClick={handleManualSave}
                         className={`transition-colors ${isSaving ? 'text-accent' : 'text-[#D1D1D1] hover:text-ink'}`}
@@ -1242,23 +1264,27 @@ const App: React.FC = () => {
                     </button>
                  )}
 
-                <button 
-                onClick={goHome}
-                className="text-[#D1D1D1] hover:text-ink transition-colors"
-                title="Főoldal"
-                >
-                    <Home className="w-6 h-6" />
-                </button>
+                {!isEmbedded && (
+                    <button 
+                    onClick={goHome}
+                    className="text-[#D1D1D1] hover:text-ink transition-colors"
+                    title="Főoldal"
+                    >
+                        <Home className="w-6 h-6" />
+                    </button>
+                )}
             </>
         )}
         
-        <button 
-        onClick={() => setShowInfo(true)}
-        className="text-[#D1D1D1] hover:text-ink transition-colors"
-        title="Info"
-        >
-            <Info className="w-6 h-6" />
-        </button>
+        {!isEmbedded && (
+            <button 
+            onClick={() => setShowInfo(true)}
+            className="text-[#D1D1D1] hover:text-ink transition-colors"
+            title="Info"
+            >
+                <Info className="w-6 h-6" />
+            </button>
+        )}
       </div>
 
       <SidebarPanel 
@@ -1319,9 +1345,11 @@ const App: React.FC = () => {
             <div className="absolute inset-0 overflow-y-auto bg-paper z-30">
                 <div className="max-w-4xl mx-auto px-6 py-28 flex flex-col items-center text-center">
                     <div className="mb-16 w-full max-w-2xl">
-                        <h2 className="text-5xl md:text-7xl font-serif text-ink mb-8 font-light">
-                            A filozófia <span className="text-accent italic">rendszerei</span>
-                        </h2>
+                        {!isEmbedded && (
+                             <h2 className="text-5xl md:text-7xl font-serif text-ink mb-8 font-light">
+                                A filozófia <span className="text-accent italic">rendszerei</span>
+                            </h2>
+                        )}
                         
                         <div className="w-full relative group mb-4">
                              {uploadedFile && (
@@ -1375,21 +1403,25 @@ const App: React.FC = () => {
                              </form>
                         </div>
 
-                        <p className="max-w-xl mx-auto text-lg text-secondary font-sans font-light leading-relaxed mb-6">
-                            Rendszerszintű megértés filozófiai témákhoz. Add meg a témát vagy válassz egyet:
-                        </p>
+                        {!isEmbedded && (
+                            <p className="max-w-xl mx-auto text-lg text-secondary font-sans font-light leading-relaxed mb-6">
+                                Rendszerszintű megértés filozófiai témákhoz. Add meg a témát vagy válassz egyet:
+                            </p>
+                        )}
                         
-                        <div className="flex flex-wrap justify-center gap-3">
-                            {currentSuggestions.map((tag) => (
-                                <button 
-                                    key={tag}
-                                    onClick={() => { setQuery(tag); handleSearch(); }}
-                                    className="px-5 py-2 rounded-full border border-stone-200 bg-white text-stone-600 font-sans text-sm hover:border-accent hover:text-accent hover:bg-stone-50 transition-all shadow-sm"
-                                >
-                                    {tag}
-                                </button>
-                            ))}
-                        </div>
+                        {!isEmbedded && (
+                            <div className="flex flex-wrap justify-center gap-3">
+                                {currentSuggestions.map((tag) => (
+                                    <button 
+                                        key={tag}
+                                        onClick={() => { setQuery(tag); handleSearch(); }}
+                                        className="px-5 py-2 rounded-full border border-stone-200 bg-white text-stone-600 font-sans text-sm hover:border-accent hover:text-accent hover:bg-stone-50 transition-all shadow-sm"
+                                    >
+                                        {tag}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
