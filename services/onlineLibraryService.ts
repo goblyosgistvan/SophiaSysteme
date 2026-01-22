@@ -8,7 +8,10 @@ export const fetchLibraryIndex = async (): Promise<LibraryItem[]> => {
     try {
         // Opcionális: Ha van library/index.json, betöltjük a katalógust
         const response = await fetch(`./library/index.json`);
-        if (!response.ok) {
+        const contentType = response.headers.get("content-type");
+        
+        // Ha HTML-t kapunk vissza (Vercel SPA fallback), akkor nincs index fájl
+        if (!response.ok || (contentType && contentType.includes("text/html"))) {
             return [];
         }
         return await response.json();
@@ -22,31 +25,44 @@ export const fetchOnlineGraph = async (filenameOrUrl: string): Promise<GraphData
     try {
         let url = filenameOrUrl;
 
-        // 1. Ha nem teljes URL, akkor relatív útvonalat építünk
+        // 1. Ha nem teljes URL, akkor relatív útvonalat építünk (alapértelmezés: gyökér)
         if (!url.startsWith('http') && !url.startsWith('/')) {
             // Ha nincs kiterjesztés, hozzáadjuk a .json-t
             const cleanName = url.endsWith('.json') ? url : `${url}.json`;
-            
-            // Közvetlenül a gyökérből próbáljuk betölteni (pl. /nietzsche.json)
             url = `/${cleanName}`;
         }
 
-        const response = await fetch(url);
-        
-        // Ha a gyökérben nem találjuk, tehetünk egy próbát a library mappában is fallback-ként
-        if (!response.ok && !filenameOrUrl.startsWith('http') && !filenameOrUrl.includes('/')) {
+        let response = await fetch(url);
+        let contentType = response.headers.get("content-type");
+        const isHtml = contentType && contentType.includes("text/html");
+
+        // FONTOS JAVÍTÁS:
+        // Ha a válasz nem OK, VAGY (és ez a Vercel SPA miatt kritikus) OK, de HTML-t kaptunk JSON helyett,
+        // akkor a fájl nincs a gyökérben. Ilyenkor próbálkozzunk a 'library' mappával.
+        if ((!response.ok || isHtml) && !filenameOrUrl.startsWith('http') && !filenameOrUrl.includes('/')) {
+             console.log(`A fájl nem található a gyökérben (${url}), keresés a könyvtárban...`);
+             
              const cleanName = filenameOrUrl.endsWith('.json') ? filenameOrUrl : `${filenameOrUrl}.json`;
-             const libraryResponse = await fetch(`/library/${cleanName}`);
-             if (libraryResponse.ok) {
+             const libraryUrl = `/library/${cleanName}`;
+             
+             const libraryResponse = await fetch(libraryUrl);
+             const libContentType = libraryResponse.headers.get("content-type");
+             const libIsHtml = libContentType && libContentType.includes("text/html");
+             
+             if (libraryResponse.ok && !libIsHtml) {
                  return await libraryResponse.json();
              }
-             // Ha ott sincs, akkor eldobjuk az eredeti hibát
-             throw new Error(`Nem található a fájl: ${url} (Státusz: ${response.status})`);
         }
 
+        // Ha itt vagyunk, vagy sikerült az első kérés, vagy a fallback is sikertelen volt.
         if (!response.ok) {
             throw new Error(`Nem sikerült betölteni: ${url} (Státusz: ${response.status})`);
         }
+        
+        if (isHtml) {
+             throw new Error("A kért fájl nem található (HTML választ kaptunk JSON helyett).");
+        }
+
         return await response.json();
     } catch (error) {
         console.error("Hiba az online gráf betöltésekor:", error);
@@ -55,8 +71,8 @@ export const fetchOnlineGraph = async (filenameOrUrl: string): Promise<GraphData
 };
 
 export const generateShareableLink = (filename: string): string => {
-    const baseUrl = window.location.origin + window.location.pathname;
-    // Eltávolítjuk a .json-t a linkből, hogy szebb legyen (a fetcher úgyis visszateszi)
+    // Tiszta URL generálása: https://site.com/nietzsche
+    const origin = window.location.origin;
     const cleanName = filename.replace('.json', '');
-    return `${baseUrl}?src=${encodeURIComponent(cleanName)}`;
+    return `${origin}/${cleanName}`;
 };
