@@ -406,8 +406,10 @@ const App: React.FC = () => {
     }
   };
 
-  const autoSaveGraph = (topic: string, graphData: GraphData) => {
-    if (isOnlineGraph) return;
+  const autoSaveGraph = (topic: string, graphData: GraphData, forceSave = false) => {
+    // If online graph and not forced, don't save (Read-only mode)
+    // But if we force save (because an edit happened), we proceed.
+    if (isOnlineGraph && !forceSave) return;
 
     const exists = savedGraphs.find(g => g.topic.toLowerCase() === topic.toLowerCase());
     let updatedGraphs: SavedGraph[];
@@ -862,6 +864,15 @@ const App: React.FC = () => {
 
   const clearUploadedFile = () => setUploadedFile(null);
 
+  const switchToLocalModeIfNeeded = () => {
+    if (isOnlineGraph) {
+        setIsOnlineGraph(false);
+        setCurrentOnlineFilename(null);
+        // Clean URL to reflect local state
+        window.history.pushState({}, '', window.location.pathname);
+    }
+  };
+
   const handleAugment = async (e?: React.FormEvent) => {
       if (e) e.preventDefault();
       if (!augmentQuery.trim() || !data) return;
@@ -889,9 +900,10 @@ const App: React.FC = () => {
               customOrder: [...(data.customOrder || []), ...newIds] 
           };
           setData(updatedData);
-          if (!isOnlineGraph) {
-              autoSaveGraph(query, updatedData); 
-          }
+          
+          switchToLocalModeIfNeeded();
+          autoSaveGraph(query, updatedData, true); // Force save
+          
           setShowAugmentInput(false);
           setAugmentQuery('');
       } catch (err) { console.error(err); } finally { setAugmentLoading(false); }
@@ -903,9 +915,9 @@ const App: React.FC = () => {
       const updatedData = { ...data, nodes: updatedNodes };
       setData(updatedData);
       setSelectedNode(updatedNode);
-      if (!isOnlineGraph) {
-         autoSaveGraph(query, updatedData);
-      }
+      
+      switchToLocalModeIfNeeded();
+      autoSaveGraph(query, updatedData, true);
   }
 
   const handleRegenerateNode = async (node: PhilosophicalNode) => {
@@ -918,9 +930,9 @@ const App: React.FC = () => {
           const updatedData = { ...data, nodes: updatedNodes };
           setData(updatedData);
           setSelectedNode(updatedNode); 
-          if (!isOnlineGraph) {
-            autoSaveGraph(query, updatedData); 
-          }
+          
+          switchToLocalModeIfNeeded();
+          autoSaveGraph(query, updatedData, true);
       } catch (error) { console.error("Failed to regenerate node:", error); } finally { setIsRegeneratingNode(false); }
   };
 
@@ -940,9 +952,9 @@ const App: React.FC = () => {
       const updatedData = { nodes: finalNodes, links: updatedLinks, customOrder: newOrder };
       setData(updatedData);
       setSelectedNode(null);
-      if (!isOnlineGraph) {
-        autoSaveGraph(query, updatedData);
-      }
+      
+      switchToLocalModeIfNeeded();
+      autoSaveGraph(query, updatedData, true);
   };
 
   const handleAddConnectedNode = async (sourceNode: PhilosophicalNode, topic: string) => {
@@ -977,9 +989,9 @@ const App: React.FC = () => {
           setData(updatedData);
           const updatedSourceNode = finalNodes.find(n => n.id === sourceNode.id);
           if (updatedSourceNode) { setSelectedNode(updatedSourceNode); }
-          if (!isOnlineGraph) {
-            autoSaveGraph(query, updatedData);
-          }
+          
+          switchToLocalModeIfNeeded();
+          autoSaveGraph(query, updatedData, true);
       } catch (err) { console.error("Failed to add connected node", err); } finally { setIsAddingConnection(false); }
   };
 
@@ -987,9 +999,9 @@ const App: React.FC = () => {
       if (!data) return;
       const updatedData = { ...data, customOrder: newOrder };
       setData(updatedData);
-      if (!isOnlineGraph) {
-        autoSaveGraph(query, updatedData);
-      }
+      
+      switchToLocalModeIfNeeded();
+      autoSaveGraph(query, updatedData, true);
   };
 
   const focusOnNodeById = (id: string) => {
@@ -1093,24 +1105,6 @@ const App: React.FC = () => {
             <h1 className="font-serif text-xl tracking-wide hidden md:block cursor-pointer text-[#D1D1D1] hover:text-ink transition-colors absolute left-14 top-1" onClick={goHome}>Sophia</h1>
           )}
       </div>
-
-      {/* --- Online Indicator Pill --- */}
-      {isOnlineGraph && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-40 animate-in fade-in slide-in-from-top-2">
-              <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-1.5 rounded-full shadow-sm flex items-center gap-2 text-sm font-medium">
-                  <Globe className="w-4 h-4" />
-                  <span>Online Olvasó Mód</span>
-                  {data && folderHandle && (
-                      <button 
-                        onClick={handleManualSave} 
-                        className="ml-2 bg-blue-600 hover:bg-blue-700 text-white px-2 py-0.5 rounded text-xs transition-colors"
-                      >
-                          Mentés sajátként
-                      </button>
-                  )}
-              </div>
-          </div>
-      )}
 
       {showGraphSearch && hasSearched && (
           <div className="absolute top-8 left-1/2 -translate-x-1/2 z-[100] animate-in fade-in slide-in-from-top-4 duration-300">
