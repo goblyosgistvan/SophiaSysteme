@@ -4,20 +4,17 @@ import { GraphData, LibraryItem } from '../types';
 // Segédfüggvény a biztonságos JSON letöltéshez időbélyeggel (cache elkerülése)
 const tryFetchJSON = async (url: string): Promise<any | null> => {
     try {
-        // Cache-busting: hozzáadjuk az időt, hogy biztosan friss verziót kapjunk
         const safeUrl = `${url}?t=${new Date().getTime()}`;
         console.log(`[Library] Fetching: ${safeUrl}`);
         
         const response = await fetch(safeUrl);
         const contentType = response.headers.get("content-type");
         
-        // Debug infó a konzolra
         if (!response.ok) {
             console.warn(`[Library] Hiba (${response.status}) itt: ${url}`);
             return null;
         }
 
-        // Ha HTML-t kapunk vissza, az nem jó (Vercel fallback)
         if (contentType && contentType.includes("text/html")) {
             console.warn(`[Library] HTML választ kaptunk JSON helyett innen: ${url}`);
             return null;
@@ -31,8 +28,11 @@ const tryFetchJSON = async (url: string): Promise<any | null> => {
 };
 
 export const fetchLibraryIndex = async (): Promise<LibraryItem[]> => {
-    // Szigorúan abszolút útvonalat használunk a gyökérből
+    // Diagnosztika: Ha az index sem jön le, nagy valószínűséggel rossz helyen van a mappa
     const data = await tryFetchJSON('/library/index.json');
+    if (!data) {
+        console.error("KRITIKUS HIBA: A '/library/index.json' nem érhető el. Ellenőrizd, hogy a 'library' mappa a 'public' könyvtárban van-e!");
+    }
     return data || [];
 };
 
@@ -41,16 +41,14 @@ export const fetchOnlineGraph = async (filenameOrUrl: string): Promise<GraphData
         const baseName = filenameOrUrl.replace(/\.json$/i, '');
         const candidates: string[] = [];
 
-        // 1. ESET: Teljes URL vagy útvonal (ha tartalmaz / jelet)
+        // 1. ESET: Teljes URL
         if (filenameOrUrl.includes('/') || filenameOrUrl.startsWith('http')) {
             const url = filenameOrUrl.endsWith('.json') ? filenameOrUrl : `${filenameOrUrl}.json`;
             candidates.push(url);
         } 
         // 2. ESET: Csak fájlnév -> Generálunk lehetséges útvonalakat
         else {
-            // Prioritás: Abszolút útvonal a public/library mappába
             candidates.push(`/library/${baseName}.json`);
-            // Esetleg kisbetűs verzió, ha a fájlnév csupa kisbetűs a szerveren
             candidates.push(`/library/${baseName.toLowerCase()}.json`);
         }
 
@@ -60,28 +58,31 @@ export const fetchOnlineGraph = async (filenameOrUrl: string): Promise<GraphData
             if (data) return data;
         }
 
-        // 3. ESET: SMART FALLBACK - Ha nem találtuk, megnézzük az indexben
-        // Ez segít, ha a fájlnév pl. "Arthur_Schopenhauer.json" de a link "arthur_schopenhauer"
+        // 3. ESET: FALLBACK és Diagnosztika
+        // Ha nem találtuk a konkrét fájlt, megnézzük, hogy egyáltalán létezik-e a könyvtár
+        const index = await fetchLibraryIndex();
+        
+        if (index.length === 0) {
+            // Ha az index üres/nem elérhető, akkor strukturális hiba van
+            throw new Error(`A teljes online könyvtár elérhetetlen. Ellenőrizd, hogy a "library" mappa a "public" mappán belül van-e!`);
+        }
+
+        // Ha az index elérhető, megpróbáljuk abban megkeresni (kisbetű/nagybetű eltérés kezelése)
         if (!filenameOrUrl.includes('/')) {
-            console.log(`[Library] Közvetlen elérés sikertelen: ${baseName}. Keresés az indexben...`);
-            const index = await fetchLibraryIndex();
-            
             const lowerBase = baseName.toLowerCase();
-            // Keresünk egyezést (kisbetűsítve, kiterjesztés nélkül)
             const match = index.find(item => 
                 item.filename.replace(/\.json$/i, '').toLowerCase() === lowerBase
             );
 
             if (match) {
                 console.log(`[Library] Találat az indexben: ${match.filename}`);
-                // Próbáljuk a megtalált pontos fájlnévvel (abszolút útvonalon)
                 const matchUrl = `/library/${match.filename}`;
                 const data = await tryFetchJSON(matchUrl);
                 if (data) return data;
             }
         }
 
-        throw new Error(`A kért gráf nem található sem a megadott néven (${baseName}), sem az index alapján.`);
+        throw new Error(`A fájl nem található: ${baseName}. (A könyvtár elérhető, de ez a fájl hiányzik.)`);
 
     } catch (error) {
         console.error("Hiba az online gráf betöltésekor:", error);
