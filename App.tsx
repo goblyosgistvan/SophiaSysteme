@@ -181,17 +181,19 @@ const App: React.FC = () => {
         }
     }
 
-    // --- NEW: Load Online Library Index ---
+    // Load Online Library Index (if exists)
     const loadLibrary = async () => {
         const items = await fetchLibraryIndex();
         setOnlineLibrary(items);
     };
     loadLibrary();
 
-    // --- NEW: Check for URL Params (Deep Linking) ---
+    // --- DEEP LINKING LOGIC ---
     const params = new URLSearchParams(window.location.search);
     const src = params.get('src');
+    
     if (src) {
+        // Ha van ?src=nietzsche paraméter, azt töltjük be
         handleLoadOnlineGraphByFilename(src);
     }
 
@@ -210,14 +212,11 @@ const App: React.FC = () => {
         const key = e.key.toUpperCase();
         
         if (e.key === 'Escape') {
-             // Priority 1: Close Search if open
              if (showGraphSearch) {
                  setShowGraphSearch(false);
                  setGraphSearchQuery('');
                  return;
              }
-             
-             // Priority 2: Go Home if graph is open (and search wasn't open)
              if (hasSearched) {
                  goHome();
                  return;
@@ -227,7 +226,6 @@ const App: React.FC = () => {
 
         if (isInput) return;
         
-        // Q: Toggle Outline (Graph View) OR Sidebar (Home View)
         if (key === 'Q') {
             if (hasSearched) {
                 setIsOutlineOpen(prev => !prev);
@@ -236,22 +234,19 @@ const App: React.FC = () => {
             }
         }
         
-        // F: Graph Search
         if (key === 'F' && hasSearched && !loading) {
             e.preventDefault();
             setShowGraphSearch(true);
             setTimeout(() => graphSearchInputRef.current?.focus(), 50);
         }
 
-        // R: Toggle Detail Panel / Select Root
         if (key === 'R') {
             if (selectedNode) {
-                setSelectedNode(null); // Close
+                setSelectedNode(null);
             } else if (data) {
                  const root = data.nodes.find(n => n.type === NodeType.ROOT);
                  if (root) {
                      setSelectedNode(root);
-                     // Focus logic
                      if (isMobile) {
                         graphRef.current?.focusNode(root.id, { targetYRatio: 0.2, scale: 0.5 });
                      } else {
@@ -261,7 +256,6 @@ const App: React.FC = () => {
             }
         }
         
-        // W/E: Navigate Outline
         if (data && data.customOrder && (key === 'W' || key === 'E')) {
             const order = data.customOrder;
             if (order.length === 0) return;
@@ -275,7 +269,7 @@ const App: React.FC = () => {
             
             if (key === 'W') { // Up / Back
                  if (currentIndex === -1) {
-                     nextIndex = 0; // If nothing selected, start at top
+                     nextIndex = 0;
                  } else if (currentIndex > 0) {
                      nextIndex = currentIndex - 1;
                  }
@@ -308,7 +302,6 @@ const App: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [data, selectedNode, panelWidth, isMobile, hasSearched, showGraphSearch]);
 
-  // Handle Graph Search Enter Key
   const handleGraphSearchKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && data) {
         const lowerTerm = graphSearchQuery.toLowerCase();
@@ -326,7 +319,6 @@ const App: React.FC = () => {
     }
   };
 
-  // Click outside to close Export Menu
   useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
           if (showExportMenu && !(event.target as Element).closest('.export-container')) {
@@ -337,16 +329,12 @@ const App: React.FC = () => {
       return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showExportMenu]);
 
-  // Focus augment input when opened
   useEffect(() => {
       if (showAugmentInput && augmentInputRef.current) {
           augmentInputRef.current.focus();
       }
   }, [showAugmentInput]);
 
-  // --- File System Access Logic ---
-
-  // Helper to verify permissions
   const verifyPermission = async (fileHandle: any, readWrite: boolean) => {
     const options: any = {};
     if (readWrite) {
@@ -361,7 +349,6 @@ const App: React.FC = () => {
     return false;
   };
 
-  // Helper: Recursive function to get directory handle from path
   const getDirectoryHandleFromPath = async (rootHandle: any, path: string, create = false): Promise<any> => {
       if (!path) return rootHandle;
       const parts = path.split('/');
@@ -375,8 +362,6 @@ const App: React.FC = () => {
 
   const saveToFolder = async (topic: string, graphData: GraphData, manual = false, specificPath?: string) => {
     if (!folderHandle) return;
-    
-    // Determine path: use specificPath if provided
     const path = typeof specificPath === 'string' ? specificPath : "";
 
     if (!manual && lastFileSave && (new Date().getTime() - lastFileSave.getTime() < 2000)) {
@@ -415,7 +400,6 @@ const App: React.FC = () => {
   };
 
   const autoSaveGraph = (topic: string, graphData: GraphData) => {
-    // Prevent auto-saving if in Online View Mode unless user explicitly imported it
     if (isOnlineGraph) return;
 
     const exists = savedGraphs.find(g => g.topic.toLowerCase() === topic.toLowerCase());
@@ -663,10 +647,8 @@ const App: React.FC = () => {
                const oldFileName = `${getCleanFileName(oldTopic)}.json`;
                const newFileName = `${getCleanFileName(newName)}.json`;
                
-               // 1. Mentés az új néven ugyanabba a mappába
                await saveToFolder(newName, updatedData, true, oldPath);
                
-               // 2. Ha megváltozott a fájlnév, töröljük a régit
                if (oldFileName !== newFileName) {
                     const dir = await getDirectoryHandleFromPath(folderHandle, oldPath);
                     await dir.removeEntry(oldFileName);
@@ -696,7 +678,6 @@ const App: React.FC = () => {
       if (!folderHandle) {
            localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
       } else {
-          // Explicitly pass path to avoid root duplication
           await saveToFolder(graph.topic, updatedData, true, graph.path);
       }
   }
@@ -716,7 +697,6 @@ const App: React.FC = () => {
     setIsSidebarOpen(false);
     setIsOnlineGraph(false);
     setCurrentOnlineFilename(null);
-    // Clear URL params
     window.history.pushState({}, '', window.location.pathname);
   };
 
@@ -742,7 +722,7 @@ const App: React.FC = () => {
           setIsOutlineOpen(false);
       } catch (err) {
           console.error("Error loading online graph", err);
-          setError("Nem sikerült betölteni az online gráfot.");
+          setError("Nem sikerült betölteni az online gráfot. Ellenőrizd, hogy a fájl létezik-e.");
       } finally {
           setLoading(false);
       }
@@ -750,7 +730,7 @@ const App: React.FC = () => {
 
   const loadOnlineGraphItem = (item: LibraryItem) => {
       handleLoadOnlineGraphByFilename(item.filename);
-      // Update URL
+      // Generate clean link (without .json) for sharing
       const newUrl = generateShareableLink(item.filename);
       window.history.pushState({}, '', newUrl);
   };
@@ -776,12 +756,9 @@ const App: React.FC = () => {
       if (!folderHandle) return;
       
       if (isOnlineGraph) {
-          // If online, save as NEW local file
-          await saveToFolder(query, data, true, ""); // Save to root by default
+          await saveToFolder(query, data, true, ""); 
           alert("Sikeres mentés a helyi mappába! Mostantól ez egy helyi másolat.");
-          // Switch to local mode
           setIsOnlineGraph(false);
-          // Reload list
           await loadGraphsFromFolder(folderHandle);
       } else {
           const graph = savedGraphs.find(g => g.topic.toLowerCase() === query.toLowerCase());
@@ -828,7 +805,7 @@ const App: React.FC = () => {
                     parsedData.customOrder = generateDefaultOrder(parsedData.nodes, parsedData.links);
                 }
 
-                setIsOnlineGraph(false); // Imported files are local
+                setIsOnlineGraph(false); 
                 autoSaveGraph(topic, parsedData);
                 const importedGraph: SavedGraph = {
                     id: Date.now().toString(),
@@ -904,8 +881,6 @@ const App: React.FC = () => {
               customOrder: [...(data.customOrder || []), ...newIds] 
           };
           setData(updatedData);
-          // If it was online, it stays "online view" in UI until saved, 
-          // but we can't autosave to server. 
           if (!isOnlineGraph) {
               autoSaveGraph(query, updatedData); 
           }
