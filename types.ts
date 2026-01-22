@@ -1,4 +1,5 @@
 
+
 import { SimulationNodeDatum, SimulationLinkDatum } from 'd3';
 
 export enum NodeType {
@@ -31,6 +32,8 @@ export interface GraphData {
   metadata?: {
       title?: string;
       icon?: string;
+      author?: string; // New: For online attribution
+      version?: string;
   };
 }
 
@@ -57,4 +60,15 @@ export interface SavedGraph {
   data: GraphData;
   path: string; // Directory path, e.g., "" or "Philosophy/German"
   icon?: string; // e.g. 'book', 'star', 'brain'
+  isOnline?: boolean; // New: Identifies if this is from the read-only online library
+  onlineSource?: string; // The filename/url
+}
+
+export interface LibraryItem {
+    filename: string; // e.g., "aristotle_ethics.json"
+    title: string;
+    description: string;
+    category: string;
+    added: string;
+    icon?: string;
 }
