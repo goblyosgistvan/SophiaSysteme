@@ -1,13 +1,14 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical, BookOpen, FolderInput, RefreshCw, Save, HardDrive, CheckCircle, AlertCircle, FolderOpen, Cloud, ExternalLink, RefreshCcw, Paperclip, File, Menu } from 'lucide-react';
+import { Search, Loader2, Info, ChevronRight, ChevronLeft, X, Home, ArrowRight, Trash2, Edit2, Eye, Check, Download, Plus, Send, List, GripVertical, FileJson, FileText, Upload, MoreVertical, BookOpen, FolderInput, RefreshCw, Save, HardDrive, CheckCircle, AlertCircle, FolderOpen, Cloud, ExternalLink, RefreshCcw, Paperclip, File, Menu, Share2, Globe } from 'lucide-react';
 import ConceptGraph, { ConceptGraphHandle } from './components/ConceptGraph';
 import DetailPanel from './components/DetailPanel';
 import OutlinePanel from './components/OutlinePanel';
 import SidebarPanel from './components/SidebarPanel';
 import { fetchPhilosophyData, augmentPhilosophyData, enrichNodeData, createConnectedNode, FileInput } from './services/geminiService';
 import { exportJSON, exportMarkdown, getCleanFileName } from './services/exportService';
-import { GraphData, PhilosophicalNode, NodeType, SavedGraph } from './types';
+import { fetchLibraryIndex, fetchOnlineGraph, generateShareableLink } from './services/onlineLibraryService';
+import { GraphData, PhilosophicalNode, NodeType, SavedGraph, LibraryItem } from './types';
 
 declare global {
   interface Window {
@@ -105,6 +106,10 @@ const App: React.FC = () => {
   const [selectedNode, setSelectedNode] = useState<PhilosophicalNode | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const [savedGraphs, setSavedGraphs] = useState<SavedGraph[]>([]);
+  const [onlineLibrary, setOnlineLibrary] = useState<LibraryItem[]>([]); // Online items
+  const [isOnlineGraph, setIsOnlineGraph] = useState(false); // Track if current is online
+  const [currentOnlineFilename, setCurrentOnlineFilename] = useState<string | null>(null);
+
   const [showInfo, setShowInfo] = useState(false);
   const [showExportMenu, setShowExportMenu] = useState(false);
   
@@ -147,6 +152,7 @@ const App: React.FC = () => {
   const [isAddingConnection, setIsAddingConnection] = useState(false);
 
   const [currentSuggestions, setCurrentSuggestions] = useState<string[]>([]);
+  const [copiedLink, setCopiedLink] = useState(false);
   
   // Responsive state
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
@@ -175,6 +181,20 @@ const App: React.FC = () => {
         }
     }
 
+    // --- NEW: Load Online Library Index ---
+    const loadLibrary = async () => {
+        const items = await fetchLibraryIndex();
+        setOnlineLibrary(items);
+    };
+    loadLibrary();
+
+    // --- NEW: Check for URL Params (Deep Linking) ---
+    const params = new URLSearchParams(window.location.search);
+    const src = params.get('src');
+    if (src) {
+        handleLoadOnlineGraphByFilename(src);
+    }
+
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
@@ -186,7 +206,6 @@ const App: React.FC = () => {
   // Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-        // Ignore if typing in input/textarea, UNLESS it's Escape to close things
         const isInput = ['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName);
         const key = e.key.toUpperCase();
         
@@ -292,7 +311,6 @@ const App: React.FC = () => {
   // Handle Graph Search Enter Key
   const handleGraphSearchKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && data) {
-        // Smart Zoom: If there is exactly one match, zoom to it.
         const lowerTerm = graphSearchQuery.toLowerCase();
         const matches = data.nodes.filter(n => n.label.toLowerCase().includes(lowerTerm));
         
@@ -349,6 +367,7 @@ const App: React.FC = () => {
       const parts = path.split('/');
       let current = rootHandle;
       for (const part of parts) {
+          if (!part) continue;
           current = await current.getDirectoryHandle(part, { create });
       }
       return current;
@@ -357,14 +376,8 @@ const App: React.FC = () => {
   const saveToFolder = async (topic: string, graphData: GraphData, manual = false, specificPath?: string) => {
     if (!folderHandle) return;
     
-    // Determine path: use specificPath if provided, otherwise look up in savedGraphs
-    let path = "";
-    if (typeof specificPath === 'string') {
-        path = specificPath;
-    } else {
-        const existingGraph = savedGraphs.find(g => g.topic.toLowerCase() === topic.toLowerCase());
-        path = existingGraph ? existingGraph.path : "";
-    }
+    // Determine path: use specificPath if provided
+    const path = typeof specificPath === 'string' ? specificPath : "";
 
     if (!manual && lastFileSave && (new Date().getTime() - lastFileSave.getTime() < 2000)) {
         return;
@@ -380,7 +393,6 @@ const App: React.FC = () => {
         }
 
         const fileName = `${getCleanFileName(topic)}.json`;
-        // Navigate to subfolder
         const targetDirHandle = await getDirectoryHandleFromPath(folderHandle, path, true);
         
         const fileHandle = await targetDirHandle.getFileHandle(fileName, { create: true });
@@ -388,7 +400,6 @@ const App: React.FC = () => {
         await writable.write(JSON.stringify(graphData, null, 2));
         await writable.close();
         
-        console.log(`Saved ${fileName} to ${path || 'root'}.`);
         setLastFileSave(new Date());
         
         const updatedDate = new Date().toLocaleDateString('hu-HU');
@@ -404,18 +415,18 @@ const App: React.FC = () => {
   };
 
   const autoSaveGraph = (topic: string, graphData: GraphData) => {
+    // Prevent auto-saving if in Online View Mode unless user explicitly imported it
+    if (isOnlineGraph) return;
+
     const exists = savedGraphs.find(g => g.topic.toLowerCase() === topic.toLowerCase());
     let updatedGraphs: SavedGraph[];
 
-    // Ensure metadata persists if not explicitly provided in new graphData
-    // (e.g., if just updating nodes, we don't want to lose the icon)
     let dataToSave = {
         ...graphData,
         customOrder: graphData.customOrder || generateDefaultOrder(graphData.nodes, graphData.links)
     };
 
     if (exists) {
-        // Merge metadata: preserve existing icon/title if new data doesn't have it
         dataToSave = {
             ...dataToSave,
             metadata: {
@@ -433,7 +444,7 @@ const App: React.FC = () => {
           topic: topic,
           date: new Date().toLocaleDateString('hu-HU'),
           data: dataToSave,
-          path: "", // Default to root
+          path: "", 
           icon: dataToSave.metadata?.icon
         };
         updatedGraphs = [newGraph, ...savedGraphs];
@@ -447,7 +458,7 @@ const App: React.FC = () => {
     if (!folderHandle) {
         localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
     } else {
-        saveToFolder(topic, dataToSave, false);
+        saveToFolder(topic, dataToSave, false, exists?.path || "");
     }
   };
 
@@ -455,7 +466,6 @@ const App: React.FC = () => {
       setIsSyncing(true);
       const newGraphs: SavedGraph[] = [];
 
-      // Recursive function to read files
       const readDirectory = async (dirHandle: any, path: string) => {
           for await (const entry of dirHandle.values()) {
               if (entry.kind === 'file' && entry.name.endsWith('.json')) {
@@ -466,7 +476,6 @@ const App: React.FC = () => {
                       
                       if (parsedData.nodes && parsedData.links) {
                           const rootNode = parsedData.nodes.find((n: any) => n.type === 'ROOT');
-                          // Priority: Metadata Title > Root Label > Filename
                           const topic = parsedData.metadata?.title || rootNode?.label || entry.name.replace('.json', '');
                           const icon = parsedData.metadata?.icon;
 
@@ -549,12 +558,11 @@ const App: React.FC = () => {
       if (!newFolderName) return;
 
       if (!folderHandle) {
-          // Browser/Local Storage Mode: Create a placeholder file to hold the path
           const fullPath = path ? `${path}/${newFolderName}` : newFolderName;
           
           const placeholderGraph: SavedGraph = {
               id: `folder-${Date.now()}`,
-              topic: ".keep", // Special name to hide in list
+              topic: ".keep", 
               date: new Date().toLocaleDateString('hu-HU'),
               data: { nodes: [], links: [] },
               path: fullPath
@@ -603,7 +611,6 @@ const App: React.FC = () => {
               alert("Nem sikerült áthelyezni a fájlt.");
           }
       } else {
-          // Local storage move (just update path)
           const updated = savedGraphs.map(g => g.id === graphId ? { ...g, path: targetPath } : g);
           setSavedGraphs(updated);
           localStorage.setItem('sophia_saved_graphs', JSON.stringify(updated));
@@ -635,6 +642,9 @@ const App: React.FC = () => {
        const graph = savedGraphs.find(g => g.id === id);
        if (!graph) return;
 
+       const oldTopic = graph.topic;
+       const oldPath = graph.path;
+
        const updatedData = {
            ...graph.data,
            metadata: {
@@ -643,7 +653,6 @@ const App: React.FC = () => {
            }
        };
 
-       // Update State
        const updatedGraphs = savedGraphs.map(g => g.id === id ? { ...g, topic: newName, data: updatedData } : g);
        setSavedGraphs(updatedGraphs);
        
@@ -651,21 +660,19 @@ const App: React.FC = () => {
            localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
        } else {
            try {
-               // 1. Calculate filenames
-               const oldName = getCleanFileName(graph.topic);
-               const nextName = getCleanFileName(newName);
+               const oldFileName = `${getCleanFileName(oldTopic)}.json`;
+               const newFileName = `${getCleanFileName(newName)}.json`;
                
-               // 2. Save new file EXPLICITLY to the same path (avoiding root duplication)
-               await saveToFolder(newName, updatedData, true, graph.path);
+               // 1. Mentés az új néven ugyanabba a mappába
+               await saveToFolder(newName, updatedData, true, oldPath);
                
-               // 3. Delete old file if name changed
-               if (oldName !== nextName) {
-                    const dir = await getDirectoryHandleFromPath(folderHandle, graph.path);
-                    await dir.removeEntry(`${oldName}.json`);
+               // 2. Ha megváltozott a fájlnév, töröljük a régit
+               if (oldFileName !== newFileName) {
+                    const dir = await getDirectoryHandleFromPath(folderHandle, oldPath);
+                    await dir.removeEntry(oldFileName);
                }
            } catch(e) {
                 console.error("Rename filesystem error:", e);
-                // In case of error, reload folders to reflect reality
                 await loadGraphsFromFolder(folderHandle);
            }
        }
@@ -689,7 +696,7 @@ const App: React.FC = () => {
       if (!folderHandle) {
            localStorage.setItem('sophia_saved_graphs', JSON.stringify(updatedGraphs));
       } else {
-          // Explicitly pass path to ensure we overwrite the file in the correct subfolder
+          // Explicitly pass path to avoid root duplication
           await saveToFolder(graph.topic, updatedData, true, graph.path);
       }
   }
@@ -707,6 +714,45 @@ const App: React.FC = () => {
     setError(null);
     setIsOutlineOpen(false);
     setIsSidebarOpen(false);
+    setIsOnlineGraph(false);
+    setCurrentOnlineFilename(null);
+    // Clear URL params
+    window.history.pushState({}, '', window.location.pathname);
+  };
+
+  const handleLoadOnlineGraphByFilename = async (filename: string) => {
+      setLoading(true);
+      setError(null);
+      setHasSearched(true);
+      try {
+          const graphData = await fetchOnlineGraph(filename);
+          // Auto-infer title if missing
+          const rootNode = graphData.nodes.find(n => n.type === NodeType.ROOT);
+          const title = graphData.metadata?.title || rootNode?.label || "Online Gráf";
+          
+          setQuery(title);
+          
+          if (!graphData.customOrder) {
+              graphData.customOrder = generateDefaultOrder(graphData.nodes, graphData.links);
+          }
+          setData(graphData);
+          setIsOnlineGraph(true);
+          setCurrentOnlineFilename(filename);
+          setIsSidebarOpen(false);
+          setIsOutlineOpen(false);
+      } catch (err) {
+          console.error("Error loading online graph", err);
+          setError("Nem sikerült betölteni az online gráfot.");
+      } finally {
+          setLoading(false);
+      }
+  };
+
+  const loadOnlineGraphItem = (item: LibraryItem) => {
+      handleLoadOnlineGraphByFilename(item.filename);
+      // Update URL
+      const newUrl = generateShareableLink(item.filename);
+      window.history.pushState({}, '', newUrl);
   };
 
   const goHome = async () => {
@@ -718,19 +764,29 @@ const App: React.FC = () => {
     setIsOutlineOpen(false);
     setShowGraphSearch(false);
     setLastFileSave(null);
+    setIsOnlineGraph(false);
+    setCurrentOnlineFilename(null);
+    window.history.pushState({}, '', window.location.pathname);
     const shuffled = [...ALL_SUGGESTIONS].sort(() => 0.5 - Math.random());
     setCurrentSuggestions(shuffled.slice(0, 5));
   };
 
   const handleManualSave = async () => {
       if (!data || !query) return;
-      if (!folderHandle) {
-          // Instead of showing modal, maybe highlight sidebar? 
-          // For now, if no folder, it auto saves to local storage anyway.
-          // The button is only visible if folder is connected in original logic.
-          return;
+      if (!folderHandle) return;
+      
+      if (isOnlineGraph) {
+          // If online, save as NEW local file
+          await saveToFolder(query, data, true, ""); // Save to root by default
+          alert("Sikeres mentés a helyi mappába! Mostantól ez egy helyi másolat.");
+          // Switch to local mode
+          setIsOnlineGraph(false);
+          // Reload list
+          await loadGraphsFromFolder(folderHandle);
+      } else {
+          const graph = savedGraphs.find(g => g.topic.toLowerCase() === query.toLowerCase());
+          await saveToFolder(query, data, true, graph?.path || "");
       }
-      await saveToFolder(query, data, true);
   };
 
   const handleExportJSON = () => {
@@ -744,6 +800,16 @@ const App: React.FC = () => {
     exportMarkdown(data, query);
     setShowExportMenu(false);
   };
+
+  const handleShareLink = () => {
+      if (!currentOnlineFilename) return;
+      const url = generateShareableLink(currentOnlineFilename);
+      navigator.clipboard.writeText(url).then(() => {
+          setCopiedLink(true);
+          setTimeout(() => setCopiedLink(false), 2000);
+      });
+      setShowExportMenu(false);
+  }
 
   const handleImportGraph = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -762,6 +828,7 @@ const App: React.FC = () => {
                     parsedData.customOrder = generateDefaultOrder(parsedData.nodes, parsedData.links);
                 }
 
+                setIsOnlineGraph(false); // Imported files are local
                 autoSaveGraph(topic, parsedData);
                 const importedGraph: SavedGraph = {
                     id: Date.now().toString(),
@@ -810,7 +877,6 @@ const App: React.FC = () => {
 
   const clearUploadedFile = () => setUploadedFile(null);
 
-  // --- Augment & Modification Logic (Pass-throughs) ---
   const handleAugment = async (e?: React.FormEvent) => {
       if (e) e.preventDefault();
       if (!augmentQuery.trim() || !data) return;
@@ -838,7 +904,11 @@ const App: React.FC = () => {
               customOrder: [...(data.customOrder || []), ...newIds] 
           };
           setData(updatedData);
-          autoSaveGraph(query, updatedData); 
+          // If it was online, it stays "online view" in UI until saved, 
+          // but we can't autosave to server. 
+          if (!isOnlineGraph) {
+              autoSaveGraph(query, updatedData); 
+          }
           setShowAugmentInput(false);
           setAugmentQuery('');
       } catch (err) { console.error(err); } finally { setAugmentLoading(false); }
@@ -850,7 +920,9 @@ const App: React.FC = () => {
       const updatedData = { ...data, nodes: updatedNodes };
       setData(updatedData);
       setSelectedNode(updatedNode);
-      autoSaveGraph(query, updatedData);
+      if (!isOnlineGraph) {
+         autoSaveGraph(query, updatedData);
+      }
   }
 
   const handleRegenerateNode = async (node: PhilosophicalNode) => {
@@ -863,7 +935,9 @@ const App: React.FC = () => {
           const updatedData = { ...data, nodes: updatedNodes };
           setData(updatedData);
           setSelectedNode(updatedNode); 
-          autoSaveGraph(query, updatedData); 
+          if (!isOnlineGraph) {
+            autoSaveGraph(query, updatedData); 
+          }
       } catch (error) { console.error("Failed to regenerate node:", error); } finally { setIsRegeneratingNode(false); }
   };
 
@@ -883,7 +957,9 @@ const App: React.FC = () => {
       const updatedData = { nodes: finalNodes, links: updatedLinks, customOrder: newOrder };
       setData(updatedData);
       setSelectedNode(null);
-      autoSaveGraph(query, updatedData);
+      if (!isOnlineGraph) {
+        autoSaveGraph(query, updatedData);
+      }
   };
 
   const handleAddConnectedNode = async (sourceNode: PhilosophicalNode, topic: string) => {
@@ -918,7 +994,9 @@ const App: React.FC = () => {
           setData(updatedData);
           const updatedSourceNode = finalNodes.find(n => n.id === sourceNode.id);
           if (updatedSourceNode) { setSelectedNode(updatedSourceNode); }
-          autoSaveGraph(query, updatedData);
+          if (!isOnlineGraph) {
+            autoSaveGraph(query, updatedData);
+          }
       } catch (err) { console.error("Failed to add connected node", err); } finally { setIsAddingConnection(false); }
   };
 
@@ -926,7 +1004,9 @@ const App: React.FC = () => {
       if (!data) return;
       const updatedData = { ...data, customOrder: newOrder };
       setData(updatedData);
-      autoSaveGraph(query, updatedData);
+      if (!isOnlineGraph) {
+        autoSaveGraph(query, updatedData);
+      }
   };
 
   const focusOnNodeById = (id: string) => {
@@ -952,6 +1032,9 @@ const App: React.FC = () => {
     setSelectedNode(null);
     setHasSearched(true);
     setIsOutlineOpen(false);
+    setIsOnlineGraph(false);
+    setCurrentOnlineFilename(null);
+    window.history.pushState({}, '', window.location.pathname);
 
     try {
       let fileInputData: FileInput | undefined = undefined;
@@ -990,8 +1073,6 @@ const App: React.FC = () => {
 
   return (
     <div className="h-screen w-screen flex flex-col bg-paper text-ink overflow-hidden relative">
-      
-      {/* Hidden File Inputs */}
       <input 
           type="file" 
           ref={fileInputRef}
@@ -1000,13 +1081,11 @@ const App: React.FC = () => {
           accept=".json"
       />
       
-      {/* --- Floating Controls (Left) --- */}
       <div className="absolute top-4 left-6 z-50 flex flex-col items-center gap-3 pointer-events-auto">
           <div className="w-10 h-10 bg-ink text-paper rounded-full flex items-center justify-center font-serif text-2xl cursor-pointer shadow-md hover:scale-105 transition-transform" onClick={goHome}>
               S
           </div>
           
-          {/* Toggle Sidebar (Home) */}
           {!hasSearched && !loading && !isSidebarOpen && (
               <button 
                 onClick={() => setIsSidebarOpen(true)}
@@ -1017,7 +1096,6 @@ const App: React.FC = () => {
               </button>
           )}
 
-          {/* Toggle Outline (Graph) */}
           {hasSearched && !loading && !isOutlineOpen && (
               <button 
                 onClick={() => setIsOutlineOpen(true)}
@@ -1033,7 +1111,24 @@ const App: React.FC = () => {
           )}
       </div>
 
-      {/* --- Graph Search Overlay (F) --- */}
+      {/* --- Online Indicator Pill --- */}
+      {isOnlineGraph && (
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-40 animate-in fade-in slide-in-from-top-2">
+              <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-1.5 rounded-full shadow-sm flex items-center gap-2 text-sm font-medium">
+                  <Globe className="w-4 h-4" />
+                  <span>Online Olvasó Mód</span>
+                  {data && folderHandle && (
+                      <button 
+                        onClick={handleManualSave} 
+                        className="ml-2 bg-blue-600 hover:bg-blue-700 text-white px-2 py-0.5 rounded text-xs transition-colors"
+                      >
+                          Mentés sajátként
+                      </button>
+                  )}
+              </div>
+          </div>
+      )}
+
       {showGraphSearch && hasSearched && (
           <div className="absolute top-8 left-1/2 -translate-x-1/2 z-[100] animate-in fade-in slide-in-from-top-4 duration-300">
               <div className="bg-white/90 backdrop-blur-md shadow-2xl rounded-full border border-stone-200 pl-4 pr-2 py-2 flex items-center gap-2 w-[320px] md:w-[480px]">
@@ -1058,12 +1153,10 @@ const App: React.FC = () => {
           </div>
       )}
       
-      {/* --- Floating Controls (Right) --- */}
       <div className="absolute top-4 right-6 z-[70] flex gap-4 items-center pointer-events-auto">
         
         {data && !loading && (
             <>
-                {/* Augment Bar */}
                 <div className={`
                     flex items-center transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]
                     ${showAugmentInput 
@@ -1121,7 +1214,6 @@ const App: React.FC = () => {
                     </button>
                 </div>
 
-                {/* Export Dropdown */}
                 <div className="relative flex items-center export-container">
                     <button 
                         onClick={() => setShowExportMenu(!showExportMenu)}
@@ -1132,7 +1224,19 @@ const App: React.FC = () => {
                     </button>
                     
                     {showExportMenu && (
-                        <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-stone-200 py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-stone-200 py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                             {isOnlineGraph && (
+                                <button 
+                                    onClick={handleShareLink}
+                                    className="w-full text-left px-4 py-3 hover:bg-stone-50 flex items-center gap-3 transition-colors text-blue-600"
+                                >
+                                    {copiedLink ? <CheckCircle className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+                                    <span className="font-sans text-sm font-medium">
+                                        {copiedLink ? "Link másolva!" : "Link másolása"}
+                                    </span>
+                                </button>
+                             )}
+
                              <button 
                                 onClick={handleExportMarkdown}
                                 className="w-full text-left px-4 py-3 hover:bg-stone-50 flex items-center gap-3 transition-colors"
@@ -1151,18 +1255,16 @@ const App: React.FC = () => {
                     )}
                 </div>
 
-                 {/* SAVE BUTTON */}
                  {folderHandle && (
                      <button 
                         onClick={handleManualSave}
                         className={`transition-colors ${isSaving ? 'text-accent' : 'text-[#D1D1D1] hover:text-ink'}`}
-                        title="Mentés mappába"
+                        title={isOnlineGraph ? "Mentés helyi másolatként" : "Mentés mappába"}
                     >
                         {isSaving ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
                     </button>
                  )}
 
-                {/* HOME BUTTON - Swapped position */}
                 <button 
                 onClick={goHome}
                 className="text-[#D1D1D1] hover:text-ink transition-colors"
@@ -1173,7 +1275,6 @@ const App: React.FC = () => {
             </>
         )}
         
-        {/* Info Button */}
         <button 
         onClick={() => setShowInfo(true)}
         className="text-[#D1D1D1] hover:text-ink transition-colors"
@@ -1183,12 +1284,13 @@ const App: React.FC = () => {
         </button>
       </div>
 
-      {/* --- Sidebar (Home View) --- */}
       <SidebarPanel 
         savedGraphs={savedGraphs}
+        onlineLibrary={onlineLibrary}
         isOpen={isSidebarOpen && !hasSearched}
         onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
         onLoadGraph={loadSavedGraph}
+        onLoadOnlineGraph={loadOnlineGraphItem}
         onDeleteGraph={deleteGraph}
         onRenameGraph={renameGraph}
         onUpdateIcon={updateGraphIcon}
@@ -1202,7 +1304,6 @@ const App: React.FC = () => {
         isFolderConnected={!!folderHandle}
       />
 
-      {/* --- Info Modal --- */}
       {showInfo && (
           <div className="fixed inset-0 z-[60] bg-ink/50 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowInfo(false)}>
               <div 
@@ -1225,9 +1326,10 @@ const App: React.FC = () => {
                               <li>Nyomd meg az <b>F</b> betűt a gráfban kereséshez.</li>
                               <li>Nyomd meg a <b>Q</b> betűt a vázlat/oldalsáv megnyitásához.</li>
                               <li>Csatlakoztass egy helyi mappát a mappák kezeléséhez.</li>
+                              <li><b>Online Könyvtár:</b> Tölts be gráfokat a közösségi tárból a fájlok menüben!</li>
                           </ul>
                           <p className="text-base text-secondary pt-4 font-sans">
-                              0.3.8 verzió.
+                              0.4.5 verzió (GitHub Online támogatás).
                           </p>
                       </div>
                   </div>
@@ -1235,10 +1337,7 @@ const App: React.FC = () => {
           </div>
       )}
 
-      {/* --- Main Content --- */}
       <main className="flex-1 relative flex flex-row overflow-hidden">
-        
-        {/* Landing Page */}
         {!hasSearched && !loading && (
             <div className="absolute inset-0 overflow-y-auto bg-paper z-30">
                 <div className="max-w-4xl mx-auto px-6 py-28 flex flex-col items-center text-center">
@@ -1319,26 +1418,24 @@ const App: React.FC = () => {
             </div>
         )}
 
-        {/* Loading State */}
         {loading && (
              <div className="absolute inset-0 flex flex-col items-center justify-center bg-paper/80 backdrop-blur-sm z-50">
                 <Loader2 className="w-10 h-10 text-accent animate-spin mb-4" />
                 <p className="font-serif text-xl animate-pulse">
-                    {uploadedFile ? "Dokumentum elemzése..." : "Kapcsolatok létrehozása..."}
+                    {uploadedFile ? "Dokumentum elemzése..." : (isOnlineGraph ? "Online gráf betöltése..." : "Kapcsolatok létrehozása...")}
                 </p>
                 <p className="text-sm text-secondary mt-2 font-sans">
-                    {uploadedFile ? "Nagyobb fájloknál ez eltarthat egy ideig." : "Ez körülbelül 1-2 percet vesz igénybe."}
+                    {uploadedFile ? "Nagyobb fájloknál ez eltarthat egy ideig." : ""}
                 </p>
              </div>
         )}
 
-        {/* Error State */}
         {error && (
             <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none">
                  <div className="bg-white p-6 rounded-lg shadow-xl border border-red-100 max-w-md text-center pointer-events-auto">
                     <p className="text-accent font-medium mb-4">{error}</p>
                     <button 
-                        onClick={() => { setError(null); setHasSearched(false); }}
+                        onClick={() => { setError(null); setHasSearched(false); setIsOnlineGraph(false); }}
                         className="px-4 py-2 bg-ink text-white rounded hover:bg-stone-700 transition-colors font-sans text-sm"
                     >
                         Vissza a főoldalra
@@ -1347,7 +1444,6 @@ const App: React.FC = () => {
             </div>
         )}
 
-        {/* --- Persistent Outline Panel (Left - Graph View) --- */}
         {data && !loading && (
            <OutlinePanel 
              nodes={data.nodes}
@@ -1361,7 +1457,6 @@ const App: React.FC = () => {
            />
         )}
 
-        {/* --- Concept Graph Visualization --- */}
         {data && !loading && (
             <div className={`flex-1 relative h-full w-full transition-all duration-300 ${isOutlineOpen && !isMobile ? 'ml-80' : ''}`}>
                <ConceptGraph 
@@ -1374,7 +1469,6 @@ const App: React.FC = () => {
             </div>
         )}
 
-        {/* --- Detail Panel (Slide-in) --- */}
         <DetailPanel 
           node={selectedNode}
           allNodes={data?.nodes || []}
@@ -1390,7 +1484,6 @@ const App: React.FC = () => {
           width={panelWidth}
           onResize={setPanelWidth}
         />
-
       </main>
     </div>
   );
