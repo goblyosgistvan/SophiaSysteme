@@ -1,0 +1,637 @@
+{
+  "nodes": [
+    {
+      "id": "leibniz",
+      "label": "Gottfried Wilhelm Leibniz",
+      "type": "ROOT",
+      "shortSummary": "Gottfried Wilhelm Leibniz (1646–1716) német polihisztor, filozófus, matematikus és jogász, aki a racionalizmus egyik legjelentősebb alakja volt, és rendszere az igazságok, a monászok és az előre elrendelt harmónia köré épül.",
+      "longExplanation": "Leibniz a 17. századi racionalizmus kiemelkedő képviselője, aki Descartes és Spinoza filozófiájára építve, de azt meghaladva, egy rendkívül koherens és átfogó metafizikai rendszert alkotott. Munkássága kiterjedt a matematikára (a differenciál- és integrálszámítás egyik feltalálója), a logikára (az első formális logikai rendszerek kidolgozója), a fizikára, a jogra és a történelemre is. Filozófiájának központi eleme az elégséges alap elve, a monászok tana, valamint az előre elrendelt harmónia, amelyekkel a test és lélek problémájára, valamint a rossz problémájára is választ keresett.",
+      "connections": [
+        "igazsagelmelet",
+        "metafizika",
+        "teodicia",
+        "filozofiai_elvek",
+        "monadologia",
+        "teodicia_work"
+      ],
+      "conceptContext": ""
+    },
+    {
+      "id": "igazsagelmelet",
+      "label": "Igazságelmélet",
+      "type": "CATEGORY",
+      "shortSummary": "Leibniz igazságelmélete két fő típusra osztja az igazságokat: az észigazságokra és a tényigazságokra, melyek eltérő módon igazolhatók és eltérő szükségszerűséggel bírnak.",
+      "longExplanation": "Leibniz igazságelmélete alapvető fontosságú rendszere megértéséhez, mivel az igazságok természetének megkülönböztetése határozza meg a tudás és a valóság megközelítését. A kétféle igazság – az észigazságok és a tényigazságok – közötti különbségtétel lehetővé teszi számára, hogy egyaránt magyarázatot adjon a logikai és matematikai szükségszerűségekre, valamint az empirikus világ esetlegességeire. Ez a felosztás kulcsfontosságú az elégséges alap elvének alkalmazásában is, amely mindkét típusú igazságra vonatkozik, de eltérő módon.",
+      "connections": [
+        "ketfele_igazsag",
+        "elegseges_alap_elve"
+      ],
+      "conceptContext": "Párhuzamok: Kant „analitikus” és „szintetikus” ítéletei, valamint Hume „az ideák közötti viszonyok” és „tényállások” megkülönböztetése mutat hasonlóságot Leibniz felosztásával, bár mindkét filozófus más következtetésekre jutott. Descartes a veleszületett ideák és az érzéki tapasztalat közötti különbséget hangsúlyozta. Spinoza a szükségszerű igazságokat a szubsztancia attribútumaiból vezeti le. Interdiszciplináris analógia: A számítástechnikában a programkód belső logikája (észigazság) és a program futása során keletkező adatok (tényigazság) közötti különbség. A matematika axiómái és tételei (észigazságok) szemben állnak a fizikai mérések eredményeivel (tényigazságok)."
+    },
+    {
+      "id": "ketfele_igazsag",
+      "label": "kétféle igazság",
+      "type": "CONCEPT",
+      "shortSummary": "Leibniz szerint léteznek észigazságok, melyek szükségszerűek és analitikusak, és tényigazságok, melyek esetlegesek és szintetikusak.",
+      "longExplanation": "Leibniz filozófiájának egyik alapköve az igazságok kettős felosztása. Az _észigazságok_ olyan állítások, amelyek szükségszerűen igazak, és tagadásuk logikai ellentmondáshoz vezet. Ezek analitikusak, azaz az állítmány fogalma már benne foglaltatik az alany fogalmában, és puszta fogalmi elemzéssel igazolhatók. Ilyenek például a matematika és a logika tételei. Ezzel szemben a _tényigazságok_ esetlegesek, azaz tagadásuk nem vezet logikai ellentmondáshoz, és igazságuk a tapasztalaton alapul. Ezek szintetikusak, azaz az állítmány nem része az alany fogalmának, hanem valamilyen külső tényállásra utal. Például „A Nap felkel holnap” egy tényigazság, amelynek tagadása logikailag lehetséges, még ha valószínűtlen is.",
+      "connections": [
+        "igazsagelmelet",
+        "eszigazsagok",
+        "tenyigazsagok"
+      ],
+      "conceptContext": "Párhuzamok: Kant „analitikus” és „szintetikus” ítéletei, valamint Hume „az ideák közötti viszonyok” és „tényállások” megkülönböztetése mutat hasonlóságot Leibniz felosztásával, bár mindkét filozófus más következtetésekre jutott. Interdiszciplináris analógia: A jogban a törvények belső logikája (észigazság) és a konkrét jogesetek tényállása (tényigazság) közötti különbség. A nyelvészetben a definíciók (észigazságok) és a mondatok empirikus igazságtartalma (tényigazságok)."
+    },
+    {
+      "id": "eszigazsagok",
+      "label": "észigazságok",
+      "type": "CONCEPT",
+      "shortSummary": "Az észigazságok szükségszerűek és analitikusak, tagadásuk ellentmondáshoz vezet, és elégséges alapjuk analízissel, egyszerűbb ideákra bontva található meg.",
+      "longExplanation": "Az észigazságok olyan állítások, amelyek szükségszerűen igazak, és tagadásuk logikai ellentmondást eredményez. Ezek az igazságok analitikusak, ami azt jelenti, hogy az állítmány fogalma már benne foglaltatik az alany fogalmában, így puszta fogalmi elemzéssel igazolhatók. Például „A háromszögnek három oldala van” egy észigazság, mivel a „háromszög” fogalma már magában hordozza a „három oldal” tulajdonságot. Leibniz szerint az észigazságok elégséges alapja az analízis révén, az alapvető, elsődleges ideákig és igazságokig való visszavezetéssel található meg.",
+      "connections": [
+        "ketfele_igazsag",
+        "elegseges_alap_elve"
+      ],
+      "conceptContext": "Párhuzamok: Kant „analitikus ítéletei” és Hume „az ideák közötti viszonyok” fogalma mutat hasonlóságot az észigazságokkal, bár Kant a szintetikus a priori ítéletekkel bővíti a kört. Descartes „veleszületett ideái” is rokoníthatóak. Interdiszciplináris analógia: A matematika axiómái és tételei kiváló példák az észigazságokra. Például a „2+2=4” vagy a „Pitagorasz-tétel” logikai szükségszerűséggel bír, és nem empirikus megfigyelésen alapul. Egy számítógépes algoritmus belső logikája is hasonló: a program helyessége a belső definíciók és műveletek konzisztenciájából fakad, nem a külső adatoktól."
+    },
+    {
+      "id": "tenyigazsagok",
+      "label": "tényigazságok",
+      "type": "CONCEPT",
+      "shortSummary": "A tényigazságok esetlegesek és szintetikusak, tagadásuk nem vezet ellentmondáshoz, és elégséges alapjuk a végtelenbe nyúló ok-okozati láncolatban, végső soron Istenben található meg.",
+      "longExplanation": "A tényigazságok olyan állítások, amelyek igazsága nem szükségszerű, hanem esetleges, azaz tagadásuk logikailag lehetséges, és nem vezet ellentmondáshoz. Ezek az igazságok szintetikusak, ami azt jelenti, hogy az állítmány fogalma nem része az alany fogalmának, hanem a tapasztalatból származó információt ad hozzá. Például „Caesar átkelt a Rubiconon” egy tényigazság. A tényigazságok okait más hasonló tények vizsgálatával találhatjuk meg, de ez az elemzés a végtelenségig részletezhető korlátok nélkül, mivel minden tény egy másik tényre mutat vissza.",
+      "connections": [
+        "ketfele_igazsag",
+        "elegseges_alap_elve",
+        "isten"
+      ],
+      "conceptContext": "Párhuzamok: Hume „tényállások” fogalma és Kant „szintetikus ítéletei” hasonló kategóriát jelölnek, bár Leibniz a tényigazságok végső okát Istenben találja meg, míg Hume szkeptikusabb, Kant pedig a tapasztalat és az ész közötti kölcsönhatásra helyezi a hangsúlyt. Interdiszciplináris analógia: A történelemtudományban a konkrét események leírása és magyarázata tényigazságokon alapul. A biológiai evolúció folyamata, a fajok kialakulása és változása is tényigazságok sorozatán keresztül írható le, ahol minden eseménynek van egy korábbi oka, de a végső ok egy transzcendens pontra mutat."
+    },
+    {
+      "id": "elegseges_alap_elve",
+      "label": "elégséges alap elve",
+      "type": "CONCEPT",
+      "shortSummary": "Ez az elv kimondja, hogy semmi sem létezik ok nélkül, és minden igazságnak van elégséges alapja, amely megmagyarázza, miért úgy van, ahogy van, és nem másképp.",
+      "longExplanation": "Az elégséges alap elve (principium rationis sufficientis) Leibniz filozófiájának egyik legfontosabb alapelve, amely szerint semmi sem létezik ok nélkül, és minden igazságnak van elégséges alapja, amely megmagyarázza, miért úgy van, ahogy van, és nem másképp. Az észigazságok esetében ez az alap az analízisben, a fogalmak belső logikájában rejlik. A tényigazságok esetében azonban az okok láncolata a világon belül a végtelenségig folytatódna, ezért a végső, elégséges okot a sorozaton kívül, egy szükségszerű lényben, Istenben kell keresni. Ez az elv biztosítja a világ rendjét és érthetőségét, és alapul szolgál Isten létezésének bizonyításához is.",
+      "connections": [
+        "igazsagelmelet",
+        "eszigazsagok",
+        "tenyigazsagok",
+        "isten"
+      ],
+      "conceptContext": "Párhuzamok: Spinoza a szükségszerűség elvét hangsúlyozza, ahol minden Isten természetéből következik. Arisztotelész az „első mozgató” fogalma is egy végső okra utal. Interdiszciplináris analógia: A tudományos kutatás alapja az elégséges alap elve: minden jelenségre keresünk magyarázatot, okot. A fizika kauzalitás elve, miszerint minden eseménynek van oka, ennek az elvnek egy speciális megnyilvánulása. A detektívmunka is az elégséges alap elvére épül, amikor a bűntény okait és indítékait kutatja."
+    },
+    {
+      "id": "metafizika",
+      "label": "Metafizika",
+      "type": "CATEGORY",
+      "shortSummary": "Leibniz metafizikája a valóság alapvető természetével foglalkozik, középpontjában az oszthatatlan, anyagtalan monászok tana, az előre elrendelt harmónia és a panpszichizmus áll.",
+      "longExplanation": "Leibniz metafizikája a valóság legmélyebb rétegeit vizsgálja, és egy radikálisan új szubsztanciaelméletet vezet be a monászok formájában. Ezzel a dualista (Descartes) és monista (Spinoza) rendszerek hiányosságaira kíván választ adni. A monászok tana magyarázatot ad a világ sokféleségére és egységére, miközben fenntartja az egyedi létezők autonómiáját. A metafizika ezen ága foglalkozik továbbá a test és lélek viszonyával, a szabadság és determinizmus kérdésével, valamint a világ működésének alapvető elveivel, mint az előre elrendelt harmónia.",
+      "connections": [
+        "monaszok",
+        "panpszichizmus",
+        "pszichofizikai_parhuzamossag",
+        "elore_elrendelt_harmonia",
+        "determinizmus",
+        "kompatibilizmus",
+        "conatus"
+      ],
+      "conceptContext": "Párhuzamok: Descartes szubsztanciaelmélete (gondolkodó és kiterjedt szubsztancia), Spinoza egyetlen szubsztanciája (Isten vagy Természet). Platón ideatanában az ideák a valóság alapvető építőkövei, hasonlóan a monászokhoz, bár azok statikusabbak. Interdiszciplináris analógia: A kvantumfizikában az elemi részecskék, amelyek a világ alapvető építőkövei, és amelyek viselkedése alapvetően meghatározza a makroszkopikus valóságot. A biológia sejtjei, mint az élet alapvető, önálló egységei, amelyek mégis egy nagyobb organizmus részei."
+    },
+    {
+      "id": "monaszok",
+      "label": "monászok",
+      "type": "CONCEPT",
+      "shortSummary": "A monászok oszthatatlan, részek nélküli, anyagtalan, elmeszerű aktivitási központok, amelyek nem lépnek kölcsönhatásba egymással, és a valóság alapvető építőkövei.",
+      "longExplanation": "Leibniz metafizikájának központi elemei a „monászok” (vagy monádok), amelyek a valóság alapvető, oszthatatlan, anyagtalan és részek nélküli szubsztanciái. Minden monász egyfajta elmeszerű aktivitási központ, amely saját belső elve alapján fejlődik, és a világ egészét tükrözi egyedi perspektívából. A monászok „nincsenek ablakaik”, azaz nem lépnek kölcsönhatásba egymással, sem ok-okozati, sem fizikai értelemben. Ezt a „malom-hasonlattal” illusztrálja: ha belépnénk egy felnagyított, tudatos gép belsejébe, ott csak mechanikus alkatrészeket találnánk, és soha semmi olyat, ami megmagyarázná az észlelést (percepciót), mert az a monász belső állapota.",
+      "connections": [
+        "metafizika",
+        "csupasz_monaszok",
+        "lelkek",
+        "elmek",
+        "panpszichizmus",
+        "conatus",
+        "pszichofizikai_parhuzamossag",
+        "elore_elrendelt_harmonia",
+        "monadologia"
+      ],
+      "conceptContext": "Párhuzamok: Descartes gondolkodó szubsztanciája (lélek) és Spinoza egyetlen szubsztanciája (Isten) közötti átmenetként is értelmezhető. Atomista elméletek (Demokritosz) az oszthatatlan egységek tekintetében, de Leibniz monászai anyagtalanok és elmeszerűek. Interdiszciplináris analógia: A holográfia elve, ahol a kép minden egyes pontja tartalmazza az egész kép információját, hasonlóan ahhoz, ahogy minden monász tükrözi az egész univerzumot. A biológiai sejt, mint az élet alapvető, önálló egysége, amely mégis egy nagyobb organizmus része, és saját belső programja szerint működik."
+    },
+    {
+      "id": "csupasz_monaszok",
+      "label": "csupasz monászok",
+      "type": "CONCEPT",
+      "shortSummary": "A csupasz monászok a legalacsonyabb rendű monászok, amelyek tudattalan észlelésekkel rendelkeznek, és a növényekben, élettelen tárgyakban, valamint az állati/emberi testek alárendelt monászai.",
+      "longExplanation": "A monászok hierarchiájának legalján helyezkednek el a „csupasz monászok”. Ezek a monászok a legkevésbé fejlettek, és tudattalan, zavaros észlelésekkel rendelkeznek. Nincs emlékezetük, öntudatuk vagy racionális gondolkodásuk. Megtalálhatók az élettelen tárgyakban, a növényekben, valamint az állati és emberi testek azon részeiben, amelyek nem a központi lélekhez tartoznak. Bár tudattalanok, mégis rendelkeznek belső aktivitással és a világ egyfajta, ha homályos, reprezentációjával.",
+      "connections": [
+        "monaszok"
+      ],
+      "conceptContext": "Párhuzamok: Az ókori filozófiában az anyag passzív princípiuma, vagy a stoikusok pneuma-elméletének alacsonyabb rendű megnyilvánulásai. Interdiszciplináris analógia: A fizikai rendszerek, mint például egy kő vagy egy vízcsepp, amelyek belső dinamikával rendelkeznek, de nem mutatnak tudatos viselkedést. A biológiai rendszerekben a vegetatív funkciók, amelyek tudattalanul működnek, mint például a növények növekedése vagy az emberi test alapvető élettani folyamatai."
+    },
+    {
+      "id": "lelkek",
+      "label": "lelkek",
+      "type": "CONCEPT",
+      "shortSummary": "A lelkek a csupasz monászoknál magasabb rendű monászok, amelyek elkülönült észlelésekkel, emlékezettel, érzékeléssel és tudatossággal (appercepcióval) bírnak, és az állatok központi monászai.",
+      "longExplanation": "A lelkek a monászok hierarchiájának középső szintjét képviselik. Ezek a monászok már rendelkeznek olyan észlelésekkel, amelyek elég elkülönültek és tiszták ahhoz, hogy emlékezetet, érzékelést és egyfajta tudatosságot, azaz _appercepciót_ hozzanak létre. Az állatok központi monászai ebbe a kategóriába tartoznak. Képesek tanulni a tapasztalatból, felismerni mintázatokat és reagálni a környezetükre, bár még nem érik el az emberi öntudat és racionalitás szintjét. A lelkek is elpusztíthatatlanok, és testüket csak fokozatosan változtatják meg.",
+      "connections": [
+        "monaszok",
+        "appercepcio"
+      ],
+      "conceptContext": "Párhuzamok: Arisztotelész „vegetatív” és „szenzitív” lelke, amely az élet és az érzékelés alapja. Descartes állatgépei, bár Leibniz szerint az állatoknak is van lelkük. Interdiszciplináris analógia: Az állatok viselkedése, tanulási képessége és emlékezete, amelyet a modern etológia és neurobiológia vizsgál. Egy komplex robot, amely képes érzékelni a környezetét, tanulni és adaptálódni, de még nem rendelkezik öntudattal."
+    },
+    {
+      "id": "elmek",
+      "label": "elmék",
+      "type": "CONCEPT",
+      "shortSummary": "Az elmék a legmagasabb rendű monászok, amelyek öntudattal, racionális észlelésekkel és az észigazságok felismerésének képességével bírnak, ide tartozik Isten, az emberek és angyalok központi monászai.",
+      "longExplanation": "Az elmék a monászok hierarchiájának csúcsán állnak, és a legfejlettebb tudatossági szintet képviselik. Ezek a monászok nemcsak emlékezettel és érzékeléssel rendelkeznek, hanem képesek az öntudatra, a racionális gondolkodásra és az észigazságok felismerésére is. Az emberi lélek, az angyalok és maga Isten is ebbe a kategóriába tartozik. Az elmék képesek a reflexióra, az absztrakt gondolkodásra és a morális döntéshozatalra, ezáltal a világot nemcsak tükrözik, hanem aktívan részt is vesznek annak megértésében és alakításában, ha korlátozott mértékben is.",
+      "connections": [
+        "monaszok",
+        "appercepcio",
+        "isten"
+      ],
+      "conceptContext": "Párhuzamok: Platón „észlelő” lelke, amely képes az ideák szemlélésére. Descartes „gondolkodó szubsztanciája” (res cogitans). Interdiszciplináris analógia: Az emberi tudatosság, az öntudat és a racionális gondolkodás, amelyet a kognitív tudományok és a pszichológia vizsgál. A mesterséges intelligencia kutatásában a „strong AI” koncepciója, amely az emberihez hasonló öntudattal és értelemmel bírna."
+    },
+    {
+      "id": "appercepcio",
+      "label": "appercepció",
+      "type": "CONCEPT",
+      "shortSummary": "Az appercepció a tudatos észlelés, azaz az a képesség, hogy egy monász nemcsak észlel, hanem tudatában is van saját észlelésének, ami az állati lelkeknél kezdődik és az emberi elmékben teljesedik ki.",
+      "longExplanation": "Az appercepció Leibniznél a tudatos észlelés képességét jelenti, szemben a puszta, tudattalan percepcióval, amellyel a csupasz monászok rendelkeznek. Míg minden monász észlel valamilyen mértékben, addig az appercepcióval rendelkező monászok (lelkek és elmék) tudatában vannak saját észleléseiknek, képesek azokat elkülöníteni és reflektálni rájuk. Ez a képesség teszi lehetővé az emlékezetet, a tanulást és az öntudatot. Az appercepció mértéke és tisztasága határozza meg a monászok hierarchiában elfoglalt helyét, a zavaros állati észlelésektől az emberi racionális öntudatig.",
+      "connections": [
+        "lelkek",
+        "elmek"
+      ],
+      "conceptContext": "Párhuzamok: Kantnál az „transzcendentális appercepció” az öntudat egységét jelenti, amely a tapasztalatot rendezi. Locke „reflexió” fogalma, mint a belső tapasztalat forrása. Interdiszciplináris analógia: A pszichológiában a metakogníció, azaz a gondolkodásról való gondolkodás képessége. A neurobiológiában az agyi folyamatok, amelyek az öntudatot és a szubjektív élményt hozzák létre."
+    },
+    {
+      "id": "panpszichizmus",
+      "label": "panpszichizmus",
+      "type": "CONCEPT",
+      "shortSummary": "Leibniz panpszichista nézete szerint minden monász, legyen az anyag vagy elme, rendelkezik valamilyen fokú elmeszerű aktivitással és észleléssel, még a legalacsonyabb rendűek is.",
+      "longExplanation": "Leibniz filozófiája panpszichista jellegű, ami azt jelenti, hogy a világ minden eleme, azaz minden monász, rendelkezik valamilyen fokú elmeszerű aktivitással és észleléssel. Még a „csupasz monászok” is, amelyek az élettelen anyagot alkotják, tudattalan percepciókkal bírnak. Ez a nézet elmosódottá teszi az élettelen és az élő, az anyag és az elme közötti éles határt, és egy egységes, dinamikus valóságképet fest. A percepciók tisztasága és tudatossága (appercepció) azonban hierarchikusan változik a monászok között, a legalacsonyabb rendű, zavaros észlelésektől a legmagasabb rendű, racionális öntudatig.",
+      "connections": [
+        "monaszok",
+        "csupasz_monaszok",
+        "lelkek",
+        "elmek"
+      ],
+      "conceptContext": "Párhuzamok: Az ókori görög filozófiában Thalesz „minden tele van istenekkel” kijelentése, vagy a stoikusok pneuma-elmélete, amely az egész kozmoszt átható életerőt feltételez. Modern filozófiában Whitehead folyamatfilozófiája, ahol az „aktuális alkalmak” rendelkeznek szubjektív oldallal. Interdiszciplináris analógia: A modern fizika egyes értelmezései, amelyek az információt vagy a tudatosságot alapvetőnek tekintik a valóságban. A biológia holisztikus megközelítései, amelyek az organizmusokat nem pusztán mechanikus gépekként, hanem belső céllal és aktivitással rendelkező egészként kezelik."
+    },
+    {
+      "id": "conatus",
+      "label": "conatus",
+      "type": "CONCEPT",
+      "shortSummary": "A conatus a monászok belső törekvése, aktivitása, amely a belső állapotok változását és a percepciók fejlődését hajtja, és minden monászra jellemző.",
+      "longExplanation": "A _conatus_ (törekvés, erőfeszítés) Leibniz filozófiájában a monászok alapvető belső aktivitását és dinamizmusát jelöli. Minden monász rendelkezik ezzel a belső erővel, amely arra készteti, hogy a belső állapotai folyamatosan változzanak és fejlődjenek, a percepciók tisztábbá és elkülönültebbé váljanak. Ez a belső elv magyarázza a monászok önmozgását és azt, hogy minden monász a saját belső programja szerint bontakozik ki, anélkül, hogy külső hatásokra lenne szüksége. A conatus biztosítja a monászok folytonos létezését és fejlődését, és megakadályozza a „tökéletes halált”.",
+      "connections": [
+        "monaszok",
+        "determinizmus"
+      ],
+      "conceptContext": "Párhuzamok: Spinoza _conatus_ fogalma, amely minden dologban megnyilvánuló önfenntartási törekvést jelent. Arisztotelész _entelechia_ fogalma, mint a belső cél, amely a dolgokat a tökéletesség felé hajtja. Interdiszciplináris analógia: A biológiai rendszerekben az élet belső hajtóereje, a homeosztázis fenntartására és a növekedésre való törekvés. A pszichológiában az önmegvalósításra való törekvés vagy a motivációk, amelyek az egyén fejlődését irányítják."
+    },
+    {
+      "id": "pszichofizikai_parhuzamossag",
+      "label": "pszichofizikai párhuzamosság",
+      "type": "CONCEPT",
+      "shortSummary": "A pszichofizikai párhuzamosság elve szerint az elme és a test eseményei között nincs közvetlen ok-okozati kölcsönhatás, hanem Isten által előre elrendelt harmóniában vannak egymással.",
+      "longExplanation": "Mivel a monászok „nincsenek ablakaik” és nem lépnek kölcsönhatásba egymással, Leibniznek magyarázatot kellett adnia arra, hogy miért tűnik úgy, mintha a test és a lélek eseményei szinkronban lennének. A pszichofizikai párhuzamosság elve szerint az elme (a központi monász) és a test (az alárendelt monászok összessége) eseményei között nincs közvetlen ok-okozati kapcsolat. Ehelyett Isten a teremtéskor úgy aktualizálta az összes monászt, hogy azok tökéletes, előre elrendelt harmóniában legyenek egymással. Ez azt jelenti, hogy a lélek belső fejlődése és a test fizikai változásai úgy vannak összehangolva, mint két tökéletesen szinkronizált óra, amelyek anélkül mutatják ugyanazt az időt, hogy közvetlenül hatnának egymásra.",
+      "connections": [
+        "metafizika",
+        "monaszok",
+        "elore_elrendelt_harmonia"
+      ],
+      "conceptContext": "Párhuzamok: Descartes dualizmusa, ahol a test és lélek a tobozmirigyen keresztül hat egymásra (amit Leibniz elutasít). Malebranche okkazionalizmusa, ahol Isten minden egyes alkalommal közvetlenül beavatkozik a test és lélek közötti látszólagos kölcsönhatás magyarázatára. Interdiszciplináris analógia: Két tökéletesen szinkronizált óra, amelyek anélkül mutatják ugyanazt az időt, hogy közvetlenül hatnának egymásra. A zeneelméletben két különálló hangszer, amelyek egy előre megírt partitúra alapján tökéletes harmóniában játszanak, anélkül, hogy egymás játékát befolyásolnák."
+    },
+    {
+      "id": "elore_elrendelt_harmonia",
+      "label": "előre elrendelt harmónia",
+      "type": "CONCEPT",
+      "shortSummary": "Az előre elrendelt harmónia Isten teremtési aktusa, amely biztosítja, hogy a monászok, anélkül, hogy kölcsönhatásba lépnének, tökéletes összhangban működjenek egymással.",
+      "longExplanation": "Az előre elrendelt harmónia (harmonia praestabilita) Leibniz rendszerének kulcsfontosságú eleme, amely megoldást kínál a test és lélek problémájára, valamint a monászok közötti látszólagos kölcsönhatásra. Mivel a monászok nem rendelkeznek „ablakokkal”, azaz nem hatnak egymásra, Isten a teremtéskor úgy rendezte el az összes monász belső fejlődését, hogy azok tökéletes összhangban legyenek egymással. Ez azt jelenti, hogy minden monász a saját belső programja szerint bontakozik ki, de ez a program tökéletesen szinkronizálva van az összes többi monász programjával, mintha egy tökéletes órásmester minden órát úgy állított volna be, hogy azok mindig ugyanazt az időt mutassák. Isten nem avatkozik be közvetlenül a természet menetébe a teremtés után, mert a teremtés eleve tökéletes volt.",
+      "connections": [
+        "metafizika",
+        "monaszok",
+        "pszichofizikai_parhuzamossag",
+        "isten",
+        "lehetseges_legjobb_vilag",
+        "monadologia"
+      ],
+      "conceptContext": "Párhuzamok: Malebranche okkazionalizmusa, ahol Isten minden egyes alkalommal közvetlenül beavatkozik a test és lélek közötti látszólagos kölcsönhatás magyarázatára, szemben Leibniz előre elrendelt harmóniájával, amely egyszeri isteni aktust feltételez. Interdiszciplináris analógia: Egy komplex szimfónia, ahol minden hangszer a saját partitúráját játssza, de a zeneszerző (Isten) úgy alkotta meg a partitúrákat, hogy azok tökéletes harmóniában szólaljanak meg. Egy önszabályozó ökoszisztéma, ahol a különböző fajok és környezeti tényezők anélkül működnek együtt, hogy egy központi irányító beavatkozna, mert a rendszer belsőleg harmonikus."
+    },
+    {
+      "id": "determinizmus",
+      "label": "determinizmus",
+      "type": "CONCEPT",
+      "shortSummary": "Leibniz determinizmusa szerint minden monász minden nem kezdeti állapotának valós oka ugyanazon monász egy korábbi állapota, ami a belső fejlődés elvéből fakad.",
+      "longExplanation": "Leibniz filozófiájában a determinizmus a monászok belső természetéből fakad. Mivel a monászok nem lépnek kölcsönhatásba egymással, minden monász minden nem kezdeti állapotának valós oka ugyanazon monász egy korábbi állapota. Ez azt jelenti, hogy minden monász belsőleg meghatározott, és a saját belső programja szerint bontakozik ki, amely a teremtés pillanatában belé volt írva. Ez a belső determinizmus azonban nem külső kényszer, hanem a monász természetéből fakadó szükségszerűség. A monászok fejlődése előre elrendelt, de ez az elrendezés a monász saját lényegéből fakad, nem pedig külső erők hatásából.",
+      "connections": [
+        "metafizika",
+        "monaszok",
+        "conatus",
+        "kompatibilizmus"
+      ],
+      "conceptContext": "Párhuzamok: Spinoza radikális determinizmusa, ahol minden szükségszerűen következik Isten természetéből. A stoikusok sorsfelfogása. Interdiszciplináris analógia: Egy számítógépes program, amely a kezdeti állapotból kiindulva, belső logikája szerint fut le, és minden lépése előre meghatározott. A fizika klasszikus mechanikája, ahol a részecskék mozgása a kezdeti feltételek és a fizikai törvények alapján teljesen előre jelezhető."
+    },
+    {
+      "id": "kompatibilizmus",
+      "label": "kompatibilizmus",
+      "type": "CONCEPT",
+      "shortSummary": "Leibniz kompatibilista álláspontja szerint az emberi szabadság összeegyeztethető a determinizmussal, mivel Isten a lehetséges legjobb világ részeként aktualizálta az elméket, anélkül, hogy megváltoztatta volna természetüket.",
+      "longExplanation": "Leibniz a kompatibilizmus híve, ami azt jelenti, hogy a szabadságot összeegyeztethetőnek tartja a determinizmussal. Bár az emberi elmék (monászok) belsőleg determináltak, és Isten a lehetséges legjobb világ részeként aktualizálta őket, ez nem jelenti a szabadság hiányát. Az emberi szabadság abban áll, hogy az elme a saját belső természetéből fakadóan, racionális megfontolások alapján cselekszik, anélkül, hogy külső kényszer hatna rá. Isten nem kényszeríti az elmét, hanem úgy teremtette meg, hogy az a saját belső logikája szerint, szabadon válassza a jót, ami egyben a lehetséges legjobb világ része. A szabadság tehát nem a szükségszerűség hiánya, hanem a belső, racionális szükségszerűségből fakadó cselekvés.",
+      "connections": [
+        "metafizika",
+        "determinizmus",
+        "isten",
+        "lehetseges_legjobb_vilag"
+      ],
+      "conceptContext": "Párhuzamok: Hume és Locke is kompatibilista nézeteket vallottak, bár más alapokon. A modern filozófiában számos kompatibilista elmélet létezik, amelyek a szabad akaratot a determinált világban próbálják értelmezni. Interdiszciplináris analógia: Egy sakkjátékos, aki szabadon hoz döntéseket, de ezek a döntések a játék szabályai és a tábla állása által determináltak. A művész, aki szabadon alkot, de alkotása mégis a művészeti formák és a saját stílusa által meghatározott keretek között mozog."
+    },
+    {
+      "id": "teodicia",
+      "label": "Teodícia",
+      "type": "CATEGORY",
+      "shortSummary": "Leibniz teodíciája Isten jóságát és igazságosságát igazolja a világban tapasztalható rossz ellenére, azzal az érvvel, hogy Isten a lehető legjobb világot teremtette meg.",
+      "longExplanation": "A teodícia (Isten igazolása) Leibniz filozófiájának egy fontos ága, amely a rossz problémájára keres választ: hogyan egyeztethető össze egy mindenható, mindentudó és jóságos Isten létezése a világban tapasztalható szenvedéssel és gonoszsággal? Leibniz válasza az, hogy Isten, mint tökéletes lény, a végtelen számú lehetséges univerzum közül a lehető legjobbat teremtette meg. Ez a világ nem tökéletes a szó abszolút értelmében, de a benne lévő jó a lehető legnagyobb mértékben felülmúlja a rosszat, és a rossz is hozzájárul a nagyobb jóhoz vagy a harmóniához. A teodícia tehát Isten bölcsességét és jóságát hangsúlyozza a teremtésben.",
+      "connections": [
+        "isten",
+        "lehetseges_legjobb_vilag",
+        "a_rossz_problemaja",
+        "teodicia_work"
+      ],
+      "conceptContext": "Párhuzamok: Aquinói Szent Tamás teodíciája, amely a rosszat a jó hiányaként értelmezi. Ágoston teodíciája, amely a rosszat a szabad akarat következményeként magyarázza. Interdiszciplináris analógia: Egy komplex mérnöki rendszer, amelynek tervezése során kompromisszumokat kell kötni a különböző célok (pl. hatékonyság, biztonság, költség) között, és a „legjobb” megoldás nem feltétlenül jelenti a tökéleteset minden szempontból. Egy műalkotás, amelynek szépsége a kontrasztokból és a feszültségekből is fakad, nem csak a tiszta harmóniából."
+    },
+    {
+      "id": "isten",
+      "label": "Isten",
+      "type": "CONCEPT",
+      "shortSummary": "Isten a szükségszerű lény, a tényigazságok végső, elégséges oka, aki a végtelen számú lehetséges világ közül a lehető legjobbat teremtette meg, és az előre elrendelt harmónia megalkotója.",
+      "longExplanation": "Leibniz filozófiájában Isten központi szerepet játszik, mint a szükségszerű lény, akinek létezése önmagában is lehetséges, és ezért szükségszerűen léteznie kell. Ő a tényigazságok végtelen ok-okozati láncolatának végső, elégséges alapja, aki a világon kívül állva ad magyarázatot a világ létezésére és rendjére. Isten intellektusában létezik végtelen számú lehetséges univerzum, és jóságából fakadóan a lehető legjobb világot választotta ki és teremtette meg. Isten nem avatkozik be közvetlenül a természet menetébe a teremtés után, mert a teremtés eleve tökéletes volt, és az előre elrendelt harmónia biztosítja a világ működését.",
+      "connections": [
+        "elegseges_alap_elve",
+        "tenyigazsagok",
+        "teodicia",
+        "lehetseges_legjobb_vilag",
+        "elore_elrendelt_harmonia",
+        "elmek",
+        "kompatibilizmus"
+      ],
+      "conceptContext": "Párhuzamok: Descartes Isten-bizonyítékai, Spinoza „Isten vagy Természet” fogalma, Aquinói Szent Tamás kozmológiai istenérve. Interdiszciplináris analógia: Egy programozó, aki megír egy tökéletes algoritmust, amely önállóan fut, és nem igényel további beavatkozást. Egy építész, aki egy olyan épületet tervez, amely statikailag tökéletes, és nem igényel utólagos megerősítést."
+    },
+    {
+      "id": "lehetseges_legjobb_vilag",
+      "label": "a lehetséges legjobb világ",
+      "type": "CONCEPT",
+      "shortSummary": "Isten, mint tökéletes lény, a végtelen számú lehetséges univerzum közül a lehető legjobb világot teremtette meg, amelyben a jó a lehető legnagyobb mértékben felülmúlja a rosszat.",
+      "longExplanation": "Leibniz teodíciájának központi tézise, hogy Isten, mint mindenható, mindentudó és jóságos lény, a végtelen számú lehetséges világ közül a lehető legjobb világot teremtette meg. Ez a világ nem abszolút tökéletes, és tartalmaz rosszat is, de a benne lévő jó a lehető legnagyobb mértékben felülmúlja a rosszat, és a rossz is hozzájárul a nagyobb harmóniához vagy a nagyobb jóhoz. Isten bölcsessége és jósága abban nyilvánul meg, hogy a legoptimálisabb egyensúlyt találta meg a lehetőségek között, maximalizálva a létező jót és minimalizálva a rosszat, amennyire az egy szabad világban lehetséges. Ez a koncepció válasz a rossz problémájára.",
+      "connections": [
+        "teodicia",
+        "isten",
+        "a_rossz_problemaja",
+        "kompatibilizmus",
+        "elore_elrendelt_harmonia"
+      ],
+      "conceptContext": "Párhuzamok: Voltaire szatirikus kritikája a _Candide_ című művében, amely kifigurázza ezt a koncepciót. Interdiszciplináris analógia: Az optimalizálási problémák a mérnöki tudományokban vagy a közgazdaságtanban, ahol a legjobb megoldást kell megtalálni számos korlátozó tényező és célfüggvény figyelembevételével. Egy komplex ökológiai rendszer, amelyben a ragadozók és a zsákmányállatok közötti egyensúly, vagy a betegségek szerepe a populációk szabályozásában a „legjobb” működést biztosítja a rendszer egészére nézve."
+    },
+    {
+      "id": "a_rossz_problemaja",
+      "label": "a rossz problémája",
+      "type": "CONCEPT",
+      "shortSummary": "A rossz problémája az a filozófiai kérdés, hogy hogyan egyeztethető össze egy mindenható, mindentudó és jóságos Isten létezése a világban tapasztalható rosszal és szenvedéssel.",
+      "longExplanation": "A rossz problémája (problem of evil) az egyik legősibb és legnehezebb teológiai és filozófiai kérdés. A probléma abból adódik, hogy ha Isten mindenható (képes megakadályozni a rosszat), mindentudó (tud a rosszról) és jóságos (akarja megakadályozni a rosszat), akkor miért létezik mégis rossz a világban? Leibniz teodíciája erre a kérdésre ad választ azzal, hogy Isten a végtelen számú lehetséges világ közül a lehető legjobb világot teremtette meg, amelyben a rossz is valamilyen módon hozzájárul a nagyobb jóhoz vagy a harmóniához, vagy elkerülhetetlen velejárója a szabad akaratnak és a komplexitásnak. A rossz tehát nem Isten tökéletlenségét jelzi, hanem a teremtett világ szükségszerű korlátait.",
+      "connections": [
+        "teodicia",
+        "isten",
+        "lehetseges_legjobb_vilag"
+      ],
+      "conceptContext": "Párhuzamok: Ágoston teodíciája, amely a rosszat a szabad akarat következményeként magyarázza. Epikurosz paradoxona, amely a rossz problémáját fogalmazza meg. Interdiszciplináris analógia: A természeti katasztrófák vagy betegségek, amelyek a természeti törvények szükségszerű következményei, és bár szenvedést okoznak, a rendszer egészének működéséhez hozzátartoznak. A művészetben a tragédia, amely a rossz ábrázolásán keresztül mélyebb értelmet és katarzist nyújt."
+    },
+    {
+      "id": "filozofiai_elvek",
+      "label": "Filozófiai elvek",
+      "type": "CATEGORY",
+      "shortSummary": "Leibniz filozófiájának alapvető elvei, mint a megkülönböztethetetlenek azonossága és a folytonosság elve, amelyek a valóság szerkezetét és működését írják le.",
+      "longExplanation": "Leibniz rendszere számos alapvető filozófiai elvre épül, amelyek nemcsak metafizikáját, hanem logikáját és tudományfelfogását is áthatják. Ezek az elvek biztosítják a világ koherenciáját és érthetőségét, és lehetővé teszik a racionális gondolkodást a valóság természetéről. A megkülönböztethetetlenek azonossága elve például a logikai identitás alapját képezi, míg a folytonosság elve a természetben megfigyelhető fokozatos átmeneteket magyarázza. Ezek az elvek nem pusztán leíró jellegűek, hanem normatívak is, azaz azt mutatják meg, hogyan kell gondolkodnunk a világról.",
+      "connections": [
+        "leibniz_torvenye",
+        "folytonossag_elve"
+      ],
+      "conceptContext": "Párhuzamok: Arisztotelész logikai elvei (ellentmondásmentesség, kizárt harmadik). Spinoza a szükségszerűség elve. Interdiszciplináris analógia: A matematika axiómái, amelyek egy adott rendszer alapvető, bizonyítás nélkül elfogadott igazságai. A fizika alapelvei, mint az energiamegmaradás törvénye, amelyek a természeti jelenségek mögötti mélyebb struktúrát írják le."
+    },
+    {
+      "id": "leibniz_torvenye",
+      "label": "Leibniz törvénye (a megkülönböztethetetlenek azonossága)",
+      "type": "CONCEPT",
+      "shortSummary": "Leibniz törvénye kimondja, hogy ha két objektumnak pontosan ugyanazok a tulajdonságai, akkor azok egy és ugyanazon dolgok; a megkülönböztethetetlenek azonosak.",
+      "longExplanation": "A megkülönböztethetetlenek azonosságának elve (principium identitatis indiscernibilium), vagy röviden Leibniz törvénye, az egyik legismertebb és legfontosabb logikai-metafizikai elve. Kimondja, hogy nem létezhet két dolog az univerzumban, amelyek minden tulajdonságukban megegyeznek, de mégis numerikusan különbözőek. Ha két dolognak pontosan ugyanazok a tulajdonságai, akkor azok valójában egy és ugyanazon dolog. Ez az elv alapvető a monászok egyediségének és a világ sokféleségének magyarázatában, mivel minden monász egyedi perspektívából tükrözi a világot, és így szükségszerűen különbözik minden más monásztól.",
+      "connections": [
+        "filozofiai_elvek",
+        "monaszok"
+      ],
+      "conceptContext": "Párhuzamok: Locke az identitásról szóló nézetei, bár Leibniz radikálisabban alkalmazza az elvet. Interdiszciplináris analógia: A digitális világban a fájlok hash-értéke: ha két fájl hash-értéke megegyezik, akkor nagy valószínűséggel a fájlok tartalma is azonos. A biometrikus azonosítás, ahol az egyedi fizikai jellemzők (pl. ujjlenyomat) alapján azonosítanak egy személyt, feltételezve, hogy nincs két teljesen azonos ujjlenyomat."
+    },
+    {
+      "id": "folytonossag_elve",
+      "label": "a folytonosság elve",
+      "type": "CONCEPT",
+      "shortSummary": "A folytonosság elve (gradualizmus) szerint a természet nem csinál ugrásokat; semmi sem történik hirtelen, hanem minden változás fokozatosan megy végbe.",
+      "longExplanation": "A folytonosság elve (principium continuitatis) Leibniz másik fontos filozófiai elve, amely szerint a természetben nincsenek ugrások (_natura non facit saltus_). Ez azt jelenti, hogy minden változás fokozatosan, folyamatosan megy végbe, és nincsenek hirtelen, megszakítás nélküli átmenetek. Ez az elv érvényes a monászok hierarchiájára is, ahol a csupasz monászoktól az elmékig fokozatosan növekszik a percepciók tisztasága és a tudatosság szintje. A folytonosság elve a fizikai világra is vonatkozik, ahol a mozgás és az állapotváltozások is folyamatosak, nem pedig diszkrétek. Ez az elv a világ rendjét és koherenciáját hangsúlyozza.",
+      "connections": [
+        "filozofiai_elvek",
+        "monaszok"
+      ],
+      "conceptContext": "Párhuzamok: Arisztotelész a természet fokozatos fejlődéséről szóló nézetei. Interdiszciplináris analógia: A matematika differenciálszámítása, amely a függvények folytonos változását vizsgálja. A biológiai evolúció elmélete, amely a fajok fokozatos átalakulását és fejlődését írja le, szemben a hirtelen, ugrásszerű változásokkal (bár a modern evolúcióbiológia elismeri a pontozott egyensúlyt is). A fizika klasszikus mechanikája, ahol a mozgás és az energiaátadás folytonos."
+    },
+    {
+      "id": "monadologia",
+      "label": "_Monadológia_",
+      "type": "WORK",
+      "shortSummary": "A _Monadológia_ (1714) Leibniz egyik legfontosabb műve, amely tömör formában foglalja össze metafizikai rendszerét, különös tekintettel a monászok tanára és az előre elrendelt harmóniára.",
+      "longExplanation": "A _Monadológia_ egy rövid, de rendkívül sűrű filozófiai értekezés, amelyet Leibniz 1714-ben írt, és amely a monászokról szóló tanításának legátfogóbb összefoglalását adja. Ebben a műben fejti ki részletesen a monászok természetét, hierarchiáját (csupasz monászok, lelkek, elmék), valamint azt, hogy miként tükrözik a világot. A mű magyarázatot ad az előre elrendelt harmóniára is, mint a monászok közötti látszólagos kölcsönhatás magyarázatára. A _Monadológia_ a leibnizi metafizika alapvető forrása, amely a racionalista filozófia egyik csúcspontját képviseli.",
+      "connections": [
+        "leibniz",
+        "monaszok",
+        "elore_elrendelt_harmonia"
+      ],
+      "conceptContext": ""
+    },
+    {
+      "id": "teodicia_work",
+      "label": "_Teodícia_",
+      "type": "WORK",
+      "shortSummary": "A _Teodícia_ (1710) Leibniz fő műve, amelyben Isten jóságát igazolja a világban tapasztalható rossz ellenére, a „lehetséges legjobb világ” koncepciójával.",
+      "longExplanation": "A _Teodícia_ (teljes címén: _Esszék a teodíciáról az isteni jóság, az emberi szabadság és a rossz eredetének kérdésében_) Leibniz egyetlen, életében megjelent filozófiai könyve, amelyet 1710-ben publikált. Ebben a műben foglalkozik a rossz problémájával, és arra a következtetésre jut, hogy Isten, mint tökéletes lény, a végtelen számú lehetséges világ közül a lehető legjobb világot teremtette meg. A mű részletesen elemzi a rossz különböző típusait (metafizikai, fizikai, morális) és azok viszonyát Isten jóságához és mindenhatóságához. A _Teodícia_ a felvilágosodás korának egyik legfontosabb teológiai-filozófiai vitájának alapját képezte.",
+      "connections": [
+        "leibniz",
+        "teodicia",
+        "lehetseges_legjobb_vilag",
+        "a_rossz_problemaja"
+      ],
+      "conceptContext": ""
+    }
+  ],
+  "links": [
+    {
+      "source": "leibniz",
+      "target": "igazsagelmelet",
+      "relationLabel": "kidolgozta"
+    },
+    {
+      "source": "leibniz",
+      "target": "metafizika",
+      "relationLabel": "kidolgozta"
+    },
+    {
+      "source": "leibniz",
+      "target": "teodicia",
+      "relationLabel": "kidolgozta"
+    },
+    {
+      "source": "leibniz",
+      "target": "filozofiai_elvek",
+      "relationLabel": "kidolgozta"
+    },
+    {
+      "source": "leibniz",
+      "target": "monadologia",
+      "relationLabel": "fő műve"
+    },
+    {
+      "source": "leibniz",
+      "target": "teodicia_work",
+      "relationLabel": "fő műve"
+    },
+    {
+      "source": "igazsagelmelet",
+      "target": "ketfele_igazsag",
+      "relationLabel": "magába foglalja"
+    },
+    {
+      "source": "igazsagelmelet",
+      "target": "elegseges_alap_elve",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "ketfele_igazsag",
+      "target": "eszigazsagok",
+      "relationLabel": "felosztja"
+    },
+    {
+      "source": "ketfele_igazsag",
+      "target": "tenyigazsagok",
+      "relationLabel": "felosztja"
+    },
+    {
+      "source": "eszigazsagok",
+      "target": "elegseges_alap_elve",
+      "relationLabel": "igazolható az"
+    },
+    {
+      "source": "tenyigazsagok",
+      "target": "elegseges_alap_elve",
+      "relationLabel": "igazolható az"
+    },
+    {
+      "source": "tenyigazsagok",
+      "target": "isten",
+      "relationLabel": "végső oka"
+    },
+    {
+      "source": "elegseges_alap_elve",
+      "target": "isten",
+      "relationLabel": "vezet Istenhez"
+    },
+    {
+      "source": "metafizika",
+      "target": "monaszok",
+      "relationLabel": "központi eleme"
+    },
+    {
+      "source": "metafizika",
+      "target": "panpszichizmus",
+      "relationLabel": "jellemzi"
+    },
+    {
+      "source": "metafizika",
+      "target": "pszichofizikai_parhuzamossag",
+      "relationLabel": "magyarázza"
+    },
+    {
+      "source": "metafizika",
+      "target": "elore_elrendelt_harmonia",
+      "relationLabel": "magyarázza"
+    },
+    {
+      "source": "metafizika",
+      "target": "determinizmus",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "metafizika",
+      "target": "kompatibilizmus",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "metafizika",
+      "target": "conatus",
+      "relationLabel": "jellemzi"
+    },
+    {
+      "source": "monaszok",
+      "target": "csupasz_monaszok",
+      "relationLabel": "típusa"
+    },
+    {
+      "source": "monaszok",
+      "target": "lelkek",
+      "relationLabel": "típusa"
+    },
+    {
+      "source": "monaszok",
+      "target": "elmek",
+      "relationLabel": "típusa"
+    },
+    {
+      "source": "monaszok",
+      "target": "panpszichizmus",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "monaszok",
+      "target": "conatus",
+      "relationLabel": "jellemzi"
+    },
+    {
+      "source": "monaszok",
+      "target": "pszichofizikai_parhuzamossag",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "monaszok",
+      "target": "elore_elrendelt_harmonia",
+      "relationLabel": "alapja"
+    },
+    {
+      "source": "lelkek",
+      "target": "appercepcio",
+      "relationLabel": "rendelkezik"
+    },
+    {
+      "source": "elmek",
+      "target": "appercepcio",
+      "relationLabel": "rendelkezik"
+    },
+    {
+      "source": "elmek",
+      "target": "isten",
+      "relationLabel": "magasabb rendű"
+    },
+    {
+      "source": "pszichofizikai_parhuzamossag",
+      "target": "elore_elrendelt_harmonia",
+      "relationLabel": "magyarázata"
+    },
+    {
+      "source": "determinizmus",
+      "target": "kompatibilizmus",
+      "relationLabel": "összeegyeztethető a"
+    },
+    {
+      "source": "teodicia",
+      "target": "isten",
+      "relationLabel": "igazolja"
+    },
+    {
+      "source": "teodicia",
+      "target": "lehetseges_legjobb_vilag",
+      "relationLabel": "központi eleme"
+    },
+    {
+      "source": "teodicia",
+      "target": "a_rossz_problemaja",
+      "relationLabel": "válasz a"
+    },
+    {
+      "source": "isten",
+      "target": "lehetseges_legjobb_vilag",
+      "relationLabel": "teremtette"
+    },
+    {
+      "source": "isten",
+      "target": "elore_elrendelt_harmonia",
+      "relationLabel": "megalkotója"
+    },
+    {
+      "source": "lehetseges_legjobb_vilag",
+      "target": "a_rossz_problemaja",
+      "relationLabel": "válasz a"
+    },
+    {
+      "source": "filozofiai_elvek",
+      "target": "leibniz_torvenye",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "filozofiai_elvek",
+      "target": "folytonossag_elve",
+      "relationLabel": "tartalmazza"
+    },
+    {
+      "source": "monadologia",
+      "target": "monaszok",
+      "relationLabel": "részletezi"
+    },
+    {
+      "source": "monadologia",
+      "target": "elore_elrendelt_harmonia",
+      "relationLabel": "részletezi"
+    },
+    {
+      "source": "teodicia_work",
+      "target": "isten",
+      "relationLabel": "részletezi"
+    },
+    {
+      "source": "teodicia_work",
+      "target": "lehetseges_legjobb_vilag",
+      "relationLabel": "részletezi"
+    },
+    {
+      "source": "teodicia_work",
+      "target": "a_rossz_problemaja",
+      "relationLabel": "részletezi"
+    }
+  ],
+  "customOrder": [
+    "leibniz",
+    "igazsagelmelet",
+    "elegseges_alap_elve",
+    "ketfele_igazsag",
+    "eszigazsagok",
+    "tenyigazsagok",
+    "metafizika",
+    "conatus",
+    "determinizmus",
+    "elore_elrendelt_harmonia",
+    "kompatibilizmus",
+    "monaszok",
+    "panpszichizmus",
+    "pszichofizikai_parhuzamossag",
+    "monadologia",
+    "csupasz_monaszok",
+    "elmek",
+    "lelkek",
+    "appercepcio",
+    "teodicia",
+    "lehetseges_legjobb_vilag",
+    "a_rossz_problemaja",
+    "isten",
+    "teodicia_work",
+    "filozofiai_elvek",
+    "folytonossag_elve",
+    "leibniz_torvenye"
+  ],
+  "metadata": {
+    "icon": "brain"
+  }
+}
